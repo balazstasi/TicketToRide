@@ -3,6 +3,19 @@ import Reducer from "./reducer";
 
 const initialState = {
   gameState: "",
+  gamePhase: "",
+  trainColors: [
+    "red",
+    "green",
+    "blue",
+    "purple",
+    // TODO: ezek a szinek nincsenek tailwindbe
+    // "black",
+    // "white",
+    // "orange",
+    "yellow",
+    "rainbow",
+  ],
 };
 
 const Store = (props) => {

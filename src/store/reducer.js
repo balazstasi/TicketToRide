@@ -5,6 +5,11 @@ const Reducer = (state, action) => {
         ...state,
         gameState: action.payload,
       };
+    case "SET_GAME_PHASE":
+      return {
+        ...state,
+        gamePhase: action.payload,
+      };
 
     default:
       throw new Error("The action type provided can't be found");

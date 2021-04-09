@@ -1,18 +1,49 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/store";
 import gameMap from "../assets/ticket-to-ride-europe-map.jpg";
+import Card from "../components/card";
+import CardStack from "../components/card-stack";
+
+import { getRandomColor } from "../utils/getRandomColor";
 
 const GameScreen = () => {
   const [state, dispatch] = useContext(Context);
+  const [cards, setCards] = useState([
+    getRandomColor(),
+    getRandomColor(),
+    getRandomColor(),
+    getRandomColor(),
+    getRandomColor(),
+  ]);
 
   useEffect(() => {
     dispatch({ type: "SET_GAME_STATE", payload: "IN_GAME" });
   }, [dispatch, state.gameState]);
 
+  const drawCard = () => {
+    setCards([...cards, getRandomColor()]);
+  };
+
   return (
-    <div className="flex flex-col">
-      <img src={gameMap} alt="Game Map" className="self-center mt-16" />
-      {/* <img src={scoringBorder} alt="ScoreBorder" /> */}
+    <div>
+      <h1 className="text-5xl text-blue-700 mx-10 my-4 font-semibold">
+        Your Turn !
+      </h1>
+      <div className="flex flex-col my-12">
+        <div className="flex flex-row">
+          <img
+            src={gameMap}
+            alt="Game Map"
+            className="self-center w-1/2 mx-10"
+          />
+          <CardStack drawCard={() => drawCard()} />
+        </div>
+        <div className="flex flex-row flex-wrap mx-10">
+          {cards.map((color) => (
+            <Card color={color} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
