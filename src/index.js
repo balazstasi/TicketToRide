@@ -1,8 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import Routes from "./routes/Routes";
+import Store from "./store/store";
 
 import "./styles/tailwind.css";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(
+  <Store>
+    <App />
+  </Store>,
+  document.getElementById("root")
+);

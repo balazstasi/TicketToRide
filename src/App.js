@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Routes from "./routes/Routes";
+import { Context } from "./store/store";
 
 function App() {
-  return (
-    <div>
-      <Routes></Routes>
-    </div>
-  );
+  const [state] = useContext(Context);
+
+  useEffect(() => {
+    console.log(state);
+  }, [JSON.stringify(state)]);
+
+  return <Routes></Routes>;
 }
 
 export default App;

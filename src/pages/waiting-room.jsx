@@ -1,30 +1,37 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Context } from "../store/store";
 
 const WaitingRoom = () => {
+  const [state, dispatch] = useContext(Context);
+
+  useEffect(() => {
+    dispatch({ type: "SET_GAME_STATE", payload: "WAITING_FOR_PLAYERS" });
+  }, []);
+
   return (
     <div>
-      <div class="min-h-screen flex-1 bg-blue-400 p-4 flex justify-center items-center">
-        <div class="bg-white w-full md:max-w-4xl rounded-lg shadow">
-          <div class="h-12 flex justify-between items-center border-b border-gray-200 m-4">
+      <div className="min-h-screen flex-1 bg-blue-400 p-4 flex justify-center items-center">
+        <div className="bg-white w-full md:max-w-4xl rounded-lg shadow">
+          <div className="h-12 flex justify-between items-center border-b border-gray-200 m-4">
             <div>
-              <div class="text-xl font-bold text-gray-700">Tasi's Room</div>
-              <div class="text-sm font-base text-gray-500">
+              <div className="text-xl font-bold text-gray-700">Tasi's Room</div>
+              <div className="text-sm font-base text-gray-500">
                 Waiting for more players...
               </div>
             </div>
             <div>
-              <div class="flex items-center justify-center w-full  shadow-md rounded-full">
+              <div className="flex items-center justify-center w-full  shadow-md rounded-full">
                 <label
                   htmlFor="toogleA"
-                  class="flex items-center cursor-pointer"
+                  className="flex items-center cursor-pointer"
                 >
-                  <div class="flex items-center">
-                    <input id="toogleA" type="checkbox" class="hidden" />
-                    <div class="toggle__line w-20 h-10 bg-gray-300 rounded-full shadow-inner"></div>
-                    <div class="toggle__dot bg-blue-400 absolute w-10 h-10 rounded-full shadow flex items-center justify-center">
+                  <div className="flex items-center">
+                    <input id="toogleA" type="checkbox" className="hidden" />
+                    <div className="toggle__line w-20 h-10 bg-gray-300 rounded-full shadow-inner"></div>
+                    <div className="toggle__dot bg-blue-400 absolute w-10 h-10 rounded-full shadow flex items-center justify-center">
                       <svg
-                        class="text-white w-6 h-6 "
+                        className="text-white w-6 h-6 "
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -43,25 +50,25 @@ const WaitingRoom = () => {
               </div>
             </div>
           </div>
-          <div class="px-6">
-            <div class="flex justify-between items-center h-16 p-4 my-6  rounded-lg border border-gray-100 shadow-md">
-              <div class="flex items-center">
+          <div className="px-6">
+            <div className="flex justify-between items-center h-16 p-4 my-6  rounded-lg border border-gray-100 shadow-md">
+              <div className="flex items-center">
                 <img
-                  class="rounded-full h-12 w-12"
+                  className="rounded-full h-12 w-12"
                   src="https://eadn-wc03-1341917.nxedge.io/cdn/wp-content/uploads/2020/10/png-clipart-xubuntu-xfce-menu-element-hand-logo-150x150.png"
                   alt="Logo"
                 />
-                <div class="ml-2">
-                  <div class="text-sm font-semibold text-gray-600">Már</div>
-                  {/* <div class="text-sm font-light text-gray-500">
+                <div className="ml-2">
+                  <div className="text-sm font-semibold text-gray-600">Már</div>
+                  {/* <div className="text-sm font-light text-gray-500">
                     Alcím
                   </div> */}
                 </div>
               </div>
               <div>
-                <button class="bg-red-400 hover:bg-red-500 p-2 rounded-full shadow-md flex justify-center items-center">
+                <button className="bg-red-400 hover:bg-red-500 p-2 rounded-full shadow-md flex justify-center items-center">
                   <svg
-                    class="text-white toggle__lock w-6 h-6"
+                    className="text-white toggle__lock w-6 h-6"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -77,24 +84,26 @@ const WaitingRoom = () => {
                 </button>
               </div>
             </div>
-            <div class="flex justify-between items-center h-16 p-4 my-6  rounded-lg border border-gray-100 shadow-md">
-              <div class="flex items-center">
+            <div className="flex justify-between items-center h-16 p-4 my-6  rounded-lg border border-gray-100 shadow-md">
+              <div className="flex items-center">
                 <img
-                  class="rounded-full h-12 w-12"
+                  className="rounded-full h-12 w-12"
                   src="https://www.shareicon.net/data/2015/09/16/101867_archlinux_512x512.png"
                   alt="Logo"
                 />
-                <div class="ml-2">
-                  <div class="text-sm font-semibold text-gray-600">Megint</div>
-                  {/* <div class="text-sm font-light text-gray-500">
+                <div className="ml-2">
+                  <div className="text-sm font-semibold text-gray-600">
+                    Megint
+                  </div>
+                  {/* <div className="text-sm font-light text-gray-500">
                     Alcím
                   </div> */}
                 </div>
               </div>
               <div>
-                <button class="bg-red-400 hover:bg-red-500  p-2 rounded-full shadow-md flex justify-center items-center">
+                <button className="bg-red-400 hover:bg-red-500  p-2 rounded-full shadow-md flex justify-center items-center">
                   <svg
-                    class="text-white toggle__lock w-6 h-6"
+                    className="text-white toggle__lock w-6 h-6"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -110,26 +119,26 @@ const WaitingRoom = () => {
                 </button>
               </div>
             </div>
-            <div class="flex justify-between items-center h-16 p-4 my-6  rounded-lg border border-gray-100 shadow-md">
-              <div class="flex items-center">
+            <div className="flex justify-between items-center h-16 p-4 my-6  rounded-lg border border-gray-100 shadow-md">
+              <div className="flex items-center">
                 <img
-                  class="rounded-full h-12 w-12"
+                  className="rounded-full h-12 w-12"
                   src="https://ia801905.us.archive.org/30/items/librewolf-81.0/logo.png"
                   alt="Logo"
                 />
-                <div class="ml-2">
-                  <div class="text-sm font-semibold text-gray-600">
+                <div className="ml-2">
+                  <div className="text-sm font-semibold text-gray-600">
                     Társasjáték :P
                   </div>
-                  {/* <div class="text-sm font-light text-gray-500">
+                  {/* <div className="text-sm font-light text-gray-500">
                     Alcím
                   </div> */}
                 </div>
               </div>
               <div>
-                <button class="bg-red-400 hover:bg-red-500  p-2 rounded-full shadow-md flex justify-center items-center">
+                <button className="bg-red-400 hover:bg-red-500  p-2 rounded-full shadow-md flex justify-center items-center">
                   <svg
-                    class="text-white toggle__lock w-6 h-6"
+                    className="text-white toggle__lock w-6 h-6"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -145,11 +154,11 @@ const WaitingRoom = () => {
                 </button>
               </div>
             </div>
-            <div class="flex bg-gray-200 justify-center items-center h-16 p-4 my-6  rounded-lg  shadow-inner">
-              <div class="flex items-center border border-gray-400 p-2 border-dashed rounded cursor-pointer">
+            <div className="flex bg-gray-200 justify-center items-center h-16 p-4 my-6  rounded-lg  shadow-inner">
+              <div className="flex items-center border border-gray-400 p-2 border-dashed rounded cursor-pointer">
                 <div>
                   <svg
-                    class="text-gray-500 w-6 h-6"
+                    className="text-gray-500 w-6 h-6"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -163,15 +172,15 @@ const WaitingRoom = () => {
                     />
                   </svg>
                 </div>
-                <div class="ml-1 text-gray-500 font-medium">
+                <div className="ml-1 text-gray-500 font-medium">
                   Invite a friend
                 </div>
               </div>
             </div>
           </div>
-          <div class="p-6 flex flex-row">
+          <div className="p-6 flex flex-row">
             <Link
-              class="p-4 bg-blue-400 hover:bg-blue-500 rounded-lg shadow text-xl font-medium uppercase text-white w-full"
+              className="p-4 bg-blue-400 hover:bg-blue-500 rounded-lg shadow text-xl font-medium uppercase text-white w-full"
               to="/game"
             >
               <center>
