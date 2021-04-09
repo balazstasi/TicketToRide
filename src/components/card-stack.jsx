@@ -1,10 +1,10 @@
 import React from "react";
 
-const CardStack = ({ drawCard }) => {
+const CardStack = ({ drawCard, type }) => {
   return (
     <div
       className="self-center w-1/6 my-4 mx-4 px-2 cursor-pointer"
-      onClick={() => drawCard()}
+      onClick={drawCard}
     >
       <div
         className={`w-full align-items-center justify-items-center
@@ -12,7 +12,7 @@ const CardStack = ({ drawCard }) => {
       >
         <div id="header" className="my-4 w-full items-center flex flex-col">
           <h4 id="name" className="text-xl font-semibold">
-            Draw Card
+            {type === "trains" ? "Draw Train Card" : "Draw Destination"}
           </h4>
         </div>
         <div id="image"></div>
