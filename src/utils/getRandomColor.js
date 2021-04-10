@@ -1,17 +1,6 @@
-const getRandomColor = () => {
-  const trainColors = [
-    "red",
-    "green",
-    "blue",
-    "purple",
-    // TODO: ezek a szinek nincsenek tailwindbe
-    // "black",
-    // "white",
-    // "orange",
-    "yellow",
-    "rainbow",
-  ];
+import { trainColors } from "../constants/trainColors";
 
+const getRandomColor = () => {
   return trainColors[Math.trunc(Math.random() * 6)];
 };
 

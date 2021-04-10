@@ -7,7 +7,7 @@ function App() {
 
   useEffect(() => {
     console.log(state);
-  }, [JSON.stringify(state)]);
+  }, [state]);
 
   return <Routes></Routes>;
 }

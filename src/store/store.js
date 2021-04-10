@@ -2,20 +2,9 @@ import React, { createContext, useReducer } from "react";
 import Reducer from "./reducer";
 
 const initialState = {
+  turnPlayer: "",
   gameState: "",
   gamePhase: "",
-  trainColors: [
-    "red",
-    "green",
-    "blue",
-    "purple",
-    // TODO: ezek a szinek nincsenek tailwindbe
-    // "black",
-    // "white",
-    // "orange",
-    "yellow",
-    "rainbow",
-  ],
 };
 
 const Store = (props) => {
