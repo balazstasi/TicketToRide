@@ -1,12 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
+import Store from "./store/store";
 
-import "tailwindcss/tailwind.css";
+import "./styles/tailwind.css";
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Store>
     <App />
-  </React.StrictMode>,
+  </Store>,
   document.getElementById("root")
 );
