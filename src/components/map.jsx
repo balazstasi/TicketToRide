@@ -11,36 +11,62 @@ const MapImage = () => {
   return <Image image={image} />;
 };
 
-const Map = (props) => {
+const Map = ({ destinations }) => {
   return (
-    <Stage width={800} height={533}>
-      <Layer>
-        <MapImage />
-        {Object.keys(ticketToRideData.cities).map((number) => {
-          const currentCity = ticketToRideData.cities[number];
-          const { x, y } = coord(currentCity.x, currentCity.y);
-          return <Circle x={x} y={y} draggable radius={10} fill="blue" />;
-        })}
-        {Object.keys(ticketToRideData.connections).map((number) => {
-          const connection = ticketToRideData.connections[number];
-          const connectionShapes = connection.elements.map((element) => {
-            const { x, y } = coord(element.x, element.y);
+    <div className="mx-2">
+      <Stage width={800} height={533}>
+        <Layer>
+          <MapImage />
+          {Object.keys(ticketToRideData.cities).map((number) => {
+            const currentCity = ticketToRideData.cities[number];
+            const { x, y } = coord(currentCity.x, currentCity.y);
+            return <Circle x={x} y={y} draggable radius={10} fill="blue" />;
+          })}
+          {Object.keys(ticketToRideData.connections).map((number) => {
+            const connection = ticketToRideData.connections[number];
+            const connectionShapes = connection.elements.map((element) => {
+              const { x, y } = coord(element.x, element.y);
 
-            return (
-              <Circle
-                x={x}
-                y={y}
-                draggable
-                radius={5}
-                fill={connection.color}
-              />
+              return (
+                <Circle
+                  x={x}
+                  y={y}
+                  draggable
+                  radius={5}
+                  fill={connection.color}
+                />
+              );
+            });
+            return connectionShapes;
+          })}
+          {/* {destinations?.map((destination) => {
+          let connectionShapes;
+          Object.keys(ticketToRideData.connections).forEach((number) => {
+            const connection = ticketToRideData.connections[number];
+            console.log(
+              connection.to === destination.from &&
+                connection.from === destination.to
             );
+            if (
+              connection.from === destination.from &&
+              connection.to === destination.to
+            ) {
+              console.log("ARIM");
+              connectionShapes = connection.elements.map((element) => {
+                const { x, y } = coord(element.x, element.y);
+
+                return (
+                  <Circle x={x} y={y} draggable radius={5} fill={"orange"} />
+                );
+              });
+            }
           });
           console.log(connectionShapes);
           return connectionShapes;
-        })}
-      </Layer>
-    </Stage>
+        })} */}
+        </Layer>
+      </Stage>
+    </div>
   );
 };
 

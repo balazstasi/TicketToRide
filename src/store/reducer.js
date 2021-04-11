@@ -25,6 +25,11 @@ const Reducer = (state, action) => {
           },
         },
       };
+    case "SET_GAME_CODE":
+      return {
+        ...state,
+        gameCode: action.payload,
+      };
 
     default:
       throw new Error("The action type provided can't be found");

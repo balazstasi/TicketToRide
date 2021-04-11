@@ -1,6 +1,6 @@
 import React from "react";
 
-const Card = ({ color, click }) => {
+const Card = ({ color, click, fromDeck }) => {
   return (
     <div
       className="self-top p-2 ml-6 items-center cursor-pointer w-1/8"

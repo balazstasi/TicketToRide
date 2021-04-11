@@ -5,6 +5,7 @@ const initialState = {
   turnPlayer: "Balazs",
   gameState: "",
   gamePhase: "",
+  gameCode: "",
   1: {
     trains: 45,
     cards: {
