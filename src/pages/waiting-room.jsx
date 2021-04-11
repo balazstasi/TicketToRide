@@ -11,13 +11,18 @@ const WaitingRoom = () => {
 
   return (
     <div>
-      <div className="min-h-screen flex-1 bg-blue-400 p-4 flex justify-center items-center">
-        <div className="bg-white w-full md:max-w-4xl rounded-lg shadow">
+      <div className=" flex-1 bg-blue-400 flex justify-center items-center bg-gradient-to-tl from-blue-800 to-blue-500 text-white font-mono flex-col min-h-screen">
+        <div className="bg-white w-full md:max-w-4xl rounded-lg shadow p-4">
           <div className="h-12 flex justify-between items-center border-b border-gray-200 m-4">
             <div>
-              <div className="text-xl font-bold text-gray-700">Tasi's Room</div>
+              <div className="text-xl font-bold text-gray-700">
+                Room: [Game Code]
+              </div>
               <div className="text-sm font-base text-gray-500">
                 Waiting for more players...
+              </div>
+              <div className="text-sm font-base text-gray-500 mb-8">
+                Press the Lock when there are enough players (2 - 5)
               </div>
             </div>
             <div>
@@ -60,9 +65,6 @@ const WaitingRoom = () => {
                 />
                 <div className="ml-2">
                   <div className="text-sm font-semibold text-gray-600">Már</div>
-                  {/* <div className="text-sm font-light text-gray-500">
-                    Alcím
-                  </div> */}
                 </div>
               </div>
               <div>
@@ -130,9 +132,6 @@ const WaitingRoom = () => {
                   <div className="text-sm font-semibold text-gray-600">
                     Társasjáték :P
                   </div>
-                  {/* <div className="text-sm font-light text-gray-500">
-                    Alcím
-                  </div> */}
                 </div>
               </div>
               <div>
@@ -144,12 +143,7 @@ const WaitingRoom = () => {
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                   >
-                    <path
-                      // strokeLinecap="round"
-                      // strokeLinejoin="round"
-                      strokeWidth={3}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
+                    <path strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
@@ -178,13 +172,21 @@ const WaitingRoom = () => {
               </div>
             </div>
           </div>
-          <div className="p-6 flex flex-row">
+          <div className="p-6 flex flex-col">
             <Link
               className="p-4 bg-blue-400 hover:bg-blue-500 rounded-lg shadow text-xl font-medium uppercase text-white w-full"
               to="/game"
             >
               <center>
                 <p className="self-center">Start The Game</p>
+              </center>
+            </Link>
+            <Link
+              className="p-4 mt-4 bg-blue-400 hover:bg-blue-500 rounded-lg shadow text-xl font-medium uppercase text-white w-full"
+              to="/"
+            >
+              <center>
+                <p className="self-center">Back To TItle Screen</p>
               </center>
             </Link>
           </div>
