@@ -13,9 +13,7 @@ import { DestinationCard } from "../components/destination.card";
 
 const GameScreen = () => {
   const [state, dispatch] = useContext(Context);
-  const [cards, setCards] = useState(
-    [...Array(5)].map((_) => getRandomColor())
-  );
+  const [cards, setCards] = useState([...Array(5)].map((_) => getRandomColor()));
   const [ownCards, setOwnCards] = useState([]);
   const [destinations, setDestinations] = useState([]);
   const [scoreTable, setScoreTable] = useState(false);
@@ -80,10 +78,7 @@ const GameScreen = () => {
         <Button>End Game</Button>
       </Link>
       <CardStack drawCard={() => drawCard("trains")} type="trains" />
-      <CardStack
-        drawCard={() => drawCard("destinations")}
-        type="destinations"
-      />
+      <CardStack drawCard={() => drawCard("destinations")} type="destinations" />
 
       {scoreTable && (
         <div className="flex flex-row px-2 mx-2 flex-wrap w-1/2 p-4">
@@ -100,9 +95,9 @@ const GameScreen = () => {
 
       <div className="flex flex-col">
         {/* <div className="flex flex-row"></div> */}
-        <div className="flex flex-row">
+        <div className="flex flex-row w-full">
           <Map destinations={destinations} />
-          <div className="flex flex-col flex-wrap justify-center">
+          {/* <div className="flex flex-col flex-wrap justify-center">
             {cards.map((color, i) => (
               <Card color={color} click={() => getCard(i)} />
             ))}
@@ -115,7 +110,7 @@ const GameScreen = () => {
                 destination={dest}
               />
             ))}
-          </div>
+          </div> */}
         </div>
 
         <div className="flex flex-row flex-wrap">

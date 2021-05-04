@@ -8,13 +8,13 @@ import { ticketToRideData } from "../assets/ticket-to-ride-data";
 
 const MapImage = () => {
   const [image] = useImage(gameMap);
-  return <Image image={image} />;
+  return <Image image={image} width={800} height={533} />;
 };
 
 const Map = ({ destinations }) => {
   return (
-    <div className="mx-2">
-      <Stage width={800} height={533}>
+    <div className="w-full flex flex-wrap object-center">
+      <Stage width={window.innerWidth} height={533} x={window.innerWidth / 2 - 400}>
         <Layer>
           <MapImage />
           {Object.keys(ticketToRideData.cities).map((number) => {
@@ -27,15 +27,7 @@ const Map = ({ destinations }) => {
             const connectionShapes = connection.elements.map((element) => {
               const { x, y } = coord(element.x, element.y);
 
-              return (
-                <Circle
-                  x={x}
-                  y={y}
-                  draggable
-                  radius={5}
-                  fill={connection.color}
-                />
-              );
+              return <Circle x={x} y={y} draggable radius={5} fill={connection.color} />;
             });
             return connectionShapes;
           })}
