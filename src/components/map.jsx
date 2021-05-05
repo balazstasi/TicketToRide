@@ -1,14 +1,21 @@
 import React, { useEffect, useRef } from "react";
-import gameMap from "../assets/ticket-to-ride-europe-map.jpg";
 import { Circle, Image, Layer, Stage } from "react-konva";
 import useImage from "use-image";
 // import Konva from "konva";
 import { coord } from "../utils/calculateCoordinate";
 import { ticketToRideData } from "../assets/ticket-to-ride-data";
 
+import gameMap from "../assets/ticket-to-ride-europe-map.jpg";
+import cityDot from "../assets/images/cityDot.png";
+
 const MapImage = () => {
   const [image] = useImage(gameMap);
   return <Image image={image} width={800} height={533} />;
+};
+
+const CityDot = (props) => {
+  const [image] = useImage(cityDot);
+  return <Image image={image} width={30} height={30} {...props} />;
 };
 
 const Map = ({ destinations }) => {
@@ -20,7 +27,8 @@ const Map = ({ destinations }) => {
           {Object.keys(ticketToRideData.cities).map((number) => {
             const currentCity = ticketToRideData.cities[number];
             const { x, y } = coord(currentCity.x, currentCity.y);
-            return <Circle x={x} y={y} draggable radius={10} fill="blue" />;
+            // return <Circle x={x} y={y} draggable radius={10} fill="blue" />;
+            return <CityDot x={x - 15} y={y - 15} />;
           })}
           {Object.keys(ticketToRideData.connections).map((number) => {
             const connection = ticketToRideData.connections[number];
