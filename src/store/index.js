@@ -1,8 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import todoReducer from "./slices/todoSlice";
+import playerOneReducer from "./slices/playerOneSlice";
+import gameReducer from "./slices/gameSlice";
 
 export default configureStore({
   reducer: {
-    todos: todoReducer,
+    game: gameReducer,
+    playerOne: playerOneReducer,
+    // playerTwo: playerTwoReducer,
   },
 });

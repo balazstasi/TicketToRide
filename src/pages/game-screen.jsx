@@ -9,7 +9,7 @@ import { getRandomDestination } from "../utils/getRandomDestination";
 import Map from "../components/map";
 import { Link } from "react-router-dom";
 import { Button } from "../common/button";
-import { DestinationCard } from "../components/destination.card";
+import DestinationCard from "../common/destination-card";
 
 const GameScreen = () => {
   const [state, dispatch] = useContext(Context);
