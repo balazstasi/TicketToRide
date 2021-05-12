@@ -27,9 +27,15 @@ export const gameSlice = createSlice({
         state.gameCode = action.payload;
       },
     },
+
+    setTurnPlayer: {
+      reducer: (state, action) => {
+        state.turnPlayer = action.payload;
+      },
+    },
   },
 });
 
-export const { setState, setGamePhase, setGameCode } = gameSlice.actions;
+export const { setState, setGamePhase, setGameCode, setTurnPlayer } = gameSlice.actions;
 
 export default gameSlice.reducer;
