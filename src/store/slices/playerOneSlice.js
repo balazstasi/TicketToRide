@@ -16,20 +16,26 @@ export const playerOneSlice = createSlice({
     destinations: [],
   },
   reducers: {
-    addCard: {
+    addCardOne: {
       reducer: (state, action) => {
         const { color } = action.payload;
         state.cards[color]++;
       },
     },
-    addDestination: {
+    toggleDestinationOne: {
       // Add Destination to array or delete it if it's already there
       reducer: (state, action) => {
-        const { destination } = action.payload;
+        console.log("ACTION", action);
+        const destination = action.payload;
         const searchedDestIdx = state.destinations.findIndex((dest) => dest.id === destination.id);
-        if (!searchedDestIdx) {
+
+        state.destinations.forEach((d) => console.log(d));
+        console.log(searchedDestIdx);
+        if (searchedDestIdx === -1) {
+          console.log("ADDING");
           state.destinations.push(destination);
         } else {
+          console.log("REMOVING");
           state.destinations.splice(searchedDestIdx, 1);
         }
       },
@@ -37,6 +43,6 @@ export const playerOneSlice = createSlice({
   },
 });
 
-export const { addCard, addDestination } = playerOneSlice.actions;
+export const { addCardOne, toggleDestinationOne } = playerOneSlice.actions;
 
 export default playerOneSlice.reducer;

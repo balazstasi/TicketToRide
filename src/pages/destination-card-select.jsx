@@ -3,11 +3,18 @@ import DestinationCard from "../common/destination-card";
 import { Context } from "../store/store";
 import { Button } from "../common/button";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { getRandomDestination } from "../utils/getRandomDestination";
+import { toggleDestinationOne } from "../store/slices/playerOneSlice";
 
 const DestinationCardSelect = () => {
   const [state, dispatch] = useContext(Context);
+
   const [destinations, setDestinations] = useState([]);
+  const s = useSelector((state) => state.playerOne);
+  const d = useDispatch();
+
   useEffect(() => {
     dispatch({ type: "SET_GAME_STATE", payload: "DESTINATION_CARD_SELECT" });
   }, []);
@@ -18,10 +25,14 @@ const DestinationCardSelect = () => {
     console.log(destResult);
     setDestinations(destResult);
   }, []);
+
+  useEffect(() => {
+    console.log(s);
+  }, [s]);
+
   return (
     <div className="flex flex-col">
       <h1 className="text-center mt-10 font-bold text-3xl text-blue-200 select-none">
-        {/* TODO: EZT IRD MAJD AT A MERETEZEST */}
         Please Select <span className="text-4xl">2</span> Destination Cards!
       </h1>
 
@@ -29,16 +40,18 @@ const DestinationCardSelect = () => {
         return (
           <DestinationCard
             destination={dest}
+            toggled={s.destinations.find((d) => d.id === dest.id)}
             from={dest.fromCity}
             to={dest.toCity}
-            click={() => {
-              if (!state[1].destinations.find((destination) => destination.id === dest.id)) {
-                dispatch({
-                  type: "ADD_DESTINATION_TO_PLAYER",
-                  payload: { playerNumber: 1, destination: dest },
-                });
-              }
-            }}
+            // click={() => {
+            //   if (!state[1].destinations.find((destination) => destination.id === dest.id)) {
+            //     dispatch({
+            //       type: "ADD_DESTINATION_TO_PLAYER",
+            //       payload: { playerNumber: 1, destination: dest },
+            //     });
+            //   }
+            // }}
+            click={() => d(toggleDestinationOne(dest))}
           />
         );
       })}
