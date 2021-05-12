@@ -9,8 +9,8 @@ import { getRandomDestination } from "../utils/getRandomDestination";
 import Map from "../components/map";
 import { Link } from "react-router-dom";
 import { Button } from "../common/button";
-import DestinationCard from "../common/destination-card";
-import Stats from "../components/playerUI/stats";
+import Stats from "../components/player-stats/stats";
+import Sidebar from "../components/player-stats/sidebar";
 
 const GameScreen = () => {
   const [state, dispatch] = useContext(Context);
@@ -97,6 +97,7 @@ const GameScreen = () => {
       <div className="flex flex-col">
         {/* <div className="flex flex-row"></div> */}
         <div className="flex flex-row w-full">
+          <Sidebar />
           <Map destinations={destinations} />
           {/* <div className="flex flex-col flex-wrap justify-center">
             {cards.map((color, i) => (
@@ -114,13 +115,12 @@ const GameScreen = () => {
           </div> */}
         </div>
 
-        <div className="flex flex-row flex-wrap">
+        {/* <div className="flex flex-row flex-wrap">
           {ownCards.map((color, i) => (
             <Card color={color} click={() => null} />
           ))}
-        </div>
+        </div> */}
       </div>
-      <Stats />
     </div>
   );
 };

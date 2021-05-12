@@ -12,6 +12,7 @@ import { cloneDeep } from "lodash";
 export const playerOneSlice = createSlice({
   name: "playerOne",
   initialState: {
+    name: "Balazs",
     trains: 45,
     cards: {
       blue: 0,
