@@ -1,3 +1,4 @@
-import { addCard, addDestination } from "./player-one";
+import { addCardOne, addDestinationOne } from "./player-one";
+import { addCardTwo, addDestinationTwo } from "./player-two";
 
-export { addCard, addDestination };
+export { addCardOne, addCardTwo, addDestinationOne, addDestinationTwo };

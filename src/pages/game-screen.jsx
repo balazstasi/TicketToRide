@@ -10,6 +10,7 @@ import Map from "../components/map";
 import { Link } from "react-router-dom";
 import { Button } from "../common/button";
 import DestinationCard from "../common/destination-card";
+import Stats from "../components/playerUI/stats";
 
 const GameScreen = () => {
   const [state, dispatch] = useContext(Context);
@@ -119,6 +120,7 @@ const GameScreen = () => {
           ))}
         </div>
       </div>
+      <Stats />
     </div>
   );
 };

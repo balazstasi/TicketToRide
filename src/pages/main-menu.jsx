@@ -19,9 +19,7 @@ const MainMenu = () => {
       <div className="flex">
         <div className="flex-col flex ml-auto mr-auto items-center w-full lg:w-2/3 md:w-3/5">
           <form className="p-4 bg-white md:max-w-4xl lg:w-1/2 w-8/12 rounded-lg shadow mt-12 flex flex-col">
-            <h1 className="font-bold text-5xl my-10 text-blue-500 self-center">
-              🎟️➡️🚆➡️🇪🇺
-            </h1>
+            <h1 className="font-bold text-5xl my-10 text-blue-500 self-center">🎟️➡️🚆➡️🇪🇺</h1>
 
             <div className="text-blue-500 mb-4 text-center font-semiblue text-md">
               Enter a name and the game code given to you to join a Room
@@ -67,9 +65,7 @@ const MainMenu = () => {
                 <p className="self-center">ENTER LOBBY</p>
               </center>
             </Link>
-            <p className="text-blue-500 mt-4 text-center">
-              Or, fill in just your name and press:
-            </p>
+            <p className="text-blue-500 mt-4 text-center">Or, fill in just your name and press:</p>
             <Link
               className="p-2 mt-4 w-full bg-blue-400 hover:bg-blue-500 rounded-lg shadow text-xl font-medium uppercase text-white"
               to="/waiting-room"

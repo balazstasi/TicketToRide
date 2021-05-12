@@ -1,4 +1,5 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { cloneDeep } from "lodash";
 
 export const playerTwoSlice = createSlice({
   name: "playerTwo",
@@ -14,8 +15,14 @@ export const playerTwoSlice = createSlice({
       white: 0,
     },
     destinations: [],
+    score: [],
   },
   reducers: {
+    setStateTwo: {
+      reducer: (state, action) => {
+        state = cloneDeep(state);
+      },
+    },
     addCardTwo: {
       reducer: (state, action) => {
         const { color } = action.payload;
@@ -41,8 +48,14 @@ export const playerTwoSlice = createSlice({
       },
     },
   },
+  addScoreTwo: {
+    reducer: (state, action) => {
+      state.score += action.payload;
+    },
+  },
 });
 
-export const { addCardTwo, toggleDestinationTwo } = playerTwoSlice.actions;
+export const { addCardTwo, toggleDestinationTwo, addScoreTwo, setStateTwo } =
+  playerTwoSlice.actions;
 
 export default playerTwoSlice.reducer;

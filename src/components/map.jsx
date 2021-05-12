@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Circle, Image, Layer, Stage } from "react-konva";
 import useImage from "use-image";
-// import Konva from "konva";
+import Konva from "konva";
 import { coord } from "../utils/calculateCoordinate";
 import { ticketToRideData } from "../assets/ticket-to-ride-data";
 
@@ -50,7 +50,7 @@ const Map = ({ destinations }) => {
                 <Circle
                   x={x}
                   y={y}
-                  draggable
+                  // draggable
                   radius={5}
                   fill={connection.color}
                   onMouseEnter={() => console.log(connection)}

@@ -5,7 +5,6 @@ import { Button } from "../common/button";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { getRandomDestination } from "../utils/getRandomDestination";
 import { getThreeDestinations } from "../utils/getThreeDestinations";
 import { toggleDestinationOne } from "../store/slices/playerOneSlice";
 import { toggleDestinationTwo } from "../store/slices/playerTwoSlice";
