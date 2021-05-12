@@ -65,61 +65,28 @@ const GameScreen = () => {
 
   return (
     <div>
-      {/* <h1 className="text-5xl text-blue-700 mx-10 my-4 font-semibold">
-        Your Turn !
-      </h1> */}
-      {/* //TODO: kulon komponensbe  */}
-      <Button onClick={() => toggleScoreTable()}>
-        {scoreTable ? "Hide Scores" : "Show Scores"}
-      </Button>
-      <Link to="/">
-        <Button>Back to Title</Button>
-      </Link>
-      <Link to="/end-game">
-        <Button>End Game</Button>
-      </Link>
-      <CardStack drawCard={() => drawCard("trains")} type="trains" />
-      <CardStack drawCard={() => drawCard("destinations")} type="destinations" />
-
-      {scoreTable && (
-        <div className="flex flex-row px-2 mx-2 flex-wrap w-1/2 p-4">
-          {players.map((name, i) => (
-            <Player
-              number={i + 1}
-              name={name}
-              turnPlayer={name === state.turnPlayer}
-              renderCards={true}
-            />
-          ))}
-        </div>
-      )}
-
-      <div className="flex flex-col">
-        {/* <div className="flex flex-row"></div> */}
-        <div className="flex flex-row w-full">
-          <Sidebar />
-          <Map destinations={destinations} />
-          {/* <div className="flex flex-col flex-wrap justify-center">
-            {cards.map((color, i) => (
-              <Card color={color} click={() => getCard(i)} />
-            ))}
+      <div className="absolute">
+        <Sidebar />
+      </div>
+      <div className="flex flex-row">
+        <div className="flex flex-col w-full">
+          <div className="flex flex-row self-center">
+            <div>
+              <Link to="/">
+                <Button>Back to Title</Button>
+              </Link>
+            </div>
+            <div>
+              <Link to="/end-game">
+                <Button>End Game</Button>
+              </Link>
+            </div>
           </div>
-          <div className="flex flex-col flex-wrap mx-10 justify-center">
-            {destinations.map((dest) => (
-              <DestinationCard
-                from={dest.fromCity}
-                to={dest.toCity}
-                destination={dest}
-              />
-            ))}
-          </div> */}
-        </div>
 
-        {/* <div className="flex flex-row flex-wrap">
-          {ownCards.map((color, i) => (
-            <Card color={color} click={() => null} />
-          ))}
-        </div> */}
+          <Map destinations={destinations} />
+        </div>
+        {/* <CardStack drawCard={() => drawCard("trains")} type="trains" />
+      <CardStack drawCard={() => drawCard("destinations")} type="destinations" /> */}
       </div>
     </div>
   );
