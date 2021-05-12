@@ -15,22 +15,15 @@ const WaitingRoom = () => {
         <div className="bg-white w-full md:max-w-4xl rounded-lg shadow p-4">
           <div className="h-12 flex justify-between items-center border-b border-gray-200 m-4">
             <div>
-              <div className="text-xl font-bold text-gray-700">
-                Room: [Game Code]
-              </div>
-              <div className="text-sm font-base text-gray-500">
-                Waiting for more players...
-              </div>
+              <div className="text-xl font-bold text-gray-700">Room: [Game Code]</div>
+              <div className="text-sm font-base text-gray-500">Waiting for more players...</div>
               <div className="text-sm font-base text-gray-500 mb-8">
                 Press the Lock when there are enough players (2 - 5)
               </div>
             </div>
             <div>
               <div className="flex items-center justify-center w-full  shadow-md rounded-full">
-                <label
-                  htmlFor="toogleA"
-                  className="flex items-center cursor-pointer"
-                >
+                <label htmlFor="toogleA" className="flex items-center cursor-pointer">
                   <div className="flex items-center">
                     <input id="toogleA" type="checkbox" className="hidden" />
                     <div className="toggle__line w-20 h-10 bg-gray-300 rounded-full shadow-inner"></div>
@@ -94,9 +87,7 @@ const WaitingRoom = () => {
                   alt="Logo"
                 />
                 <div className="ml-2">
-                  <div className="text-sm font-semibold text-gray-600">
-                    Megint
-                  </div>
+                  <div className="text-sm font-semibold text-gray-600">Megint</div>
                   {/* <div className="text-sm font-light text-gray-500">
                     Alcím
                   </div> */}
@@ -129,9 +120,7 @@ const WaitingRoom = () => {
                   alt="Logo"
                 />
                 <div className="ml-2">
-                  <div className="text-sm font-semibold text-gray-600">
-                    Társasjáték :P
-                  </div>
+                  <div className="text-sm font-semibold text-gray-600">Társasjáték :P</div>
                 </div>
               </div>
               <div>
@@ -166,16 +155,14 @@ const WaitingRoom = () => {
                     />
                   </svg>
                 </div>
-                <div className="ml-1 text-gray-500 font-medium">
-                  Invite a friend
-                </div>
+                <div className="ml-1 text-gray-500 font-medium">Invite a friend</div>
               </div>
             </div>
           </div>
           <div className="p-6 flex flex-col">
             <Link
               className="p-4 bg-blue-400 hover:bg-blue-500 rounded-lg shadow text-xl font-medium uppercase text-white w-full"
-              to="/game"
+              to="/destination-card-select"
             >
               <center>
                 <p className="self-center">Start The Game</p>

@@ -45,29 +45,12 @@ const initialState = {
     },
     destinations: [],
   },
-  // 4: {
-  //   trains: 45,
-  //   cards: [
-  //     { blue: 0 },
-  //     { green: 0 },
-  //     { yellow: 0 },
-  //     { rainbow: 0 },
-  //     { black: 0 },
-  //     { purple: 0 },
-  //     { white: 0 },
-  //   ],
-  //   destinations: [],
-  // },
 };
 
 const Store = (props) => {
   const [state, dispatch] = useReducer(Reducer, initialState);
 
-  return (
-    <Context.Provider value={[state, dispatch]}>
-      {props.children}
-    </Context.Provider>
-  );
+  return <Context.Provider value={[state, dispatch]}>{props.children}</Context.Provider>;
 };
 
 export const Context = createContext(initialState);

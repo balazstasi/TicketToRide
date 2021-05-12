@@ -1,14 +1,32 @@
-import React, { useEffect, useRef } from "react";
-import gameMap from "../assets/ticket-to-ride-europe-map.jpg";
+import React, { useState } from "react";
 import { Circle, Image, Layer, Stage } from "react-konva";
 import useImage from "use-image";
 // import Konva from "konva";
 import { coord } from "../utils/calculateCoordinate";
 import { ticketToRideData } from "../assets/ticket-to-ride-data";
 
+import gameMap from "../assets/ticket-to-ride-europe-map.jpg";
+import cityDot from "../assets/images/cityDot.png";
+
 const MapImage = () => {
   const [image] = useImage(gameMap);
   return <Image image={image} width={800} height={533} />;
+};
+
+const CityDot = ({ city, x, y }) => {
+  const [image] = useImage(cityDot);
+  return (
+    <Image
+      image={image}
+      width={30}
+      height={30}
+      x={x}
+      y={y}
+      onMouseEnter={() => {
+        console.log(city);
+      }}
+    />
+  );
 };
 
 const Map = ({ destinations }) => {
@@ -20,14 +38,24 @@ const Map = ({ destinations }) => {
           {Object.keys(ticketToRideData.cities).map((number) => {
             const currentCity = ticketToRideData.cities[number];
             const { x, y } = coord(currentCity.x, currentCity.y);
-            return <Circle x={x} y={y} draggable radius={10} fill="blue" />;
+            // return <Circle x={x} y={y} draggable radius={10} fill="blue" />;
+            return <CityDot x={x - 15} y={y - 15} city={currentCity} />;
           })}
           {Object.keys(ticketToRideData.connections).map((number) => {
             const connection = ticketToRideData.connections[number];
             const connectionShapes = connection.elements.map((element) => {
               const { x, y } = coord(element.x, element.y);
 
-              return <Circle x={x} y={y} draggable radius={5} fill={connection.color} />;
+              return (
+                <Circle
+                  x={x}
+                  y={y}
+                  draggable
+                  radius={5}
+                  fill={connection.color}
+                  onMouseEnter={() => console.log(connection)}
+                />
+              );
             });
             return connectionShapes;
           })}

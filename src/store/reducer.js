@@ -30,6 +30,15 @@ const Reducer = (state, action) => {
         ...state,
         gameCode: action.payload,
       };
+    case "ADD_DESTINATION_TO_PLAYER":
+      const { playerNumber, destination } = action.payload;
+      return {
+        ...state,
+        [playerNumber]: {
+          ...state[playerNumber],
+          destinations: [...state[playerNumber].destinations, destination],
+        },
+      };
 
     default:
       throw new Error("The action type provided can't be found");

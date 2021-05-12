@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import DestinationCardSelect from "../pages/destination-card-select";
 import EndScreen from "../pages/end-screen";
 import GameScreen from "../pages/game-screen";
 import MainMenu from "../pages/main-menu";
@@ -22,6 +23,9 @@ const Routes = ({ children }) => {
         </Route>
         <Route path="/rules">
           <RulesScreen />
+        </Route>
+        <Route path="/destination-card-select">
+          <DestinationCardSelect />
         </Route>
         <Route path="/">
           <MainMenu />
