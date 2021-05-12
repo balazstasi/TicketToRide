@@ -9,4 +9,5 @@ export default configureStore({
     playerOne: playerOneReducer,
     playerTwo: playerTwoReducer,
   },
+  devTools: process.env.NODE_ENV !== "production",
 });
