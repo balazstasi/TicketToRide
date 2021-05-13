@@ -24,12 +24,12 @@ const Sidebar = () => {
         OPEN/CLOSE
       </span>
       <div
-        className={`min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-blue-100 text-gray-800 ${
+        className={`h-1/4 flex flex-col flex-auto flex-shrink-0 antialiased bg-blue-100 text-gray-800 ${
           !opened && "hidden"
         }`}
       >
         <div
-          className="fixed flex flex-col top-0  left-0 w-64 bg-blue-900 h-full shadow-lg"
+          className="flex flex-col top-0  left-0 w-64 bg-blue-900 h-full shadow-lg"
           onClick={() => setOpened(!opened)}
         >
           <span className="text-blue-500 text-xl text-right mx-1 p-1">CLOSE</span>

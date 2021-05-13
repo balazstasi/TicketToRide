@@ -12,6 +12,7 @@ import Map from "../components/map";
 import Stats from "../components/player-stats/stats";
 import Sidebar from "../components/player-stats/sidebar";
 import DrawSidebar from "../components/draw-sidebar/draw-sidebar";
+import DrawBottom from "../components/draw-sidebar/draw-bottom";
 
 const GameScreen = () => {
   const [state, dispatch] = useContext(Context);
@@ -65,7 +66,7 @@ const GameScreen = () => {
   }, [ownCards, cards]);
 
   return (
-    <div>
+    <div className="h-screen">
       <div className="absolute">
         <Sidebar />
       </div>
@@ -85,6 +86,7 @@ const GameScreen = () => {
           </div>
 
           <Map destinations={destinations} />
+          <DrawBottom />
         </div>
         <DrawSidebar />
         {/* <CardStack drawCard={() => drawCard("trains")} type="trains" />

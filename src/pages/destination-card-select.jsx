@@ -52,10 +52,10 @@ const DestinationCardSelect = () => {
 
   return (
     <div className="flex flex-col">
-      <h1 className="text-center mt-10 font-bold text-3xl text-blue-200 select-none">
-        Plyer {gameState.turnPlayer}
+      <h1 className="text-center mt-2 font-bold text-3xl text-blue-200 select-none">
+        Player {gameState.turnPlayer}
       </h1>
-      <h2 className="text-center mt-10 font-bold text-3xl text-blue-200 select-none">
+      <h2 className="text-center mt-4 font-bold text-3xl text-blue-200 select-none">
         Please Select <span className="text-4xl">2</span> Destination Cards!
       </h2>
 
@@ -71,7 +71,7 @@ const DestinationCardSelect = () => {
         );
       })}
 
-      <div className="w-full text-center">
+      <div className="w-1/4 mt-4 self-center text-center">
         {gameState.turnPlayer === 1 ? (
           <Button
             onClick={() => {
@@ -83,7 +83,9 @@ const DestinationCardSelect = () => {
           </Button>
         ) : (
           <Link to="/game">
-            <Button>Confirm Choices</Button>
+            <div className="text-center">
+              <Button>Confirm Choices</Button>
+            </div>
           </Link>
         )}
       </div>

@@ -8,7 +8,7 @@ const DrawSidebar = () => {
       <div
         className={`min-h-screen h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-blue-100 text-gray-800`}
       >
-        <div className="fixed flex flex-col top-0 right-0 w-64 bg-blue-900 h-full shadow-lg">
+        <div className="fixed flex flex-col top-0 right-0 w-64 bg-blue-900 h-full">
           <div className="flex items-center pl-6 h-20 border-b border-gray-800">
             <div className="ml-1">
               <p className="ml-1 mt-4 text-3xl font-medium tracking-wide truncate text-blue-100 font-sans">
