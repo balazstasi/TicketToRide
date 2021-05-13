@@ -1,7 +1,6 @@
-X3RKCT
+# X3RKCT
 
-Kliensoldali webprogramozás
-
+## Kliensoldali webprogramozás
 2021. április 11.
 
 Ezt a megoldást Tasi Balázs, X3RKCT küldte be és készítette a Kliensoldali webprogramozás kurzus Ticket-To-Ride feladatához.
