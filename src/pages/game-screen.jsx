@@ -6,9 +6,9 @@ import { Context } from "../store/store";
 import { players } from "../constants/players";
 import { getRandomColor } from "../utils/getRandomColor";
 import { getRandomDestination } from "../utils/getRandomDestination";
-import Map from "../components/map";
 import { Link } from "react-router-dom";
 import { Button } from "../common/button";
+import Map from "../components/map";
 import Stats from "../components/player-stats/stats";
 import Sidebar from "../components/player-stats/sidebar";
 
