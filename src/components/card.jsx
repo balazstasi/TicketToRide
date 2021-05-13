@@ -1,11 +1,8 @@
 import React from "react";
 
-const Card = ({ color, click, fromDeck }) => {
+const Card = ({ color, click }) => {
   return (
-    <div
-      className="self-top p-2 ml-6 items-center cursor-pointer w-1/8"
-      onClick={click}
-    >
+    <div className="p-3 items-center cursor-pointer" onClick={click}>
       <div
         className={`w-full ${
           color === "rainbow"

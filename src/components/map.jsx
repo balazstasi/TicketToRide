@@ -10,7 +10,7 @@ import cityDot from "../assets/images/cityDot.png";
 
 const MapImage = () => {
   const [image] = useImage(gameMap);
-  return <Image image={image} width={800} height={533} />;
+  return <Image image={image} width={800 / 1.15} height={533 / 1.15} />;
 };
 
 const CityDot = ({ city, x, y }) => {
@@ -18,10 +18,10 @@ const CityDot = ({ city, x, y }) => {
   return (
     <Image
       image={image}
-      width={30}
-      height={30}
-      x={x}
-      y={y}
+      width={25}
+      height={25}
+      x={x / 1.15}
+      y={y / 1.15}
       onMouseEnter={() => {
         console.log(city);
       }}
@@ -32,7 +32,12 @@ const CityDot = ({ city, x, y }) => {
 const Map = ({ destinations }) => {
   return (
     <div className="w-full flex flex-wrap object-center">
-      <Stage width={window.innerWidth} height={533} x={window.innerWidth / 2 - 400}>
+      <Stage
+        className="w-full"
+        width={window.innerWidth}
+        height={533}
+        x={window.innerWidth / 2 - 400 / 1.15}
+      >
         <Layer>
           <MapImage />
           {Object.keys(ticketToRideData.cities).map((number) => {
@@ -48,8 +53,8 @@ const Map = ({ destinations }) => {
 
               return (
                 <Circle
-                  x={x}
-                  y={y}
+                  x={x / 1.15}
+                  y={y / 1.15}
                   // draggable
                   radius={5}
                   fill={connection.color}
