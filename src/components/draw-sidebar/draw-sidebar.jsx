@@ -19,11 +19,9 @@ const DrawSidebar = () => {
               </div> */}
             </div>
           </div>
-          <div className="flex flex-col justify-between mt-1 flex-grow">
+          <div className="flex flex-col items-center justify-between mt-1 flex-grow">
             {[1, 2, 3, 4, 5].map((card) => (
-              <div className="w-full px-6">
-                <Card color="rainbow" click={() => null} />
-              </div>
+              <Card color="rainbow" click={() => null} />
             ))}
             <div className="flex flex-row">
               <div className="flex-grow mr-2 px-1 text-center">

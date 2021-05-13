@@ -2,7 +2,7 @@ import React from "react";
 
 const Card = ({ color, click }) => {
   return (
-    <div className="p-3 items-center cursor-pointer" onClick={click}>
+    <div className="p-3 items-center place-self-center cursor-pointer w-40" onClick={click}>
       <div
         className={`w-full ${
           color === "rainbow"
