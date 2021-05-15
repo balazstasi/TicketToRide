@@ -1,12 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getRandomColor } from "../../utils/getRandomColor";
 
 export const gameSlice = createSlice({
   name: "game",
   initialState: {
     turnPlayer: null,
     gameState: "",
-    gamePhase: "123",
+    gamePhase: "",
     gameCode: "",
+    deck: [],
   },
 
   reducers: {
@@ -33,9 +35,36 @@ export const gameSlice = createSlice({
         state.turnPlayer = action.payload;
       },
     },
+
+    resetDeck: {
+      reducer: (state, action) => {
+        state.deck = [1, 2, 3, 4, 5].map((_) => getRandomColor());
+        console.log(state.deck);
+      },
+    },
+
+    drawCard: {
+      reducer: (state, action) => {
+        state.deck.length < 5 && state.deck.push(getRandomColor());
+      },
+    },
+
+    removeCard: {
+      reducer: (state, action) => {
+        state.deck.splice(action.payload, 1);
+      },
+    },
   },
 });
 
-export const { setState, setGamePhase, setGameCode, setTurnPlayer } = gameSlice.actions;
+export const {
+  setState,
+  setGamePhase,
+  setGameCode,
+  setTurnPlayer,
+  resetDeck,
+  drawCard,
+  removeCard,
+} = gameSlice.actions;
 
 export default gameSlice.reducer;

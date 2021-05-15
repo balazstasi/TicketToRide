@@ -9,20 +9,33 @@ import { cloneDeep } from "lodash";
   Internally, it uses createAction and createReducer
 */
 
+export const BLACK = "black";
+export const BLUE = "blue";
+export const GREEN = "green";
+export const ORANGE = "orange";
+export const PINK = "pink";
+export const RED = "red";
+export const WHITE = "white";
+export const YELLOW = "yellow";
+export const LOCOMOTIVE = "locomotive";
 export const playerOneSlice = createSlice({
   name: "playerOne",
   initialState: {
     name: "Balazs",
     trains: 45,
     cards: {
+      black: 0,
       blue: 0,
       green: 0,
-      yellow: 3,
-      rainbow: 0,
-      black: 5,
-      purple: 0,
+      orange: 0,
+      pink: 0,
+      red: 0,
       white: 0,
+      yellow: 0,
+      locomotive: 0,
     },
+    cardsDrawn: 0,
+    deck: [],
     destinations: [],
     score: [],
   },
@@ -34,8 +47,8 @@ export const playerOneSlice = createSlice({
     },
     addCardOne: {
       reducer: (state, action) => {
-        const { color } = action.payload;
-        state.cards[color]++;
+        state.cardsDrawn++;
+        state.cards[action.payload]++;
       },
     },
 

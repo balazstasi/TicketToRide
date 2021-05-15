@@ -1,8 +1,26 @@
 import React from "react";
+import { getRandomColor } from "../../utils/getRandomColor";
 import Card from "../card";
 import CardStack from "../card-stack";
+import { removeCard } from "../../store/slices/gameSlice";
+import { addCardOne } from "../../store/slices/playerOneSlice";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const DrawSidebar = () => {
+  const d = useDispatch();
+  const gameState = useSelector((state) => state.game);
+  const playerOne = useSelector((state) => state.playerOne);
+  const playerTwo = useSelector((state) => state.playerTwo);
+
+  const drawCardForCurrentPlayer = (cardColor, i) => {
+    console.log("ADD CARD", { color: cardColor });
+    d(addCardOne(cardColor));
+    d(removeCard(i));
+    console.log(playerOne.cards);
+    console.log(playerOne.cardsDrawn);
+  };
+
   return (
     <>
       <div
@@ -20,9 +38,11 @@ const DrawSidebar = () => {
             </div>
           </div>
           <div className="flex flex-col items-center justify-between mt-1 flex-grow">
-            {[1, 2, 3, 4, 5].map((card) => (
-              <Card color="rainbow" click={() => null} />
-            ))}
+            {gameState?.deck.map((cardColor, i) => {
+              return (
+                <Card color={cardColor} click={() => drawCardForCurrentPlayer(cardColor, i)} />
+              );
+            })}
             <div className="flex flex-row">
               <div className="flex-grow mr-2 px-1 text-center">
                 <CardStack type="trains" />

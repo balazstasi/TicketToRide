@@ -15,6 +15,7 @@ export const playerTwoSlice = createSlice({
       purple: 0,
       white: 0,
     },
+    deck: [],
     destinations: [],
     score: [],
   },

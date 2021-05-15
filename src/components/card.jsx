@@ -5,16 +5,16 @@ const Card = ({ color, click }) => {
     <div className="p-3 items-center place-self-center cursor-pointer w-40" onClick={click}>
       <div
         className={`w-full ${
-          color === "rainbow"
-            ? "bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 text-yellow-200"
-            : `bg-${color}-200`
+          color === "locomotive" &&
+          "bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 text-yellow-200"
         }  border-2 border-${color}-600 px-4 rounded-md tracking-wide shadow-lg flex flex-row items-center self-center`}
+        style={{ backgroundColor: color }}
       >
         <div id="header" className="flex flex-col w-full items-center my-4">
-          {/* <h4 id="name" className="text-xl font-semibold mx-2">
-            <span className={`text-${color}-600`}>{color}</span> Train
-          </h4> */}
-          <i className={`fa fa-train text-4xl text-${color}-600`}></i>
+          <i
+            className={`fa fa-train text-4xl`}
+            style={{ color: color, WebkitFilter: "invert(100%)" }}
+          ></i>
         </div>
         <div id="image"></div>
       </div>
