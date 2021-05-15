@@ -1,5 +1,3 @@
-import { trainColors } from "../constants/trainColors";
-
 const Reducer = (state, action) => {
   switch (action.type) {
     case "SET_GAME_STATE":

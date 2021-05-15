@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { Button } from "../../common/button";
 import Stats from "./stats";
 
 const Sidebar = () => {
@@ -13,19 +12,18 @@ const Sidebar = () => {
   return (
     //TODO: TEGYEL GOMBOT SIDEBARHOZ RENDESEN
     <>
-      <span className="bg-blue-800 w-1/3 h-1/3" onClick={() => setOpened(!opened)}>
-        OPEN/CLOSE
+      <span
+        className="bg-blue-800 w-1/3 h-1/3 mt-1 select-none p-2 text-md font-sans cursor-pointer"
+        onClick={() => setOpened(!opened)}
+      >
+        {opened ? "HIDE SCORES" : "SHOW SCORES"}
       </span>
       <div
         className={`h-1/4 flex flex-col flex-auto flex-shrink-0 z-40 antialiased bg-blue-100 text-gray-800 ${
           !opened && "hidden"
         }`}
       >
-        <div
-          className="flex flex-col top-0  left-0 w-64 bg-blue-900 h-full shadow-lg"
-          onClick={() => setOpened(!opened)}
-        >
-          <span className="text-blue-500 text-xl text-right mx-1 p-1">CLOSE</span>
+        <div className="flex flex-col top-0  left-0 w-64 bg-blue-900 h-full shadow-lg">
           <div className="flex items-center pl-6 h-20 border-b border-gray-800">
             <div className="ml-1">
               <p className="ml-1 text-3xl font-medium tracking-wide truncate text-blue-100 font-sans">

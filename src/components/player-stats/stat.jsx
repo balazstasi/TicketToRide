@@ -32,25 +32,14 @@ const Stat = ({ player }) => {
       <h1 className="text-xl font-semibold">
         P{player}|{player === 1 ? playerOne.name : playerTwo.name}
       </h1>
-      {/* <ul>
-        {player === 1
-          ? Object.keys(playerOne.cards).map((card) => {
-              const amount = playerOne.cards[card];
-              return amount > 0 && <li>{card + ": " + playerOne.cards[card]}</li>;
-            })
-          : Object.keys(playerTwo.cards).map((card) => {
-              const amount = playerTwo.cards[card];
-              return amount > 0 && <li>{card + ": " + playerTwo.cards[card]}</li>;
-            })}
-      </ul> */}
       <p>Score: {player === 1 ? playerOne.score : playerTwo.score}</p>
       <p>Markers: {player === 1 ? playerOne.trains : playerTwo.trains}</p>
-      <p>Train Cards: {player === 1 ? "TODO" : "TODO"}</p>
+      <p>Train Cards: {player === 1 ? playerOne.cardsDrawn : playerTwo.cardsDrawn}</p>
       <p>
         Destination Cards:{" "}
         {player === 1 ? playerOne.destinations.length : playerTwo.destinations.length}
       </p>
-      <div className="text-xl font-bold text-blue-100">
+      <div className="text-sm font-bold text-blue-100">
         {player === 1
           ? playerOne.destinations.map((destination) => (
               <div

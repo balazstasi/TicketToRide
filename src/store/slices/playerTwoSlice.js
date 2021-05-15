@@ -1,5 +1,6 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 import { cloneDeep } from "lodash";
+import { getRandomColor } from "../../utils/getRandomColor";
 
 export const playerTwoSlice = createSlice({
   name: "playerTwo",
@@ -21,6 +22,7 @@ export const playerTwoSlice = createSlice({
     cardsDrawn: 0,
     destinations: [],
     score: [],
+    movesSoFar: [],
   },
   reducers: {
     setStateTwo: {
@@ -33,6 +35,15 @@ export const playerTwoSlice = createSlice({
         if (state.cardsDrawn < 5) {
           state.cardsDrawn++;
           state.cards[action.payload]++;
+        }
+      },
+    },
+    drawCardTwo: {
+      reducer: (state, _) => {
+        if (state.cardsDrawn < 5) {
+          const color = getRandomColor();
+          state.cards[color]++;
+          state.cardsDrawn++;
         }
       },
     },
@@ -62,7 +73,7 @@ export const playerTwoSlice = createSlice({
   },
 });
 
-export const { addCardTwo, toggleDestinationTwo, addScoreTwo, setStateTwo } =
+export const { addCardTwo, toggleDestinationTwo, addScoreTwo, setStateTwo, drawCardTwo } =
   playerTwoSlice.actions;
 
 export default playerTwoSlice.reducer;

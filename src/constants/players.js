@@ -1,1 +1,1 @@
-export const players = ["Balazs", "Niki", "Laci"];
+export const players = ["Balazs", "Niki"];

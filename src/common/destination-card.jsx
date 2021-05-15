@@ -13,7 +13,7 @@ const DestinationCard = ({ from, to, destination, click, toggled }) => {
         >
           <div className="flex flex-col">
             <span className="text-2xl">{value}</span>
-            <span className="text-3xl">{from + " ➡️➡️➡ " + to}</span>
+            <span className="text-3xl">{from + " ➡️➡️➡️ " + to}</span>
           </div>
         </p>
       </div>

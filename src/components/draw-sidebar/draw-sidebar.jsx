@@ -1,7 +1,7 @@
 import React from "react";
-import { getRandomColor } from "../../utils/getRandomColor";
 import Card from "../card";
 import CardStack from "../card-stack";
+import { getRandomColor } from "../../utils/getRandomColor";
 import { removeCard } from "../../store/slices/gameSlice";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -27,6 +27,14 @@ const DrawSidebar = () => {
     console.log(playerTwo);
   };
 
+  const drawCardFromDeck = (cardColor) => {
+    if (gameState.turnPlayer === 1 && playerOne.cardsDrawn < 5) {
+      d(addCardOne(cardColor));
+    } else if (gameState.turnPlayer === 2 && playerTwo.cardsDrawn < 5) {
+      d(addCardTwo(cardColor));
+    }
+  };
+
   return (
     <>
       <div
@@ -38,9 +46,6 @@ const DrawSidebar = () => {
               <p className="ml-1 mt-4 text-3xl font-medium tracking-wide truncate text-blue-100 font-sans">
                 Draw Cards
               </p>
-              {/* <div className="badge my-2">
-                <div className="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-blue-900 bg-blue-100 rounded-full"></div>
-              </div> */}
             </div>
           </div>
           <div className="flex flex-col items-center justify-between mt-1 flex-grow">
@@ -51,7 +56,7 @@ const DrawSidebar = () => {
             })}
             <div className="flex flex-row">
               <div className="flex-grow mr-2 px-1 text-center">
-                <CardStack type="trains" />
+                <CardStack type="trains" drawCard={() => drawCardFromDeck(getRandomColor())} />
               </div>
               <div className="flex-grow mr-2 px-1 text-center">
                 <CardStack type="destinations" />

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { cloneDeep } from "lodash";
+import { getRandomColor } from "../../utils/getRandomColor";
 
 /*
   A function that accepts an initial state, an object full of reducer functions, and a "slice name", and automatically generates action creators and action types that correspond to the reducers and state.
@@ -38,6 +39,7 @@ export const playerOneSlice = createSlice({
     deck: [],
     destinations: [],
     score: [],
+    movesSoFar: [],
   },
   reducers: {
     setStateOne: {
@@ -50,6 +52,15 @@ export const playerOneSlice = createSlice({
         if (state.cardsDrawn < 5) {
           state.cardsDrawn++;
           state.cards[action.payload]++;
+        }
+      },
+    },
+    drawCardOne: {
+      reducer: (state, _) => {
+        if (state.cardsDrawn < 5) {
+          const color = getRandomColor();
+          state.cards[color]++;
+          state.cardsDrawn++;
         }
       },
     },
@@ -80,7 +91,7 @@ export const playerOneSlice = createSlice({
   },
 });
 
-export const { addCardOne, toggleDestinationOne, addScoreOne, setStateOne } =
+export const { addCardOne, toggleDestinationOne, addScoreOne, setStateOne, drawCardOne } =
   playerOneSlice.actions;
 
 export default playerOneSlice.reducer;

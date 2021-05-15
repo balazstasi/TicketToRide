@@ -44,7 +44,7 @@ const DestinationCardSelect = () => {
     }
     if (gameState.turnPlayer === 2) {
       console.log(stateTwo.destinations.find((d) => d.id === destination.id) && "FOUND For 2");
-      return stateTwo.destinations.find((d) => d.id === destination.id);
+      return stateTwo.destinations.find((d) => d?.id === destination.id);
     }
 
     throw new Error("CURRENT TURN PLAYER IS NOT CORRECT");

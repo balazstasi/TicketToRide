@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { trainColors } from "../constants/trainColors";
 
 import { Context } from "../store/store";
 function Player({ number, name, turnPlayer, renderCards }) {
@@ -11,9 +10,7 @@ function Player({ number, name, turnPlayer, renderCards }) {
       <h1 className="font-semibold text-black text-3xl mx-8 mt-8">
         <span
           className={`text-4xl border-2 bg-blue-900 p-2 ${
-            turnPlayer
-              ? "text-white bg-blue-900 border-2 border-white"
-              : "text-blue-500"
+            turnPlayer ? "text-white bg-blue-900 border-2 border-white" : "text-blue-500"
           }`}
         >
           {name}
@@ -26,8 +23,7 @@ function Player({ number, name, turnPlayer, renderCards }) {
           {renderCards &&
             Object.keys(player.cards).map((cardType) => (
               <p>
-                {cardType}{" "}
-                <span className="text-blue-100">{player.cards[cardType]}</span>
+                {cardType} <span className="text-blue-100">{player.cards[cardType]}</span>
               </p>
             ))}
         </div>

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../store/store";
 import { Link } from "react-router-dom";
-// import "./main-menu.css";
 
 const MainMenu = () => {
   const [state, dispatch] = useContext(Context);
