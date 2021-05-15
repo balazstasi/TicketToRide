@@ -3,9 +3,10 @@ import { getRandomColor } from "../../utils/getRandomColor";
 import Card from "../card";
 import CardStack from "../card-stack";
 import { removeCard } from "../../store/slices/gameSlice";
-import { addCardOne } from "../../store/slices/playerOneSlice";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { addCardOne } from "../../store/slices/playerOneSlice";
+import { addCardTwo } from "../../store/slices/playerTwoSlice";
 
 const DrawSidebar = () => {
   const d = useDispatch();
@@ -15,10 +16,15 @@ const DrawSidebar = () => {
 
   const drawCardForCurrentPlayer = (cardColor, i) => {
     console.log("ADD CARD", { color: cardColor });
-    d(addCardOne(cardColor));
-    d(removeCard(i));
-    console.log(playerOne.cards);
-    console.log(playerOne.cardsDrawn);
+    if (gameState.turnPlayer === 1 && playerOne.cardsDrawn < 5) {
+      d(addCardOne(cardColor));
+      d(removeCard(i));
+    } else if (gameState.turnPlayer === 2 && playerTwo.cardsDrawn < 5) {
+      d(addCardTwo(cardColor));
+      d(removeCard(i));
+    }
+
+    console.log(playerTwo);
   };
 
   return (

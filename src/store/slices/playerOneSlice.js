@@ -47,8 +47,10 @@ export const playerOneSlice = createSlice({
     },
     addCardOne: {
       reducer: (state, action) => {
-        state.cardsDrawn++;
-        state.cards[action.payload]++;
+        if (state.cardsDrawn < 5) {
+          state.cardsDrawn++;
+          state.cards[action.payload]++;
+        }
       },
     },
 

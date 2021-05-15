@@ -7,15 +7,18 @@ export const playerTwoSlice = createSlice({
     name: "Niki",
     trains: 45,
     cards: {
+      black: 0,
       blue: 0,
       green: 0,
-      yellow: 0,
-      rainbow: 0,
-      black: 0,
-      purple: 0,
+      orange: 0,
+      pink: 0,
+      red: 0,
       white: 0,
+      yellow: 0,
+      locomotive: 0,
     },
     deck: [],
+    cardsDrawn: 0,
     destinations: [],
     score: [],
   },
@@ -27,8 +30,10 @@ export const playerTwoSlice = createSlice({
     },
     addCardTwo: {
       reducer: (state, action) => {
-        const { color } = action.payload;
-        state.cards[color]++;
+        if (state.cardsDrawn < 5) {
+          state.cardsDrawn++;
+          state.cards[action.payload]++;
+        }
       },
     },
     toggleDestinationTwo: {
