@@ -4,7 +4,8 @@ import useImage from "use-image";
 import Konva from "konva";
 import { coord } from "../utils/calculateCoordinate";
 import { ticketToRideData } from "../assets/ticket-to-ride-data";
-
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import gameMap from "../assets/ticket-to-ride-europe-map.jpg";
 import cityDot from "../assets/images/cityDot.png";
 
@@ -30,13 +31,17 @@ const CityDot = ({ city, x, y }) => {
 };
 
 const Map = ({ destinations }) => {
+  const ui = useSelector((state) => state.ui);
+
   return (
-    <div className="w-full flex flex-wrap object-center">
+    <div className="flex flex-wrap object-center">
       <Stage
-        className="w-full"
+        className="ml-60"
         width={window.innerWidth}
         height={533}
-        x={window.innerWidth / 2 - 400 / 1.15}
+        x={window.innerWidth / 2 - 400 - 240 / 1.15}
+        y={0}
+        onMouseOver={() => console.log("ASDAS")}
       >
         <Layer>
           <MapImage />
@@ -89,6 +94,8 @@ const Map = ({ destinations }) => {
           console.log(connectionShapes);
           return connectionShapes;
         })} */}
+          <Circle x={ui.firstX / 1.15} y={ui.firstY / 1.15} radius={20} draggable fill={"blue"} />
+          <Circle x={ui.secondX / 1.15} y={ui.secondY / 1.15} draggable radius={20} fill={"blue"} />
         </Layer>
       </Stage>
     </div>

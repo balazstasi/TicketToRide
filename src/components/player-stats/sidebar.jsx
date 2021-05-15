@@ -10,13 +10,6 @@ const Sidebar = () => {
 
   const [opened, setOpened] = useState(true);
 
-  const toggleSideBar = (event) => {
-    console.log(event.key);
-    if (event.key === "s") {
-      setOpened(!opened);
-    }
-  };
-
   return (
     //TODO: TEGYEL GOMBOT SIDEBARHOZ RENDESEN
     <>
@@ -24,7 +17,7 @@ const Sidebar = () => {
         OPEN/CLOSE
       </span>
       <div
-        className={`h-1/4 flex flex-col flex-auto flex-shrink-0 antialiased bg-blue-100 text-gray-800 ${
+        className={`h-1/4 flex flex-col flex-auto flex-shrink-0 z-40 antialiased bg-blue-100 text-gray-800 ${
           !opened && "hidden"
         }`}
       >

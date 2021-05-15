@@ -23,14 +23,25 @@ const DrawBottom = () => {
               <Card color={cardColor} click={() => null} />
             </div>
           ))} */}
-          {Object.keys(playerOne.cards).map((color) => {
-            const amount = playerOne.cards[color];
-            const result = Array.from(Array(amount).keys()).map((_) => (
-              <Card color={color} click={() => null} />
-            ));
 
-            return result;
-          })}
+          {gameState.turnPlayer === 1 &&
+            Object.keys(playerOne.cards).map((color) => {
+              const amount = playerOne.cards[color];
+              const result = Array.from(Array(amount).keys()).map((_) => (
+                <Card color={color} click={() => null} />
+              ));
+
+              return result;
+            })}
+          {gameState.turnPlayer === 2 &&
+            Object.keys(playerTwo.cards).map((color) => {
+              const amount = playerTwo.cards[color];
+              const result = Array.from(Array(amount).keys()).map((_) => (
+                <Card color={color} click={() => null} />
+              ));
+
+              return result;
+            })}
         </div>
       </div>
     </>
