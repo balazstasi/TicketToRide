@@ -1,11 +1,11 @@
 import React from "react";
 
-const Card = ({ color, highlighted, click, onHover }) => {
+const Card = ({ color, highlighted, click, onSelect }) => {
   console.log(highlighted);
   return (
     <div
       onClick={click}
-      onMouseEnter={onHover}
+      onMouseDown={onSelect}
       className={`p-3 items-center place-self-center cursor-pointer w-40`}
     >
       <div
@@ -13,7 +13,7 @@ const Card = ({ color, highlighted, click, onHover }) => {
           color === "locomotive" &&
           "bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 text-yellow-200"
         }  ${
-          highlighted ? "border-blue-200 border-4" : `border-2 border-${color}-600`
+          highlighted ? "border-blue-400 border-4" : `border-4 border-${color}-600`
         } px-4 rounded-md tracking-wide shadow-lg flex flex-row items-center self-center`}
         style={{ backgroundColor: color }}
       >

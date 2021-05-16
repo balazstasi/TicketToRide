@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Button } from "../common/button";
 import Map from "../components/map";
 import Sidebar from "../components/player-stats/sidebar";
@@ -31,12 +31,7 @@ const GameScreen = () => {
       <div className="flex flex-row">
         <div className="flex flex-col w-full">
           <div className="flex flex-row self-center">
-            <div>
-              <Button onClick={() => d(drawCard())}>Draw New Card</Button>
-            </div>
-            <div>
-              <Button onClick={() => d(resetDeck())}>Reset Draw Deck</Button>
-            </div>
+            For Debugging:
             <div>
               <Button highlighted={gameState.turnPlayer === 1} onClick={() => d(setTurnPlayer(1))}>
                 Player 1
@@ -48,7 +43,6 @@ const GameScreen = () => {
               </Button>
             </div>
           </div>
-
           <Map />
           <DrawBottom />
         </div>

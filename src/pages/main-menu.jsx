@@ -1,14 +1,7 @@
-import React, { useContext, useEffect } from "react";
-import { Context } from "../store/store";
+import React from "react";
 import { Link } from "react-router-dom";
 
 const MainMenu = () => {
-  const [state, dispatch] = useContext(Context);
-
-  useEffect(() => {
-    dispatch({ type: "SET_GAME_STATE", payload: "MAIN_PAGE" });
-  }, [dispatch]);
-
   return (
     <>
       <link

@@ -1,6 +1,7 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 import { cloneDeep } from "lodash";
 import { getRandomColor } from "../../utils/getRandomColor";
+import { MOVE_LIST } from "../../constants/constants";
 
 export const playerTwoSlice = createSlice({
   name: "playerTwo",
@@ -22,7 +23,9 @@ export const playerTwoSlice = createSlice({
     cardsDrawn: 0,
     destinations: [],
     score: [],
-    movesSoFar: [],
+    lastMove: null,
+    beforeLastMove: null,
+    cardsDrawnThisTurn: 0,
   },
   reducers: {
     setStateTwo: {
@@ -32,19 +35,22 @@ export const playerTwoSlice = createSlice({
     },
     addCardTwo: {
       reducer: (state, action) => {
-        if (state.cardsDrawn < 5) {
-          state.cardsDrawn++;
-          state.cards[action.payload]++;
-        }
+        // if (state.cardsDrawn < 5) {
+        state.cardsDrawn++;
+        state.cardsDrawnThisturn++;
+        state.cards[action.payload]++;
+        state.beforeLastMove = state.lastMove;
+        state.lastMove = MOVE_LIST.TAKE_CARD_FROM_DRAWN;
+        // }
       },
     },
     drawCardTwo: {
       reducer: (state, _) => {
-        if (state.cardsDrawn < 5) {
-          const color = getRandomColor();
-          state.cards[color]++;
-          state.cardsDrawn++;
-        }
+        // if (state.cardsDrawn < 5) {
+        const color = getRandomColor();
+        state.cards[color]++;
+        state.cardsDrawn++;
+        // }
       },
     },
     toggleDestinationTwo: {
@@ -71,9 +77,20 @@ export const playerTwoSlice = createSlice({
       state.score += action.payload;
     },
   },
+  setCardsDrawnThisTurnTwo: {
+    reducer: (state, action) => {
+      state.cardsDrawnThisTurn = 0;
+    },
+  },
 });
 
-export const { addCardTwo, toggleDestinationTwo, addScoreTwo, setStateTwo, drawCardTwo } =
-  playerTwoSlice.actions;
+export const {
+  addCardTwo,
+  toggleDestinationTwo,
+  addScoreTwo,
+  setStateTwo,
+  drawCardTwo,
+  setCardsDrawnThisTurnTwo,
+} = playerTwoSlice.actions;
 
 export default playerTwoSlice.reducer;

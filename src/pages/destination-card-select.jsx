@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import DestinationCard from "../common/destination-card";
-import { Context } from "../store/store";
 import { Button } from "../common/button";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -11,8 +10,6 @@ import { toggleDestinationTwo } from "../store/slices/playerTwoSlice";
 import { setTurnPlayer } from "../store/slices/gameSlice";
 
 const DestinationCardSelect = () => {
-  const [state, dispatch] = useContext(Context);
-
   const [destinations, setDestinations] = useState([]);
   const d = useDispatch();
   const gameState = useSelector((state) => state.game);
@@ -20,9 +17,8 @@ const DestinationCardSelect = () => {
   const stateTwo = useSelector((state) => state.playerTwo);
 
   useEffect(() => {
-    dispatch({ type: "SET_GAME_STATE", payload: "DESTINATION_CARD_SELECT" });
     d(setTurnPlayer(1));
-  }, [d, dispatch]);
+  }, [d]);
 
   // Get 3 random destinations to choose from
   useEffect(() => {

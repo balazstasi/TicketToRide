@@ -67,10 +67,10 @@ export const CARD_TO_LETTER = {
 };
 
 export const MOVE_LIST = {
-  TAKE_TOP_CARD: "Take card from the top of the deck",
-  TAKE_CARD_FROM_DRAWN: "Take a card from the drawn 5",
-  TAKE_ROUTE_CARDS: "Take route cards",
-  LAY_ROUTE: "Lay route",
+  TAKE_TOP_CARD: "CARD FROM DECK",
+  TAKE_CARD_FROM_DRAWN: "CARD FROM PALLET",
+  TAKE_ROUTE_CARDS: "TAKE ROUTE FROM DECK",
+  LAY_ROUTE: "LAY ROUTE",
 };
 
 export const ROUTE_LENGTHS = [1, 2, 3, 4, 6, 8];

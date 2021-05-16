@@ -11,15 +11,16 @@ const DrawBottom = () => {
 
   const highlightCard = (color) => {
     console.log("HIGHLIGHTING:", color);
-    setCardHighlighted(color);
+    if (cardHighlighted === color) setCardHighlighted(null);
+    else setCardHighlighted(color);
   };
 
   return (
     <>
       <div
-        className={`w-full flex flex-row flex-auto flex-shrink-0 antialiased bg-blue-900 text-gray-800`}
+        className={`flex flex-row flex-auto flex-shrink-0 antialiased bg-blue-900 text-gray-800`}
       >
-        <div className="flex items-center pl-6 h-40 border-b border-gray-800 mr-40">
+        <div className="flex items-center flex-wrap pl-6 h-auto border-b border-gray-800 mr-40">
           {gameState.turnPlayer === 1 &&
             Object.keys(playerOne.cards).map((color) => {
               const amount = playerOne.cards[color];
@@ -27,7 +28,7 @@ const DrawBottom = () => {
                 <Card
                   color={color}
                   highlighted={color === cardHighlighted}
-                  onHover={() => highlightCard(color)}
+                  onSelect={() => highlightCard(color)}
                 />
               ));
 
@@ -40,7 +41,7 @@ const DrawBottom = () => {
                 <Card
                   color={color}
                   highlighted={color === cardHighlighted}
-                  onHover={() => highlightCard(color)}
+                  onSelect={() => highlightCard(color)}
                 />
               ));
 
