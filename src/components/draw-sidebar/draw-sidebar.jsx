@@ -7,6 +7,9 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { addCardOne } from "../../store/slices/playerOneSlice";
 import { addCardTwo } from "../../store/slices/playerTwoSlice";
+import { onlyOneLocomotive } from "../../utils/onlyOneLocomotive";
+import { LOCOMOTIVE } from "../../constants/constants";
+import { setTurnPlayer } from "../../store/slices/gameSlice";
 
 const DrawSidebar = () => {
   const d = useDispatch();
@@ -16,15 +19,16 @@ const DrawSidebar = () => {
 
   const drawCardForCurrentPlayer = (cardColor, i) => {
     console.log("ADD CARD", { color: cardColor });
+
     if (gameState.turnPlayer === 1 && playerOne.cardsDrawn < 5) {
       d(addCardOne(cardColor));
       d(removeCard(i));
+      d(setTurnPlayer(gameState.turnPlayer === 1 ? 2 : 1));
     } else if (gameState.turnPlayer === 2 && playerTwo.cardsDrawn < 5) {
       d(addCardTwo(cardColor));
       d(removeCard(i));
+      d(setTurnPlayer(gameState.turnPlayer === 1 ? 2 : 1));
     }
-
-    console.log(playerTwo);
   };
 
   const drawCardFromDeck = (cardColor) => {

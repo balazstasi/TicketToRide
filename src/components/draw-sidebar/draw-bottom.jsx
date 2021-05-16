@@ -7,6 +7,11 @@ const DrawBottom = () => {
   const playerTwo = useSelector((state) => state.playerTwo);
   const gameState = useSelector((state) => state.game);
 
+  const highlightCard = (i) => {
+    //TODO
+    return null;
+  };
+
   return (
     <>
       <div
@@ -16,8 +21,8 @@ const DrawBottom = () => {
           {gameState.turnPlayer === 1 &&
             Object.keys(playerOne.cards).map((color) => {
               const amount = playerOne.cards[color];
-              const result = Array.from(Array(amount).keys()).map((_) => (
-                <Card color={color} click={() => null} />
+              const result = Array.from(Array(amount).keys()).map((_, i) => (
+                <Card color={color} click={() => highlightCard(i)} />
               ));
 
               return result;
@@ -25,8 +30,8 @@ const DrawBottom = () => {
           {gameState.turnPlayer === 2 &&
             Object.keys(playerTwo.cards).map((color) => {
               const amount = playerTwo.cards[color];
-              const result = Array.from(Array(amount).keys()).map((_) => (
-                <Card color={color} click={() => null} />
+              const result = Array.from(Array(amount).keys()).map((_, i) => (
+                <Card color={color} click={() => highlightCard(i)} />
               ));
 
               return result;
