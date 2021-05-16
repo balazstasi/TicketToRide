@@ -5,11 +5,10 @@ import { coord } from "../../utils/calculateCoordinate";
 import { getDestinationByName } from "../../utils/getDestinationByName";
 import { highlightCity } from "../../store/slices/uiSlice";
 
-const Stat = ({ player }) => {
+const Stat = ({ player, highlighted }) => {
   const d = useDispatch();
   const playerOne = useSelector((state) => state.playerOne);
   const playerTwo = useSelector((state) => state.playerTwo);
-  const ui = useSelector((state) => state.ui);
 
   const highlightNodes = (destination) => {
     const firstCity = getDestinationByName(destination.fromCity);
@@ -29,7 +28,7 @@ const Stat = ({ player }) => {
 
   return (
     <div className="mb-4 bg-gradient-to-tl from-blue-800 to-blue-600 p-2">
-      <h1 className="text-xl font-semibold">
+      <h1 className={`${highlighted && "bg-white text-blue-800"} p-2 text-xl font-semibold`}>
         P{player}|{player === 1 ? playerOne.name : playerTwo.name}
       </h1>
       <p>Score: {player === 1 ? playerOne.score : playerTwo.score}</p>

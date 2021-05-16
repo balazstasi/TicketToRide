@@ -18,8 +18,8 @@ const Stats = () => {
 
   return (
     <div className="text-blue-100 p-2 flex items-center flex-col">
-      <Stat player={1} />
-      <Stat player={2} />
+      <Stat player={1} highlighted={gameState.turnPlayer === 1} />
+      <Stat player={2} highlighted={gameState.turnPlayer === 2} />
     </div>
   );
 };
