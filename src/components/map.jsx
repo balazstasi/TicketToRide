@@ -6,26 +6,21 @@ import { ticketToRideData } from "../assets/ticket-to-ride-data";
 import { useSelector } from "react-redux";
 import gameMap from "../assets/ticket-to-ride-europe-map.jpg";
 import cityDot from "../assets/images/cityDot.png";
+import highlightedCityDot from "../assets/images/highlightedCityDot.png";
 
 const MapImage = () => {
   const [image] = useImage(gameMap);
   return <Image image={image} width={800 / 1.15} height={533 / 1.15} />;
 };
 
-const CityDot = ({ city, x, y }) => {
+const HighlightedCityDot = ({ x, y }) => {
+  const [image] = useImage(highlightedCityDot);
+  return <Image image={image} width={28} height={32} x={x} y={y} />;
+};
+
+const CityDot = ({ x, y }) => {
   const [image] = useImage(cityDot);
-  return (
-    <Image
-      image={image}
-      width={25}
-      height={25}
-      x={x / 1.15}
-      y={y / 1.15}
-      onMouseEnter={() => {
-        console.log(city);
-      }}
-    />
-  );
+  return <Image image={image} width={25} height={32} x={x / 1.15} y={y / 1.15} />;
 };
 
 const Map = () => {
@@ -66,8 +61,8 @@ const Map = () => {
             });
             return connectionShapes;
           })}
-          <Circle x={ui.firstX / 1.15} y={ui.firstY / 1.15} radius={20} draggable fill={"blue"} />
-          <Circle x={ui.secondX / 1.15} y={ui.secondY / 1.15} draggable radius={20} fill={"blue"} />
+          <HighlightedCityDot x={ui.firstX / 1.15 - 15} y={ui.firstY / 1.15 - 15} />
+          <HighlightedCityDot x={ui.secondX / 1.15 - 15} y={ui.secondY / 1.15 - 15} />
         </Layer>
       </Stage>
     </div>

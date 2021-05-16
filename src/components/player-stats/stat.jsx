@@ -44,13 +44,13 @@ const Stat = ({ player, highlighted }) => {
               <div
                 className="cursor-pointer"
                 onMouseEnter={() => highlightNodes(destination)}
-              >{`${destination.fromCity} -> ${destination.toCity}`}</div>
+              >{`${destination.value}: ${destination.fromCity} -> ${destination.toCity}`}</div>
             ))
           : playerTwo.destinations.map((destination) => (
               <div
                 className="cursor-pointer"
                 onMouseEnter={() => highlightNodes(destination)}
-              >{`${destination.fromCity} -> ${destination.toCity}`}</div>
+              >{`${destination.value}: ${destination.fromCity} -> ${destination.toCity}`}</div>
             ))}
       </div>
     </div>

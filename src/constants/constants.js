@@ -69,9 +69,8 @@ export const CARD_TO_LETTER = {
 export const MOVE_LIST = {
   TAKE_TOP_CARD: "Take card from the top of the deck",
   TAKE_CARD_FROM_DRAWN: "Take a card from the drawn 5",
-  LAY_STATION: "Lay station",
-  LAY_ROUTE: "Lay route",
   TAKE_ROUTE_CARDS: "Take route cards",
+  LAY_ROUTE: "Lay route",
 };
 
 export const ROUTE_LENGTHS = [1, 2, 3, 4, 6, 8];

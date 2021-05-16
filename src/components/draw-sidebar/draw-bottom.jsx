@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "../card";
 import { useSelector } from "react-redux";
 
@@ -7,9 +7,11 @@ const DrawBottom = () => {
   const playerTwo = useSelector((state) => state.playerTwo);
   const gameState = useSelector((state) => state.game);
 
-  const highlightCard = (i) => {
-    //TODO
-    return null;
+  const [cardHighlighted, setCardHighlighted] = useState();
+
+  const highlightCard = (color) => {
+    console.log("HIGHLIGHTING:", color);
+    setCardHighlighted(color);
   };
 
   return (
@@ -21,8 +23,12 @@ const DrawBottom = () => {
           {gameState.turnPlayer === 1 &&
             Object.keys(playerOne.cards).map((color) => {
               const amount = playerOne.cards[color];
-              const result = Array.from(Array(amount).keys()).map((_, i) => (
-                <Card color={color} click={() => highlightCard(i)} />
+              const result = Array.from(Array(amount).keys()).map((card, i) => (
+                <Card
+                  color={color}
+                  highlighted={color === cardHighlighted}
+                  onHover={() => highlightCard(color)}
+                />
               ));
 
               return result;
@@ -30,8 +36,12 @@ const DrawBottom = () => {
           {gameState.turnPlayer === 2 &&
             Object.keys(playerTwo.cards).map((color) => {
               const amount = playerTwo.cards[color];
-              const result = Array.from(Array(amount).keys()).map((_, i) => (
-                <Card color={color} click={() => highlightCard(i)} />
+              const result = Array.from(Array(amount).keys()).map((card, i) => (
+                <Card
+                  color={color}
+                  highlighted={color === cardHighlighted}
+                  onHover={() => highlightCard(color)}
+                />
               ));
 
               return result;

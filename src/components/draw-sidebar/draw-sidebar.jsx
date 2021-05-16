@@ -55,12 +55,20 @@ const DrawSidebar = () => {
           <div className="flex flex-col items-center justify-between mt-1 flex-grow">
             {gameState?.deck.map((cardColor, i) => {
               return (
-                <Card color={cardColor} click={() => drawCardForCurrentPlayer(cardColor, i)} />
+                <Card
+                  color={cardColor}
+                  click={() => drawCardForCurrentPlayer(cardColor, i)}
+                  highlighted={false}
+                />
               );
             })}
             <div className="flex flex-row">
               <div className="flex-grow mr-2 px-1 text-center">
-                <CardStack type="trains" drawCard={() => drawCardFromDeck(getRandomColor())} />
+                <CardStack
+                  type="trains"
+                  drawCard={() => drawCardFromDeck(getRandomColor())}
+                  highlighted={false}
+                />
               </div>
               <div className="flex-grow mr-2 px-1 text-center">
                 <CardStack type="destinations" />
