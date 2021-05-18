@@ -7,10 +7,9 @@ const Sidebar = () => {
   const playerOne = useSelector((state) => state.playerOne);
   const playerTwo = useSelector((state) => state.playerTwo);
 
-  const [opened, setOpened] = useState(true);
+  const [opened, setOpened] = useState(false);
 
   return (
-    //TODO: TEGYEL GOMBOT SIDEBARHOZ RENDESEN
     <>
       <span
         className="bg-blue-800 w-1/3 h-1/3 mt-1 select-none p-2 text-md font-sans cursor-pointer"
@@ -19,7 +18,7 @@ const Sidebar = () => {
         {opened ? "HIDE SCORES" : "SHOW SCORES"}
       </span>
       <div
-        className={`h-1/4 flex flex-col flex-auto flex-shrink-0 z-40 antialiased bg-blue-100 text-gray-800 ${
+        className={`opacity-90 h-1/4 flex flex-col flex-auto flex-shrink-0 z-40 antialiased bg-blue-100 text-gray-800 ${
           !opened && "hidden"
         }`}
       >

@@ -49,10 +49,12 @@ const DrawSidebar = () => {
   };
 
   const drawCardFromDeck = (cardColor) => {
-    if (gameState.turnPlayer === 1 && playerOne.cardsDrawn < 5) {
+    if (gameState.turnPlayer === 1) {
       d(addCardOne(cardColor));
-    } else if (gameState.turnPlayer === 2 && playerTwo.cardsDrawn < 5) {
+      d(setTurnPlayer(2));
+    } else if (gameState.turnPlayer === 2) {
       d(addCardTwo(cardColor));
+      d(setTurnPlayer(1));
     }
   };
 
