@@ -58,9 +58,7 @@ const DrawSidebar = () => {
 
   return (
     <>
-      <div
-        className={`z-0 min-h-screen h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-blue-100 text-gray-800`}
-      >
+      <div className="z-0 min-h-screen h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-blue-100 text-gray-800">
         <div className="fixed flex flex-col top-0 right-0 w-64 bg-blue-900 h-full">
           <div className="flex items-center pl-6 h-20 border-b border-gray-800">
             <div className="ml-1">
