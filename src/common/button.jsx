@@ -3,7 +3,9 @@ import React from "react";
 export const Button = (props) => {
   return (
     <button
-      className="self-center mt-10 font-semibold rounded px-3 py-2 m-2 border-b-4 border-l-2 shadow-lg bg-blue-400 border-blue-500 text-blue-900 w-1/6"
+      className={`${
+        props.highlighted ? "bg-blue-200" : "bg-blue-400"
+      } font-semibold w-full font-sans rounded px-3 py-2 p-1 mx-2 my-1 border-b-4 border-l-2 shadow-lg border-blue-500 text-blue-900`}
       {...props}
     >
       {props.children}

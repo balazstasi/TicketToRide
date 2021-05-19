@@ -1,25 +1,56 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { cloneDeep } from "lodash";
+import { getRandomColor } from "../../utils/getRandomColor";
+import { MOVE_LIST } from "../../constants/constants";
 
 export const playerTwoSlice = createSlice({
   name: "playerTwo",
   initialState: {
+    name: "Niki",
     trains: 45,
     cards: {
+      black: 0,
       blue: 0,
       green: 0,
-      yellow: 0,
-      rainbow: 0,
-      black: 0,
-      purple: 0,
+      orange: 0,
+      pink: 0,
+      red: 0,
       white: 0,
+      yellow: 0,
+      locomotive: 0,
     },
+    deck: [],
+    cardsDrawn: 0,
     destinations: [],
+    score: [],
+    lastMove: null,
+    beforeLastMove: null,
+    cardsDrawnThisTurn: 0,
   },
   reducers: {
+    setStateTwo: {
+      reducer: (state, action) => {
+        state = cloneDeep(state);
+      },
+    },
     addCardTwo: {
       reducer: (state, action) => {
-        const { color } = action.payload;
+        // if (state.cardsDrawn < 5) {
+        state.cardsDrawn++;
+        state.cardsDrawnThisturn++;
+        state.cards[action.payload]++;
+        state.beforeLastMove = state.lastMove;
+        state.lastMove = MOVE_LIST.TAKE_CARD_FROM_DRAWN;
+        // }
+      },
+    },
+    drawCardTwo: {
+      reducer: (state, _) => {
+        // if (state.cardsDrawn < 5) {
+        const color = getRandomColor();
         state.cards[color]++;
+        state.cardsDrawn++;
+        // }
       },
     },
     toggleDestinationTwo: {
@@ -41,8 +72,25 @@ export const playerTwoSlice = createSlice({
       },
     },
   },
+  addScoreTwo: {
+    reducer: (state, action) => {
+      state.score += action.payload;
+    },
+  },
+  setCardsDrawnThisTurnTwo: {
+    reducer: (state, action) => {
+      state.cardsDrawnThisTurn = 0;
+    },
+  },
 });
 
-export const { addCardTwo, toggleDestinationTwo } = playerTwoSlice.actions;
+export const {
+  addCardTwo,
+  toggleDestinationTwo,
+  addScoreTwo,
+  setStateTwo,
+  drawCardTwo,
+  setCardsDrawnThisTurnTwo,
+} = playerTwoSlice.actions;
 
 export default playerTwoSlice.reducer;

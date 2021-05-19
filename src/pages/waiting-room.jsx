@@ -1,14 +1,7 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { Context } from "../store/store";
 
 const WaitingRoom = () => {
-  const [state, dispatch] = useContext(Context);
-
-  useEffect(() => {
-    dispatch({ type: "SET_GAME_STATE", payload: "WAITING_FOR_PLAYERS" });
-  }, []);
-
   return (
     <div>
       <div className=" flex-1 bg-blue-400 flex justify-center items-center bg-gradient-to-tl from-blue-800 to-blue-500 text-white font-mono flex-col min-h-screen">
