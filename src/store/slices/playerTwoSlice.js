@@ -7,13 +7,14 @@ export const playerTwoSlice = createSlice({
   name: "playerTwo",
   initialState: {
     name: "Niki",
+    playerColor: "lightpink",
     trains: 45,
     cards: {
       black: 0,
       blue: 0,
       green: 0,
       orange: 0,
-      pink: 0,
+      purple: 0,
       red: 0,
       white: 0,
       yellow: 0,
@@ -22,15 +23,40 @@ export const playerTwoSlice = createSlice({
     deck: [],
     cardsDrawn: 0,
     destinations: [],
+    collectedRoads: [],
     score: [],
     lastMove: null,
     beforeLastMove: null,
     cardsDrawnThisTurn: 0,
   },
   reducers: {
-    setStateTwo: {
+    collectRoadTwo: {
       reducer: (state, action) => {
-        state = cloneDeep(state);
+        const { id, color, road } = action.payload;
+        const cardAmount = state.cards[color];
+        let roadLength = road.length;
+
+        if (cardAmount >= roadLength && state.trains >= roadLength) {
+          // If there are enough colored cards subtract them and build the path
+          if (!state.collectedRoads.find((road) => road.id === id)) {
+            state.trains -= roadLength;
+            state.collectedRoads.push(action.payload);
+            state.trains -= roadLength;
+            state.cards[color] -= roadLength;
+          }
+        } else if (
+          cardAmount + state.cards.locomotive >= roadLength &&
+          state.trains >= roadLength
+        ) {
+          // If there aren't enough colored cards we use locomotives too
+          if (!state.collectedRoads.find((road) => road.id === id)) {
+            state.trains -= roadLength;
+            state.collectedRoads.push(action.payload);
+            roadLength -= state.cards[color];
+            state.cards[color] = 0;
+            state.cards.locomotive -= roadLength;
+          }
+        }
       },
     },
     addCardTwo: {
@@ -91,6 +117,7 @@ export const {
   setStateTwo,
   drawCardTwo,
   setCardsDrawnThisTurnTwo,
+  collectRoadTwo,
 } = playerTwoSlice.actions;
 
 export default playerTwoSlice.reducer;

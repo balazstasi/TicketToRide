@@ -22,6 +22,7 @@ export const gameSlice = createSlice({
       locomotive: 14,
     },
     deck: [1, 2, 3, 4, 5].map((_) => getRandomColor()),
+    thrownOutCards: [],
   },
 
   reducers: {
@@ -82,6 +83,11 @@ export const gameSlice = createSlice({
       },
     },
   },
+  throwOutCard: {
+    reducer: (state, action) => {
+      state.throwOutCard.push(action.payload);
+    },
+  },
 });
 
 export const {
@@ -92,6 +98,7 @@ export const {
   resetDeck,
   drawCard,
   removeCard,
+  throwOutCard,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

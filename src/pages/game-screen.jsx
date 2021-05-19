@@ -7,15 +7,12 @@ import DrawBottom from "../components/draw-sidebar/draw-bottom";
 
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { drawCard, setTurnPlayer } from "../store/slices/gameSlice";
-import { resetDeck } from "../store/slices/gameSlice";
+import { setTurnPlayer } from "../store/slices/gameSlice";
 import { drawCardOne } from "../store/slices/playerOneSlice";
 import { drawCardTwo } from "../store/slices/playerTwoSlice";
 
 const GameScreen = () => {
   const d = useDispatch();
-  const playerOne = useSelector((state) => state.playerOne);
-  const playerTwo = useSelector((state) => state.playerTwo);
   const gameState = useSelector((state) => state.game);
   const [scoreOpen, setScoreOpen] = useState(false);
 

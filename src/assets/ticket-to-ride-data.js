@@ -543,7 +543,7 @@ export const ticketToRideData = {
         { x: 34, y: 34.146341463414636 },
         { x: 36.5, y: 37.89868667917448 },
       ],
-      color: "whote",
+      color: "white",
       locomotive: 0,
     },
     14: {
@@ -643,7 +643,7 @@ export const ticketToRideData = {
         { x: 15.375, y: 76.73545966228893 },
         { x: 13.125, y: 80.86303939962477 },
       ],
-      color: "whote",
+      color: "white",
       locomotive: 0,
     },
     21: {
@@ -796,7 +796,7 @@ export const ticketToRideData = {
         { x: 33, y: 46.34146341463415 },
         { x: 35.875, y: 43.52720450281426 },
       ],
-      color: "whote",
+      color: "white",
       locomotive: 0,
     },
     32: {
@@ -1000,7 +1000,7 @@ export const ticketToRideData = {
         { x: 51.125, y: 11.632270168855536 },
         { x: 54, y: 8.442776735459661 },
       ],
-      color: "whote",
+      color: "white",
       locomotive: 0,
     },
     47: {
@@ -1040,7 +1040,7 @@ export const ticketToRideData = {
         { x: 49.125, y: 73.73358348968105 },
         { x: 52.37500000000001, y: 75.79737335834896 },
       ],
-      color: "whote",
+      color: "white",
       locomotive: 0,
     },
     50: {
@@ -1248,7 +1248,7 @@ export const ticketToRideData = {
       to: "10",
       toCity: "Budapest",
       elements: [{ x: 56.25, y: 54.03377110694184 }],
-      color: "whote",
+      color: "white",
       locomotive: 0,
     },
     65: {
@@ -1624,7 +1624,7 @@ export const ticketToRideData = {
         { x: 82.25, y: 59.849906191369605 },
         { x: 85.125, y: 63.22701688555347 },
       ],
-      color: "whote",
+      color: "white",
       locomotive: 0,
     },
     91: {
@@ -1763,7 +1763,7 @@ export const ticketToRideData = {
         { x: 91.625, y: 17.636022514071296 },
         { x: 92.625, y: 23.076923076923077 },
       ],
-      color: "whote",
+      color: "white",
       locomotive: 0,
     },
     101: {
