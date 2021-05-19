@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import DestinationCard from "../common/destination-card";
-import { Context } from "../store/store";
 import { Button } from "../common/button";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -11,8 +10,6 @@ import { toggleDestinationTwo } from "../store/slices/playerTwoSlice";
 import { setTurnPlayer } from "../store/slices/gameSlice";
 
 const DestinationCardSelect = () => {
-  const [state, dispatch] = useContext(Context);
-
   const [destinations, setDestinations] = useState([]);
   const d = useDispatch();
   const gameState = useSelector((state) => state.game);
@@ -20,9 +17,8 @@ const DestinationCardSelect = () => {
   const stateTwo = useSelector((state) => state.playerTwo);
 
   useEffect(() => {
-    dispatch({ type: "SET_GAME_STATE", payload: "DESTINATION_CARD_SELECT" });
     d(setTurnPlayer(1));
-  }, [d, dispatch]);
+  }, [d]);
 
   // Get 3 random destinations to choose from
   useEffect(() => {
@@ -44,7 +40,7 @@ const DestinationCardSelect = () => {
     }
     if (gameState.turnPlayer === 2) {
       console.log(stateTwo.destinations.find((d) => d.id === destination.id) && "FOUND For 2");
-      return stateTwo.destinations.find((d) => d.id === destination.id);
+      return stateTwo.destinations.find((d) => d?.id === destination.id);
     }
 
     throw new Error("CURRENT TURN PLAYER IS NOT CORRECT");
@@ -52,10 +48,10 @@ const DestinationCardSelect = () => {
 
   return (
     <div className="flex flex-col">
-      <h1 className="text-center mt-10 font-bold text-3xl text-blue-200 select-none">
-        Plyer {gameState.turnPlayer}
+      <h1 className="text-center mt-2 font-bold text-3xl text-blue-200 select-none">
+        Player {gameState.turnPlayer}
       </h1>
-      <h2 className="text-center mt-10 font-bold text-3xl text-blue-200 select-none">
+      <h2 className="text-center mt-4 font-bold text-3xl text-blue-200 select-none">
         Please Select <span className="text-4xl">2</span> Destination Cards!
       </h2>
 
@@ -71,7 +67,7 @@ const DestinationCardSelect = () => {
         );
       })}
 
-      <div className="w-full text-center">
+      <div className="w-1/4 mt-4 self-center text-center">
         {gameState.turnPlayer === 1 ? (
           <Button
             onClick={() => {
@@ -83,7 +79,9 @@ const DestinationCardSelect = () => {
           </Button>
         ) : (
           <Link to="/game">
-            <Button>Confirm Choices</Button>
+            <div className="text-center">
+              <Button>Confirm Choices</Button>
+            </div>
           </Link>
         )}
       </div>

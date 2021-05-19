@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { cloneDeep } from "lodash";
+import { getRandomColor } from "../../utils/getRandomColor";
+import { MOVE_LIST } from "../../constants/constants";
 
 /*
   A function that accepts an initial state, an object full of reducer functions, and a "slice name", and automatically generates action creators and action types that correspond to the reducers and state.
@@ -8,23 +10,29 @@ import { cloneDeep } from "lodash";
 
   Internally, it uses createAction and createReducer
 */
-
 export const playerOneSlice = createSlice({
   name: "playerOne",
   initialState: {
     name: "Balazs",
     trains: 45,
     cards: {
+      black: 0,
       blue: 0,
       green: 0,
-      yellow: 3,
-      rainbow: 0,
-      black: 5,
-      purple: 0,
+      orange: 0,
+      pink: 0,
+      red: 0,
       white: 0,
+      yellow: 0,
+      locomotive: 0,
     },
+    cardsDrawn: 0,
+    deck: [],
     destinations: [],
     score: [],
+    lastMove: null,
+    beforeLastMove: null,
+    cardsDrawnThisTurn: 0,
   },
   reducers: {
     setStateOne: {
@@ -34,8 +42,22 @@ export const playerOneSlice = createSlice({
     },
     addCardOne: {
       reducer: (state, action) => {
-        const { color } = action.payload;
+        // if (state.cardsDrawn < 5) {
+        state.cardsDrawn++;
+        state.cardsDrawnThisTurn++;
+        state.cards[action.payload]++;
+        state.beforeLastMove = state.lastMove;
+        state.lastMove = MOVE_LIST.TAKE_CARD_FROM_DRAWN;
+        // }
+      },
+    },
+    drawCardOne: {
+      reducer: (state, _) => {
+        // if (state.cardsDrawn < 5) {
+        const color = getRandomColor();
         state.cards[color]++;
+        state.cardsDrawn++;
+        // }
       },
     },
 
@@ -63,9 +85,20 @@ export const playerOneSlice = createSlice({
       state.score += action.payload;
     },
   },
+  setCardsDrawnThisTurnOne: {
+    reducer: (state, action) => {
+      state.cardsDrawnThisTurn = 0;
+    },
+  },
 });
 
-export const { addCardOne, toggleDestinationOne, addScoreOne, setStateOne } =
-  playerOneSlice.actions;
+export const {
+  addCardOne,
+  toggleDestinationOne,
+  addScoreOne,
+  setStateOne,
+  drawCardOne,
+  setCardsDrawnThisTurnOne,
+} = playerOneSlice.actions;
 
 export default playerOneSlice.reducer;
