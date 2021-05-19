@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Stats from "./stats";
 
-const Sidebar = () => {
+const Sidebar = ({ click }) => {
   const gameState = useSelector((state) => state.game);
   const playerOne = useSelector((state) => state.playerOne);
   const playerTwo = useSelector((state) => state.playerTwo);
@@ -13,7 +13,10 @@ const Sidebar = () => {
     <>
       <span
         className="bg-blue-800 w-1/3 h-1/3 mt-1 select-none p-2 text-md font-sans cursor-pointer"
-        onClick={() => setOpened(!opened)}
+        onClick={() => {
+          setOpened(!opened);
+          click();
+        }}
       >
         {opened ? "HIDE SCORES" : "SHOW SCORES"}
       </span>

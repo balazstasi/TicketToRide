@@ -58,10 +58,7 @@ const Stat = ({ player, highlighted }) => {
       <p className="text-sm">
         Train Cards: {player === 1 ? playerOne.cardsDrawn : playerTwo.cardsDrawn}
       </p>
-      <p className="text-sm">
-        Destination Cards:{" "}
-        {player === 1 ? playerOne.destinations.length : playerTwo.destinations.length}
-      </p>
+      <p className="text-sm">Destination Cards: </p>
       <div className="text-sm font-bold text-blue-100">
         {player === 1
           ? playerOne.destinations.map((destination) => (

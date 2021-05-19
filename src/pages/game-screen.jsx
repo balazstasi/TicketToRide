@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../common/button";
 import Map from "../components/map";
 import Sidebar from "../components/player-stats/sidebar";
@@ -17,6 +17,7 @@ const GameScreen = () => {
   const playerOne = useSelector((state) => state.playerOne);
   const playerTwo = useSelector((state) => state.playerTwo);
   const gameState = useSelector((state) => state.game);
+  const [scoreOpen, setScoreOpen] = useState(false);
 
   useEffect(() => {
     [1, 2, 3, 4].forEach((_) => d(drawCardOne()));
@@ -26,7 +27,7 @@ const GameScreen = () => {
   return (
     <div className="h-screen">
       <div className="absolute">
-        <Sidebar />
+        <Sidebar click={() => setScoreOpen(!scoreOpen)} />
       </div>
       <div className="flex flex-row">
         <div className="flex flex-col w-full">
@@ -44,7 +45,7 @@ const GameScreen = () => {
             </div>
           </div>
           <Map />
-          <DrawBottom />
+          <DrawBottom isOpened={scoreOpen} />
         </div>
         <DrawSidebar />
       </div>
