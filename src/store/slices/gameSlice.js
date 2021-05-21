@@ -61,7 +61,7 @@ export const gameSlice = createSlice({
     },
 
     drawCard: {
-      reducer: (state, action) => {
+      reducer: (state, _) => {
         if (state.deck.filter((color) => color === "locomotive").length >= 3) {
           state.deck = [1, 2, 3, 4, 5].map((_) => {
             const color = getRandomColor();

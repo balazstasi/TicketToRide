@@ -1,14 +1,14 @@
 import React from "react";
+import { coord } from "../utils/calculateCoordinate";
 import { Image, Layer, Stage, Shape } from "react-konva";
 import { useSelector, useDispatch } from "react-redux";
 import { ticketToRideData } from "../assets/ticket-to-ride-data";
 import { collectRoadOne } from "../store/slices/playerOneSlice";
 import { collectRoadTwo } from "../store/slices/playerTwoSlice";
-import { coord } from "../utils/calculateCoordinate";
 import highlightedCityDot from "../assets/images/highlightedCityDot.png";
-import useImage from "use-image";
 import gameMap from "../assets/ticket-to-ride-europe-map.jpg";
 import cityDot from "../assets/images/cityDot.png";
+import useImage from "use-image";
 
 const MapImage = () => {
   const [image] = useImage(gameMap);
@@ -17,12 +17,12 @@ const MapImage = () => {
 
 const HighlightedCityDot = ({ x, y }) => {
   const [image] = useImage(highlightedCityDot);
-  return <Image image={image} width={28} height={32} x={x} y={y} />;
+  return <Image image={image} width={32} height={32} x={x - 32 / 2} y={y - 32 / 2} />;
 };
 
 const CityDot = ({ x, y }) => {
   const [image] = useImage(cityDot);
-  return <Image image={image} width={25} height={32} x={x} y={y} />;
+  return <Image image={image} width={25} height={25} x={x - 25 / 2} y={y - 25 / 2} />;
 };
 
 const Map = () => {
@@ -63,7 +63,7 @@ const Map = () => {
           {Object.keys(ticketToRideData.cities).map((number) => {
             const currentCity = ticketToRideData.cities[number];
             const { x, y } = coord(currentCity.x, currentCity.y);
-            return <CityDot x={x - 15} y={y - 15} city={currentCity} />;
+            return <CityDot x={x} y={y} city={currentCity} />;
           })}
           {Object.keys(ticketToRideData.connections).map((number) => {
             const connection = ticketToRideData.connections[number];
@@ -78,7 +78,9 @@ const Map = () => {
                 return (
                   <Shape
                     opacity={
-                      color === playerOne.playerColor || color === playerTwo.playerColor ? 0.9 : 0
+                      color === playerOne.playerColor || color === playerTwo.playerColor
+                        ? 0.9
+                        : 0.01
                     }
                     sceneFunc={(context, shape) => {
                       context.beginPath();
@@ -129,8 +131,8 @@ const Map = () => {
             });
             return connectionShapes;
           })}
-          <HighlightedCityDot x={ui.firstX / 1.05 - 15} y={ui.firstY / 1.05 - 15} />
-          <HighlightedCityDot x={ui.secondX / 1.05 - 15} y={ui.secondY / 1.05 - 15} />
+          <HighlightedCityDot x={ui.firstX} y={ui.firstY} />
+          <HighlightedCityDot x={ui.secondX} y={ui.secondY} />
         </Layer>
       </Stage>
     </div>

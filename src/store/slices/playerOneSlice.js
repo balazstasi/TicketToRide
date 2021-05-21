@@ -28,7 +28,8 @@ export const playerOneSlice = createSlice({
       locomotive: 0,
     },
     cardsDrawn: 0,
-    deck: [],
+    hand: [],
+    selectedCards: [],
     destinations: [],
     score: [],
     collectedRoads: [],
@@ -68,9 +69,11 @@ export const playerOneSlice = createSlice({
     },
     addCardOne: {
       reducer: (state, action) => {
+        const colorCard = action.payload;
         state.cardsDrawn++;
         state.cardsDrawnThisTurn++;
-        state.cards[action.payload]++;
+        state.cards[colorCard]++;
+        state.hand.push(colorCard);
         state.beforeLastMove = state.lastMove;
         state.lastMove = MOVE_LIST.TAKE_CARD_FROM_DRAWN;
       },
@@ -78,8 +81,18 @@ export const playerOneSlice = createSlice({
     drawCardOne: {
       reducer: (state, _) => {
         const color = getRandomColor();
+        state.hand.push(color);
         state.cards[color]++;
         state.cardsDrawn++;
+      },
+    },
+    toggleCardOne: {
+      reducer: (state, { payload }) => {
+        const { index, color } = payload;
+        const cardIndex = state.selectedCards.findIndex((card) => card.index === index);
+
+        if (cardIndex < 0) state.selectedCards.push({ index, color });
+        else state.selectedCards.splice(cardIndex, 1);
       },
     },
 
@@ -117,6 +130,7 @@ export const {
   addScoreOne,
   setStateOne,
   drawCardOne,
+  toggleCardOne,
   setCardsDrawnThisTurnOne,
   collectRoadOne,
 } = playerOneSlice.actions;

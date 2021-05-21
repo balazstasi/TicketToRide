@@ -1,5 +1,4 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
-import { cloneDeep } from "lodash";
 import { getRandomColor } from "../../utils/getRandomColor";
 import { MOVE_LIST } from "../../constants/constants";
 
@@ -20,7 +19,8 @@ export const playerTwoSlice = createSlice({
       yellow: 0,
       locomotive: 0,
     },
-    deck: [],
+    hand: [],
+    selectedCards: [],
     cardsDrawn: 0,
     destinations: [],
     collectedRoads: [],
@@ -61,24 +61,42 @@ export const playerTwoSlice = createSlice({
     },
     addCardTwo: {
       reducer: (state, action) => {
-        // if (state.cardsDrawn < 5) {
+        const colorCard = action.payload;
         state.cardsDrawn++;
         state.cardsDrawnThisturn++;
-        state.cards[action.payload]++;
+        state.cards[colorCard]++;
+        state.hand.push(colorCard);
         state.beforeLastMove = state.lastMove;
         state.lastMove = MOVE_LIST.TAKE_CARD_FROM_DRAWN;
-        // }
       },
     },
     drawCardTwo: {
       reducer: (state, _) => {
-        // if (state.cardsDrawn < 5) {
         const color = getRandomColor();
         state.cards[color]++;
         state.cardsDrawn++;
-        // }
+        state.hand.push(color);
       },
     },
+
+    toggleCardTwo: {
+      reducer: (state, { payload }) => {
+        const { index, color } = payload;
+        const cardIndex = state.selectedCards.findIndex((card) => card.index === index);
+
+        console.log("CARD AT INDEX", index);
+
+        if (cardIndex < 0) {
+          console.log("NOT FOUND");
+          state.selectedCards.push({ index, color });
+        } else {
+          console.log("FOUND");
+
+          state.selectedCards.splice(cardIndex, 1);
+        }
+      },
+    },
+
     toggleDestinationTwo: {
       // Add Destination to array or delete it if it's already there
       reducer: (state, action) => {
@@ -104,7 +122,7 @@ export const playerTwoSlice = createSlice({
     },
   },
   setCardsDrawnThisTurnTwo: {
-    reducer: (state, action) => {
+    reducer: (state, _) => {
       state.cardsDrawnThisTurn = 0;
     },
   },
@@ -115,6 +133,7 @@ export const {
   toggleDestinationTwo,
   addScoreTwo,
   setStateTwo,
+  toggleCardTwo,
   drawCardTwo,
   setCardsDrawnThisTurnTwo,
   collectRoadTwo,

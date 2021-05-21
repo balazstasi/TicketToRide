@@ -1,21 +1,16 @@
 import React, { useState } from "react";
 import Card from "../card";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ScrollBar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
+import { toggleCardOne } from "../../store/slices/playerOneSlice";
+import { toggleCardTwo } from "../../store/slices/playerTwoSlice";
 
 const DrawBottom = ({ isOpened }) => {
+  const d = useDispatch();
   const playerOne = useSelector((state) => state.playerOne);
   const playerTwo = useSelector((state) => state.playerTwo);
   const gameState = useSelector((state) => state.game);
-
-  const [cardHighlighted, setCardHighlighted] = useState();
-
-  const highlightCard = (color) => {
-    console.log("HIGHLIGHTING:", color);
-    if (cardHighlighted === color) setCardHighlighted(null);
-    else setCardHighlighted(color);
-  };
 
   return (
     <>
@@ -27,31 +22,21 @@ const DrawBottom = ({ isOpened }) => {
         <ScrollBar style={{ maxHeight: "26vh" }}>
           <div className="flex items-center flex-wrap pl-6 h-auto p-4 mr-32">
             {gameState.turnPlayer === 1 &&
-              Object.keys(playerOne.cards).map((color) => {
-                const amount = playerOne.cards[color];
-                const result = Array.from(Array(amount).keys()).map(() => (
-                  <Card
-                    color={color}
-                    highlighted={color === cardHighlighted}
-                    onSelect={() => highlightCard(color)}
-                  />
-                ));
-
-                return result;
-              })}
+              playerOne.hand.map((color, index) => (
+                <Card
+                  color={color}
+                  highlighted={playerOne.selectedCards.find((card) => card.index === index)}
+                  onSelect={() => d(toggleCardOne({ color, index }))}
+                />
+              ))}
             {gameState.turnPlayer === 2 &&
-              Object.keys(playerTwo.cards).map((color) => {
-                const amount = playerTwo.cards[color];
-                const result = Array.from(Array(amount).keys()).map(() => (
-                  <Card
-                    color={color}
-                    highlighted={color === cardHighlighted}
-                    onSelect={() => highlightCard(color)}
-                  />
-                ));
-
-                return result;
-              })}
+              playerTwo.hand.map((color, index) => (
+                <Card
+                  color={color}
+                  highlighted={playerTwo.selectedCards.find((card) => card.index === index)}
+                  onSelect={() => d(toggleCardTwo({ color, index }))}
+                />
+              ))}
           </div>
         </ScrollBar>
       </div>
