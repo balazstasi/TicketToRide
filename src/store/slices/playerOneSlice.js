@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { cloneDeep } from "lodash";
 import { getRandomColor } from "../../utils/getRandomColor";
-import { LOCOMOTIVE, MOVE_LIST } from "../../constants/constants";
+import { GRAY, LOCOMOTIVE, MOVE_LIST } from "../../constants/constants";
 
 /*
   A function that accepts an initial state, an object full of reducer functions, and a "slice name", and automatically generates action creators and action types that correspond to the reducers and state.
@@ -40,17 +40,28 @@ export const playerOneSlice = createSlice({
   reducers: {
     collectRoadOne: {
       reducer: (state, action) => {
-        const { color, road } = action.payload;
+        let { color, road } = action.payload;
         let roadLength = road.length;
 
-        const canBeBuilt =
-          state.selectedCards.every((card) => card.color === color || card.color === LOCOMOTIVE) &&
-          state.selectedCards.length >= roadLength;
-        console.log(roadLength);
+        let canBeBuilt;
+        let selectedWithoutLoc = [];
+        if (color !== GRAY) {
+          canBeBuilt =
+            state.selectedCards.every(
+              (card) => card.color === color || card.color === LOCOMOTIVE
+            ) && state.selectedCards.length >= roadLength;
+        } else {
+          selectedWithoutLoc = state.selectedCards.filter((card) => card.color !== LOCOMOTIVE);
+          canBeBuilt = selectedWithoutLoc.every(
+            (card) => card.color === selectedWithoutLoc[0].color
+          );
+        }
+
         if (canBeBuilt) {
           state.trains -= roadLength;
           state.collectedRoads.push(action.payload);
 
+          if (color === GRAY) color = selectedWithoutLoc[0].color;
           const locomotivesSelected = state.selectedCards.filter(
             (card) => card.color === LOCOMOTIVE
           );
@@ -60,6 +71,7 @@ export const playerOneSlice = createSlice({
 
           if (numOfNeededColorSelected >= roadLength) {
             state.cards[color] -= roadLength;
+
             let i = 0;
             neededColorSelected.forEach((card) => {
               if (i < roadLength) {
@@ -68,13 +80,11 @@ export const playerOneSlice = createSlice({
               }
             });
           } else if (numOfNeededColorSelected + numOfLocomotivesSelected >= roadLength) {
-            state.cards[color] -= numOfNeededColorSelected;
+            if (color !== GRAY) state.cards[color] -= numOfNeededColorSelected;
             neededColorSelected.forEach((card) => {
               state.hand.splice(card.index, 1);
             });
             let lengthAfterColoredCards = roadLength - numOfNeededColorSelected + 1;
-            console.log(lengthAfterColoredCards);
-
             const handCopy = [...state.hand];
             handCopy.forEach((color, index) => {
               if (color === LOCOMOTIVE) {

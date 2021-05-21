@@ -7,6 +7,7 @@ export const BLACK = "black";
 export const RED = "red";
 export const GREEN = "green";
 export const LOCOMOTIVE = "locomotive";
+export const GRAY = "gray";
 
 export const trainColors = [BLACK, BLUE, GREEN, ORANGE, PURPLE, RED, WHITE, YELLOW, LOCOMOTIVE];
 
