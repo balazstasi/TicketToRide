@@ -32,6 +32,18 @@ export const playerTwoSlice = createSlice({
   reducers: {
     collectRoadOne: {
       reducer: (state, action) => {
+        const removeColorHand = (color, amount) => {
+          state.cards[color] -= amount;
+
+          let counter = 0;
+          while (counter < amount) {
+            const index = state.hand.findIndex((card) => card === color);
+            if (index === -1) return;
+            state.hand.splice(index, 1);
+            counter++;
+          }
+        };
+
         let { color, road } = action.payload;
         let roadLength = road.length;
 
@@ -43,7 +55,9 @@ export const playerTwoSlice = createSlice({
               (card) => card.color === color || card.color === LOCOMOTIVE
             ) && state.selectedCards.length >= roadLength;
         } else {
-          selectedWithoutLoc = state.selectedCards.filter((card) => card.color !== LOCOMOTIVE);
+          selectedWithoutLoc = state.selectedCards.filter((card) => card.color !== LOCOMOTIVE) || [
+            LOCOMOTIVE,
+          ];
           canBeBuilt = selectedWithoutLoc.every(
             (card) => card.color === selectedWithoutLoc[0].color
           );
@@ -63,31 +77,13 @@ export const playerTwoSlice = createSlice({
 
           if (numOfNeededColorSelected >= roadLength) {
             state.cards[color] -= roadLength;
-
-            let i = 0;
-            neededColorSelected.forEach((card) => {
-              if (i < roadLength) {
-                state.hand.splice(card.index, 1);
-                i++;
-              }
-            });
+            removeColorHand(color, roadLength);
           } else if (numOfNeededColorSelected + numOfLocomotivesSelected >= roadLength) {
-            if (color !== GRAY) state.cards[color] -= numOfNeededColorSelected;
-            neededColorSelected.forEach((card) => {
-              state.hand.splice(card.index, 1);
-            });
+            state.cards[color] -= numOfNeededColorSelected;
+            removeColorHand(color, numOfNeededColorSelected);
             let lengthAfterColoredCards = roadLength - numOfNeededColorSelected + 1;
-            const handCopy = [...state.hand];
-            handCopy.forEach((color, index) => {
-              if (color === LOCOMOTIVE) {
-                if (lengthAfterColoredCards > 0) {
-                  state.hand.splice(index, 1);
-                  lengthAfterColoredCards--;
-                }
-              }
-            });
+            removeColorHand(LOCOMOTIVE, lengthAfterColoredCards);
           }
-
           state.selectedCards = [];
         }
       },
