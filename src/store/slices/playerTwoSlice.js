@@ -30,7 +30,7 @@ export const playerTwoSlice = createSlice({
     cardsDrawnThisTurn: 0,
   },
   reducers: {
-    collectRoadOne: {
+    collectRoadTwo: {
       reducer: (state, action) => {
         const removeColorHand = (color, amount) => {
           state.cards[color] -= amount;

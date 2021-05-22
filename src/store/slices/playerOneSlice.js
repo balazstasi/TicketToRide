@@ -33,6 +33,7 @@ export const playerOneSlice = createSlice({
     destinations: [],
     score: [],
     collectedRoads: [],
+    lastDrawnCard: null,
     lastMove: null,
     beforeLastMove: null,
     cardsDrawnThisTurn: 0,
@@ -118,23 +119,109 @@ export const playerOneSlice = createSlice({
         }
       },
     },
+    collect: {
+      reducer: (state, action) => {
+        const removeColorHand = (color, amount) => {
+          state.cards[color] -= amount;
+
+          let counter = 0;
+          while (counter < amount) {
+            const index = state.hand.findIndex((card) => card === color);
+            if (index === -1) return;
+            state.hand.splice(index, 1);
+            counter++;
+          }
+        };
+
+        let { color, road } = action.payload;
+        let roadLength = road.length;
+
+        let canBeBuilt;
+        let selectedWithoutLoc = [];
+        if (color !== GRAY) {
+          canBeBuilt =
+            state.selectedCards.every(
+              (card) => card.color === color || card.color === LOCOMOTIVE
+            ) && state.selectedCards.length >= roadLength;
+        } else {
+          selectedWithoutLoc = state.selectedCards.filter((card) => card.color !== LOCOMOTIVE) || [
+            LOCOMOTIVE,
+          ];
+          canBeBuilt = selectedWithoutLoc.every(
+            (card) => card.color === selectedWithoutLoc[0].color
+          );
+        }
+
+        if (canBeBuilt) {
+          state.trains -= roadLength;
+          state.collectedRoads.push(action.payload);
+
+          if (color === GRAY) color = selectedWithoutLoc[0].color;
+          const locomotivesSelected = state.selectedCards.filter(
+            (card) => card.color === LOCOMOTIVE
+          );
+          const numOfLocomotivesSelected = locomotivesSelected.length;
+          const neededColorSelected = state.selectedCards.filter((card) => card.color === color);
+          const numOfNeededColorSelected = neededColorSelected.length;
+
+          if (numOfNeededColorSelected >= roadLength) {
+            state.cards[color] -= roadLength;
+
+            // let i = 0;
+            // neededColorSelected.forEach((card) => {
+            //   if (i < roadLength) {
+            //     state.hand.splice(card.index, 1);
+
+            //     i++;
+            //   }
+            // });
+            removeColorHand(color, roadLength);
+          } else if (numOfNeededColorSelected + numOfLocomotivesSelected >= roadLength) {
+            state.cards[color] -= numOfNeededColorSelected;
+            // neededColorSelected.forEach((card) => {
+            //   state.hand.splice(card.index, 1);
+            // });
+            removeColorHand(color, numOfNeededColorSelected);
+            let lengthAfterColoredCards = roadLength - numOfNeededColorSelected + 1;
+            // const handCopy = [...state.hand];
+            // handCopy.forEach((cardColor, index) => {
+            //   if (cardColor === LOCOMOTIVE) {
+            //     if (lengthAfterColoredCards > 0) {
+            //       state.hand.splice(index, 1);
+            //       lengthAfterColoredCards--;
+            //     }
+            //   }
+            // });
+            removeColorHand(LOCOMOTIVE, lengthAfterColoredCards);
+          }
+
+          state.selectedCards = [];
+        }
+      },
+    },
     addCardOne: {
       reducer: (state, action) => {
         const colorCard = action.payload;
+        // if (state.lastDrawnCard !== LOCOMOTIVE) {
+        state.lastDrawnCard = colorCard;
         state.cardsDrawn++;
         state.cardsDrawnThisTurn++;
         state.cards[colorCard]++;
         state.hand.push(colorCard);
         state.beforeLastMove = state.lastMove;
         state.lastMove = MOVE_LIST.TAKE_CARD_FROM_DRAWN;
+        // }
       },
     },
     drawCardOne: {
       reducer: (state, _) => {
         const color = getRandomColor();
-        state.hand.push(color);
-        state.cards[color]++;
-        state.cardsDrawn++;
+        if (state.lastDrawnCard !== LOCOMOTIVE) {
+          state.hand.push(color);
+          state.cards[color]++;
+          state.cardsDrawn++;
+          state.lastDrawnCard = color;
+        }
       },
     },
     toggleCardOne: {
@@ -194,6 +281,7 @@ export const {
   toggleDestinationOne,
   addScoreOne,
   setStateOne,
+  collect,
   drawCardOne,
   toggleCardOne,
   setCardsDrawnThisTurnOne,

@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { addCardOne } from "../../store/slices/playerOneSlice";
 import { addCardTwo } from "../../store/slices/playerTwoSlice";
 import { setTurnPlayer } from "../../store/slices/gameSlice";
+import { LOCOMOTIVE } from "../../constants/constants";
 
 const DrawSidebar = () => {
   const d = useDispatch();
@@ -18,12 +19,15 @@ const DrawSidebar = () => {
   const drawCardForCurrentPlayer = (cardColor, i) => {
     if (gameState.turnPlayer === 1) {
       d(addCardOne(cardColor));
-      d(removeCard(i));
+      if (playerOne.lastDrawnCard !== LOCOMOTIVE) {
+        d(removeCard(i));
+      }
       // d(setTurnPlayer(2));
       console.log("PLAYER 1 HAND", playerOne.hand);
     } else if (gameState.turnPlayer === 2) {
       d(addCardTwo(cardColor));
-      d(removeCard(i));
+      playerTwo.lastDrawnCard !== LOCOMOTIVE && d(removeCard(i));
+
       // d(setTurnPlayer(1));
       console.log("PLAYER 2 HAND", playerOne.hand);
     }

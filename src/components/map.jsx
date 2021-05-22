@@ -3,7 +3,7 @@ import { coord } from "../utils/calculateCoordinate";
 import { Image, Layer, Stage, Shape } from "react-konva";
 import { useSelector, useDispatch } from "react-redux";
 import { ticketToRideData } from "../assets/ticket-to-ride-data";
-import { collectRoadOne } from "../store/slices/playerOneSlice";
+import { collectRoadOne, collect } from "../store/slices/playerOneSlice";
 import { collectRoadTwo } from "../store/slices/playerTwoSlice";
 import highlightedCityDot from "../assets/images/highlightedCityDot.png";
 import gameMap from "../assets/ticket-to-ride-europe-map.jpg";
@@ -26,7 +26,7 @@ const CityDot = ({ x, y }) => {
 };
 
 const Map = () => {
-  const d = useDispatch();
+  const dispatch = useDispatch();
   const ui = useSelector((state) => state.ui);
   const gameState = useSelector((state) => state.game);
   const playerOne = useSelector((state) => state.playerOne);
@@ -44,9 +44,9 @@ const Map = () => {
     return null;
   };
 
-  const collect = (road) => {
-    gameState.turnPlayer === 1 && d(collectRoadOne(road));
-    gameState.turnPlayer === 2 && d(collectRoadTwo(road));
+  const collectRoad = (road) => {
+    if (gameState.turnPlayer === 1) dispatch(collectRoadOne(road));
+    else dispatch(collectRoadTwo(road));
   };
 
   return (
@@ -94,8 +94,15 @@ const Map = () => {
                     strokeWidth={
                       color === playerOne.playerColor || color === playerTwo.playerColor ? 8 : 6
                     }
+                    // onClick={() =>
+                    //   collectRoad({
+                    //     id: connection.id,
+                    //     road: roadToDispatch,
+                    //     color: connection.color,
+                    //   })
+                    // }
                     onClick={() =>
-                      collect({
+                      collectRoad({
                         id: connection.id,
                         road: roadToDispatch,
                         color: connection.color,
@@ -120,7 +127,7 @@ const Map = () => {
                       color === playerOne.playerColor || color === playerTwo.playerColor ? 12 : 6
                     }
                     onClick={() =>
-                      collect({
+                      collectRoad({
                         id: connection.id,
                         road: roadToDispatch,
                         color: connection.color,
