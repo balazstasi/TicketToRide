@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { setGamePhase } from "../store/slices/gameSlice";
+import { useDispatch } from "react-redux";
 
 const WaitingRoom = () => {
+  const d = useDispatch();
   return (
     <div>
       <div className=" flex-1 bg-blue-400 flex justify-center items-center bg-gradient-to-tl from-blue-800 to-blue-500 text-white font-mono flex-col min-h-screen">
@@ -152,7 +155,10 @@ const WaitingRoom = () => {
               </div>
             </div>
           </div>
-          <div className="p-6 flex flex-col">
+          <div
+            className="p-6 flex flex-col"
+            onClick={() => d(setGamePhase("FIRST_DRAW_DESTINATIONS"))}
+          >
             <Link
               className="p-4 bg-blue-400 hover:bg-blue-500 rounded-lg shadow text-xl font-medium uppercase text-white w-full"
               to="/destination-card-select"

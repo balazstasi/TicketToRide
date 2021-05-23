@@ -11,67 +11,18 @@ export const GRAY = "gray";
 
 export const trainColors = [BLACK, BLUE, GREEN, ORANGE, PURPLE, RED, WHITE, YELLOW, LOCOMOTIVE];
 
-export const PLAYER_STATE = {
-  score: 0,
-  stations: 0,
-  cards: 0,
-  trains: 0,
-};
-
-export const STATE = {
-  deckCount: 0,
-  discardCount: 0,
-  lastCard: "",
-  whosTurn: "",
-  lastPlayer: "",
-  lastTurn: "",
-  lastHand: "",
-  playerData: "",
-  from: "",
-  to: "",
-};
-
-export const PACK = [
-  { name: BLACK, count: 12 },
-  { name: BLUE, count: 12 },
-  { name: GREEN, count: 12 },
-  { name: ORANGE, count: 12 },
-  { name: PURPLE, count: 12 },
-  { name: RED, count: 12 },
-  { name: WHITE, count: 12 },
-  { name: YELLOW, count: 12 },
-  { name: LOCOMOTIVE, count: 14 },
-];
-
-export const LETTER_TO_CARD = {
-  k: BLACK,
-  b: BLUE,
-  g: GREEN,
-  o: ORANGE,
-  p: PURPLE,
-  r: RED,
-  w: WHITE,
-  y: YELLOW,
-  l: LOCOMOTIVE,
-};
-
-export const CARD_TO_LETTER = {
-  black: "k",
-  blue: "b",
-  green: "g",
-  orange: "o",
-  purple: "p",
-  red: "r",
-  white: "w",
-  yellow: "y",
-  locomotive: "l",
-};
-
 export const MOVE_LIST = {
-  TAKE_TOP_CARD: "CARD FROM DECK",
-  TAKE_CARD_FROM_DRAWN: "CARD FROM PALLET",
-  TAKE_ROUTE_CARDS: "TAKE ROUTE FROM DECK",
-  LAY_ROUTE: "LAY ROUTE",
+  CARD_FRO_DECK: "CARD FROM DECK",
+  TAKE_CARD_FROM_DRAWN: "CARD FROM DRAWN",
+  TAKE_ROUTE_CARD: "TAKE ROUTE FROM DECK",
+  MAKE_ROUTE: "MAKE ROUTE",
 };
 
-export const ROUTE_LENGTHS = [1, 2, 3, 4, 6, 8];
+export const GAME_PHASE = {
+  DRAW_CARDS_1: "DRAW_CARDS_1",
+  DRAW_CARDS_2: "DRAW_CARDS_2",
+  MAKE_ROUTE_1: "MAKE ROUTE 1",
+  MAKE_ROUTE_2: "MAKE ROUTE 2",
+  CHOOSE_DESTINATIONS_1: "CHOOSE_DESTINATIONS_1",
+  CHOOSE_DESTINATIONS_2: "CHOOSE_DESTINATIONS_2",
+};

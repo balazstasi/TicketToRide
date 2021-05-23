@@ -1,7 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getRandomColor } from "../../utils/getRandomColor";
-import { playerOneSlice } from "./playerOneSlice";
-import { playerTwoSlice } from "./playerTwoSlice";
 
 export const gameSlice = createSlice({
   name: "game",

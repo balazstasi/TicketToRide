@@ -10,8 +10,10 @@ import { useDispatch } from "react-redux";
 import { setTurnPlayer } from "../store/slices/gameSlice";
 import { drawCardOne } from "../store/slices/playerOneSlice";
 import { drawCardTwo } from "../store/slices/playerTwoSlice";
+import { useHistory } from "react-router-dom";
 
 const GameScreen = () => {
+  const history = useHistory();
   const d = useDispatch();
   const gameState = useSelector((state) => state.game);
   const [scoreOpen, setScoreOpen] = useState(false);
@@ -39,6 +41,9 @@ const GameScreen = () => {
               <Button highlighted={gameState.turnPlayer === 2} onClick={() => d(setTurnPlayer(2))}>
                 Player 2
               </Button>
+            </div>
+            <div>
+              <Button onClick={() => history.push("/end-game")}>End Game</Button>
             </div>
           </div>
           <Map />

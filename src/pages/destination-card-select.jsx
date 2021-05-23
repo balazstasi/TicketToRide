@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DestinationCard from "../common/destination-card";
 import { Button } from "../common/button";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { getThreeShortDestinations } from "../utils/getThreeDestinations";
@@ -9,8 +9,10 @@ import { toggleDestinationOne } from "../store/slices/playerOneSlice";
 import { toggleDestinationTwo } from "../store/slices/playerTwoSlice";
 import { setTurnPlayer } from "../store/slices/gameSlice";
 import { getRandomLongDestination } from "../utils/getRandomDestination";
+import { GAME_PHASE } from "../constants/constants";
 
 const DestinationCardSelect = () => {
+  const history = useHistory();
   const d = useDispatch();
   const [destinations, setDestinations] = useState([]);
   const [longDestinationOne, setLongDestinationOne] = useState([]);
@@ -20,7 +22,7 @@ const DestinationCardSelect = () => {
   const playerTwo = useSelector((state) => state.playerTwo);
 
   useEffect(() => {
-    d(setTurnPlayer(1));
+    if (gameState.gamePhase === "FIRST_DRAW_DESTINATIONS") d(setTurnPlayer(1));
   }, [d]);
 
   const toggleDestination = (destination) => {
@@ -30,14 +32,15 @@ const DestinationCardSelect = () => {
 
   useEffect(() => {
     setDestinations(getThreeShortDestinations());
+    if (gameState.gamePhase === "FIRST_DRAW_DESTINATIONS") {
+      let longDest = getRandomLongDestination();
+      setLongDestinationOne(longDest);
+      d(toggleDestinationOne(longDest));
 
-    let longDest = getRandomLongDestination();
-    setLongDestinationOne(longDest);
-    d(toggleDestinationOne(longDest));
-
-    longDest = getRandomLongDestination();
-    setLongDestinationTwo(longDest);
-    d(toggleDestinationTwo(longDest));
+      longDest = getRandomLongDestination();
+      setLongDestinationTwo(longDest);
+      d(toggleDestinationTwo(longDest));
+    }
   }, []);
 
   const isToggled = (destination) => {
@@ -88,19 +91,38 @@ const DestinationCardSelect = () => {
           {gameState.turnPlayer === 1 && (
             <Button
               onClick={() => {
-                d(setTurnPlayer(2));
-                setDestinations(getThreeShortDestinations());
+                if (gameState.gamePhase === GAME_PHASE.CHOOSE_DESTINATIONS_1) {
+                  d(setTurnPlayer(2));
+                  history.push("/game");
+                } else {
+                  d(setTurnPlayer(2));
+                  setDestinations(getThreeShortDestinations());
+                }
               }}
             >
               Continue with selected Destinations
             </Button>
           )}
           {playerTwo.destinations.length > 0 && gameState.turnPlayer === 2 && (
-            <Link to="/game">
-              <div className="text-center">
-                <Button>Continue with selected Destinations</Button>
-              </div>
-            </Link>
+            // <Link to="/game">
+            //   <div className="text-center">
+            //     <Button>Continue with selected Destinations</Button>
+            //   </div>
+            // </Link>
+            <Button
+              onClick={() => {
+                if (gameState.gamePhase === GAME_PHASE.CHOOSE_DESTINATIONS_2) {
+                  history.push("/game");
+                } else {
+                  // d(setTurnPlayer(1));
+                  d(setTurnPlayer(1));
+                  setDestinations(getThreeShortDestinations());
+                  history.push("/game");
+                }
+              }}
+            >
+              Continue with selected Destinations
+            </Button>
           )}
         </div>
       )}

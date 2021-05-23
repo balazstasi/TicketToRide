@@ -22,12 +22,13 @@ export const playerTwoSlice = createSlice({
     hand: [],
     selectedCards: [],
     cardsDrawn: 0,
+    cardsDrawnThisTurn: 100,
     destinations: [],
     collectedRoads: [],
     score: [],
+    justBuilt: false,
     lastMove: null,
     beforeLastMove: null,
-    cardsDrawnThisTurn: 0,
   },
   reducers: {
     collectRoadTwo: {
@@ -55,12 +56,16 @@ export const playerTwoSlice = createSlice({
               (card) => card.color === color || card.color === LOCOMOTIVE
             ) && state.selectedCards.length >= roadLength;
         } else {
-          selectedWithoutLoc = state.selectedCards.filter((card) => card.color !== LOCOMOTIVE) || [
-            LOCOMOTIVE,
-          ];
-          canBeBuilt = selectedWithoutLoc.every(
-            (card) => card.color === selectedWithoutLoc[0].color
-          );
+          selectedWithoutLoc =
+            state.selectedCards.filter((card) => card.color !== LOCOMOTIVE) || [];
+
+          if (selectedWithoutLoc.length === 0) {
+            canBeBuilt = false;
+          } else {
+            canBeBuilt =
+              selectedWithoutLoc.every((card) => card.color === selectedWithoutLoc[0].color) &&
+              state.selectedCards.length >= roadLength;
+          }
         }
 
         if (canBeBuilt) {
@@ -85,20 +90,29 @@ export const playerTwoSlice = createSlice({
             removeColorHand(LOCOMOTIVE, lengthAfterColoredCards);
           }
           state.selectedCards = [];
+          state.lastMove = MOVE_LIST.MAKE_ROUTE;
+
+          state.justBuilt = true;
         }
+      },
+    },
+    setJustBuiltTwo: {
+      reducer: (state, { payload }) => {
+        state.justBuilt = payload;
       },
     },
     addCardTwo: {
       reducer: (state, action) => {
         const colorCard = action.payload;
         state.cardsDrawn++;
-        state.cardsDrawnThisturn++;
+        state.cardsDrawnThisTurn++;
         state.cards[colorCard]++;
         state.hand.push(colorCard);
         state.beforeLastMove = state.lastMove;
         state.lastMove = MOVE_LIST.TAKE_CARD_FROM_DRAWN;
       },
     },
+
     drawCardTwo: {
       reducer: (state, _) => {
         const color = getRandomColor();
@@ -164,6 +178,7 @@ export const {
   setStateTwo,
   toggleCardTwo,
   drawCardTwo,
+  setJustBuiltTwo,
   setCardsDrawnThisTurnTwo,
   collectRoadTwo,
 } = playerTwoSlice.actions;

@@ -1,45 +1,66 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../card";
 import CardStack from "../card-stack";
 import { getRandomColor } from "../../utils/getRandomColor";
-import { removeCard } from "../../store/slices/gameSlice";
+import { removeCard, setGamePhase, setTurnPlayer } from "../../store/slices/gameSlice";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { addCardOne } from "../../store/slices/playerOneSlice";
-import { addCardTwo } from "../../store/slices/playerTwoSlice";
-import { setTurnPlayer } from "../../store/slices/gameSlice";
-import { LOCOMOTIVE } from "../../constants/constants";
+import { addCardOne, setCardsDrawnThisTurnOne } from "../../store/slices/playerOneSlice";
+import { addCardTwo, setCardsDrawnThisTurnTwo } from "../../store/slices/playerTwoSlice";
+import { GAME_PHASE } from "../../constants/constants";
+import { useHistory } from "react-router-dom";
 
 const DrawSidebar = () => {
+  const history = useHistory();
   const d = useDispatch();
   const gameState = useSelector((state) => state.game);
   const playerOne = useSelector((state) => state.playerOne);
   const playerTwo = useSelector((state) => state.playerTwo);
 
+  const [drawnOne, setDrawnOne] = useState(0);
+  const [drawnTwo, setDrawnTwo] = useState(0);
+
+  useEffect(() => {
+    setCardsDrawnThisTurnOne(0);
+    setCardsDrawnThisTurnTwo(0);
+  }, []);
+
   const drawCardForCurrentPlayer = (cardColor, i) => {
     if (gameState.turnPlayer === 1) {
       d(addCardOne(cardColor));
-      if (playerOne.lastDrawnCard !== LOCOMOTIVE) {
-        d(removeCard(i));
+      d(removeCard(i));
+      setDrawnOne(drawnOne + 1);
+      if (drawnOne === 1) {
+        d(setTurnPlayer(2));
+        d(setCardsDrawnThisTurnOne(0));
+        setDrawnOne(0);
       }
-      // d(setTurnPlayer(2));
-      console.log("PLAYER 1 HAND", playerOne.hand);
     } else if (gameState.turnPlayer === 2) {
       d(addCardTwo(cardColor));
-      playerTwo.lastDrawnCard !== LOCOMOTIVE && d(removeCard(i));
-
-      // d(setTurnPlayer(1));
-      console.log("PLAYER 2 HAND", playerOne.hand);
+      d(removeCard(i));
+      setDrawnTwo(drawnTwo + 1);
+      if (drawnTwo === 1) {
+        d(setTurnPlayer(1));
+        d(setCardsDrawnThisTurnTwo(0));
+        setDrawnTwo(0);
+      }
     }
   };
 
   const drawCardFromDeck = (cardColor) => {
     if (gameState.turnPlayer === 1) {
       d(addCardOne(cardColor));
-      d(setTurnPlayer(2));
+      if (playerOne.cardsDrawnThisTurn === 1) {
+        d(setCardsDrawnThisTurnOne(0));
+        d(setTurnPlayer(2));
+      }
     } else if (gameState.turnPlayer === 2) {
+      console.log(playerTwo.cardsDrawnThisTurn);
       d(addCardTwo(cardColor));
-      d(setTurnPlayer(1));
+      if (playerTwo.cardsDrawnThisTurn === 2) {
+        d(setCardsDrawnThisTurnTwo(0));
+        d(setTurnPlayer(1));
+      }
     }
   };
 
@@ -73,7 +94,19 @@ const DrawSidebar = () => {
                 />
               </div>
               <div className="flex-grow mr-2 px-1 text-center">
-                <CardStack type="destinations" />
+                <CardStack
+                  drawCard={() => {
+                    d(
+                      setGamePhase(
+                        gameState.turnPlayer === 1
+                          ? GAME_PHASE.CHOOSE_DESTINATIONS_1
+                          : GAME_PHASE.CHOOSE_DESTINATIONS_2
+                      )
+                    );
+                    history.push("/destination-card-select");
+                  }}
+                  type="destinations"
+                />
               </div>
             </div>
           </div>

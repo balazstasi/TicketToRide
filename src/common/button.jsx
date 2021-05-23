@@ -4,8 +4,8 @@ export const Button = (props) => {
   return (
     <button
       className={`${
-        props.highlighted ? "bg-blue-200" : "bg-blue-400"
-      } font-semibold w-full font-sans rounded px-3 py-2 p-1 mx-2 my-1 border-b-4 border-l-2 shadow-lg border-blue-500 text-blue-900`}
+        props.highlighted ? "bg-blue-500" : "bg-blue-400"
+      } p-4 bg-blue-400 hover:bg-blue-500 rounded-lg shadow text-xl font-medium uppercase text-white w-full`}
       {...props}
     >
       {props.children}

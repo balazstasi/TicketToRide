@@ -32,12 +32,14 @@ export const playerOneSlice = createSlice({
     destinations: [],
     longDestinations: [],
     drawnDestinations: [],
-    score: [],
+    completedDestinations: [],
+    score: 0,
     collectedRoads: [],
     lastDrawnCard: null,
     lastMove: null,
     beforeLastMove: null,
     cardsDrawnThisTurn: 0,
+    justBuilt: false,
   },
   reducers: {
     collectRoadOne: {
@@ -57,7 +59,7 @@ export const playerOneSlice = createSlice({
         let { color, road } = action.payload;
         let roadLength = road.length;
 
-        let canBeBuilt;
+        let canBeBuilt = false;
         let selectedWithoutLoc = [];
         if (color !== GRAY) {
           canBeBuilt =
@@ -65,15 +67,19 @@ export const playerOneSlice = createSlice({
               (card) => card.color === color || card.color === LOCOMOTIVE
             ) && state.selectedCards.length >= roadLength;
         } else {
-          selectedWithoutLoc = state.selectedCards.filter((card) => card.color !== LOCOMOTIVE) || [
-            LOCOMOTIVE,
-          ];
-          canBeBuilt = selectedWithoutLoc.every(
-            (card) => card.color === selectedWithoutLoc[0].color
-          );
+          selectedWithoutLoc = state.selectedCards.filter((card) => card.color !== LOCOMOTIVE);
+
+          if (selectedWithoutLoc.length === 0) {
+            canBeBuilt = false;
+          } else {
+            canBeBuilt =
+              selectedWithoutLoc.every((card) => card.color === selectedWithoutLoc[0].color) &&
+              state.selectedCards.length >= roadLength;
+          }
         }
 
-        if (canBeBuilt) {
+        if (canBeBuilt && state.cardsDrawnThisTurn === 0) {
+          state.score = state.score + roadLength;
           state.trains -= roadLength;
           state.collectedRoads.push(action.payload);
 
@@ -97,13 +103,21 @@ export const playerOneSlice = createSlice({
           }
 
           state.selectedCards = [];
+
+          state.lastMove = MOVE_LIST.MAKE_ROUTE;
+
+          state.justBuilt = true;
         }
+      },
+    },
+    setJustBuiltOne: {
+      reducer: (state, { payload }) => {
+        state.justBuilt = payload;
       },
     },
     addCardOne: {
       reducer: (state, action) => {
         const colorCard = action.payload;
-        // if (state.lastDrawnCard !== LOCOMOTIVE) {
         state.lastDrawnCard = colorCard;
         state.cardsDrawn++;
         state.cardsDrawnThisTurn++;
@@ -111,7 +125,6 @@ export const playerOneSlice = createSlice({
         state.hand.push(colorCard);
         state.beforeLastMove = state.lastMove;
         state.lastMove = MOVE_LIST.TAKE_CARD_FROM_DRAWN;
-        // }
       },
     },
 
@@ -188,7 +201,7 @@ export const {
   toggleDestinationOne,
   addScoreOne,
   setStateOne,
-  collect,
+  setJustBuiltOne,
   drawCardOne,
   toggleCardOne,
   setCardsDrawnThisTurnOne,

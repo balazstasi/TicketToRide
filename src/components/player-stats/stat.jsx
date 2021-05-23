@@ -52,7 +52,8 @@ const Stat = ({ player, highlighted }) => {
           )}
         </div>
       </p>
-      <p className="text-sm">Score: {player === 1 ? playerOne.score : playerTwo.score}</p>
+      <p className="text-sm">Score: {player === 2 ? 45 - playerTwo.trains : playerOne.score}</p>
+
       <p className="text-sm">Markers: {player === 1 ? playerOne.trains : playerTwo.trains}</p>
       <p className="text-sm">
         Train Cards: {player === 1 ? playerOne.cardsDrawn : playerTwo.cardsDrawn}
@@ -64,14 +65,14 @@ const Stat = ({ player, highlighted }) => {
               console.log(destination);
               return (
                 <div
-                  className="cursor-pointer"
+                  className="cursor-pointer text-red-400"
                   onMouseEnter={() => highlightNodes(destination)}
                 >{`${destination.value}: ${destination.fromCity} -> ${destination.toCity}`}</div>
               );
             })
           : playerTwo.destinations.map((destination) => (
               <div
-                className="cursor-pointer"
+                className="cursor-pointer text-red-400"
                 onMouseEnter={() => highlightNodes(destination)}
               >{`${destination.value}: ${destination.fromCity} -> ${destination.toCity}`}</div>
             ))}

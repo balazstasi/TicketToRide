@@ -20,7 +20,7 @@ const DrawBottom = ({ isOpened }) => {
         } flex flex-row flex-auto antialiased bg-blue-900 text-gray-800 h-90`}
       >
         <ScrollBar style={{ maxHeight: "26vh" }}>
-          <div className="flex items-center flex-wrap pl-6 h-auto p-4 mr-32">
+          <div className="flex items-center flex-wrap pl-6 h-auto p-4 mr-44 ml-4">
             {gameState.turnPlayer === 1 &&
               playerOne.hand.map((color, index) => (
                 <Card
