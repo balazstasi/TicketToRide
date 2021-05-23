@@ -1,7 +1,6 @@
 import React from "react";
 
 const Card = ({ color, highlighted, click, onSelect }) => {
-  console.log(highlighted);
   return (
     <div
       onClick={click}

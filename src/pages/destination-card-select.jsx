@@ -27,22 +27,17 @@ const DestinationCardSelect = () => {
 
   // Toggle Destination for current player
   const toggleDestination = (destination) => {
-    if (gameState.turnPlayer === 1) d(toggleDestinationOne(destination));
-    if (gameState.turnPlayer === 2) d(toggleDestinationTwo(destination));
+    gameState.turnPlayer === 1 && d(toggleDestinationOne(destination));
+    gameState.turnPlayer === 2 && d(toggleDestinationTwo(destination));
   };
 
   const isToggled = (destination) => {
     if (gameState.turnPlayer === 1) {
-      console.log(
-        stateOne.destinations.find((d) => d.id === destination.id) ? "FOUND1" : "NOTFOUND1"
-      );
       return stateOne.destinations.find((d) => d.id === destination.id);
     }
     if (gameState.turnPlayer === 2) {
-      console.log(stateTwo.destinations.find((d) => d.id === destination.id) && "FOUND For 2");
       return stateTwo.destinations.find((d) => d?.id === destination.id);
     }
-
     throw new Error("CURRENT TURN PLAYER IS NOT CORRECT");
   };
 

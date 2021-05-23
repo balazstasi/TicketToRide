@@ -1,14 +1,15 @@
-export const BLACK = "black";
-export const BLUE = "blue";
-export const GREEN = "green";
-export const ORANGE = "orange";
-export const PINK = "pink";
-export const RED = "red";
+export const PURPLE = "purple";
 export const WHITE = "white";
+export const BLUE = "blue";
 export const YELLOW = "yellow";
+export const ORANGE = "orange";
+export const BLACK = "black";
+export const RED = "red";
+export const GREEN = "green";
 export const LOCOMOTIVE = "locomotive";
+export const GRAY = "gray";
 
-export const trainColors = [BLACK, BLUE, GREEN, ORANGE, PINK, RED, WHITE, YELLOW, LOCOMOTIVE];
+export const trainColors = [BLACK, BLUE, GREEN, ORANGE, PURPLE, RED, WHITE, YELLOW, LOCOMOTIVE];
 
 export const PLAYER_STATE = {
   score: 0,
@@ -35,7 +36,7 @@ export const PACK = [
   { name: BLUE, count: 12 },
   { name: GREEN, count: 12 },
   { name: ORANGE, count: 12 },
-  { name: PINK, count: 12 },
+  { name: PURPLE, count: 12 },
   { name: RED, count: 12 },
   { name: WHITE, count: 12 },
   { name: YELLOW, count: 12 },
@@ -47,7 +48,7 @@ export const LETTER_TO_CARD = {
   b: BLUE,
   g: GREEN,
   o: ORANGE,
-  p: PINK,
+  p: PURPLE,
   r: RED,
   w: WHITE,
   y: YELLOW,
@@ -59,7 +60,7 @@ export const CARD_TO_LETTER = {
   blue: "b",
   green: "g",
   orange: "o",
-  pink: "p",
+  purple: "p",
   red: "r",
   white: "w",
   yellow: "y",
