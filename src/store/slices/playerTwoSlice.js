@@ -30,7 +30,7 @@ export const playerTwoSlice = createSlice({
     cardsDrawnThisTurn: 0,
   },
   reducers: {
-    collectRoadOne: {
+    collectRoadTwo: {
       reducer: (state, action) => {
         const removeColorHand = (color, amount) => {
           state.cards[color] -= amount;
@@ -144,15 +144,15 @@ export const playerTwoSlice = createSlice({
         }
       },
     },
-  },
-  addScoreTwo: {
-    reducer: (state, action) => {
-      state.score += action.payload;
+    addScoreTwo: {
+      reducer: (state, action) => {
+        state.score += action.payload;
+      },
     },
-  },
-  setCardsDrawnThisTurnTwo: {
-    reducer: (state, _) => {
-      state.cardsDrawnThisTurn = 0;
+    setCardsDrawnThisTurnTwo: {
+      reducer: (state, _) => {
+        state.cardsDrawnThisTurn = 0;
+      },
     },
   },
 });

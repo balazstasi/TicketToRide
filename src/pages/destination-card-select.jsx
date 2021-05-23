@@ -4,41 +4,50 @@ import { Button } from "../common/button";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { getThreeDestinations } from "../utils/getThreeDestinations";
+import { getThreeShortDestinations } from "../utils/getThreeDestinations";
 import { toggleDestinationOne } from "../store/slices/playerOneSlice";
 import { toggleDestinationTwo } from "../store/slices/playerTwoSlice";
 import { setTurnPlayer } from "../store/slices/gameSlice";
+import { getRandomLongDestination } from "../utils/getRandomDestination";
 
 const DestinationCardSelect = () => {
-  const [destinations, setDestinations] = useState([]);
   const d = useDispatch();
+  const [destinations, setDestinations] = useState([]);
+  const [longDestinationOne, setLongDestinationOne] = useState([]);
+  const [longDestinationTwo, setLongDestinationTwo] = useState([]);
   const gameState = useSelector((state) => state.game);
-  const stateOne = useSelector((state) => state.playerOne);
-  const stateTwo = useSelector((state) => state.playerTwo);
+  const playerOne = useSelector((state) => state.playerOne);
+  const playerTwo = useSelector((state) => state.playerTwo);
 
   useEffect(() => {
     d(setTurnPlayer(1));
   }, [d]);
 
-  // Get 3 random destinations to choose from
-  useEffect(() => {
-    setDestinations(getThreeDestinations());
-  }, []);
-
-  // Toggle Destination for current player
   const toggleDestination = (destination) => {
     gameState.turnPlayer === 1 && d(toggleDestinationOne(destination));
     gameState.turnPlayer === 2 && d(toggleDestinationTwo(destination));
   };
 
+  useEffect(() => {
+    setDestinations(getThreeShortDestinations());
+
+    let longDest = getRandomLongDestination();
+    setLongDestinationOne(longDest);
+    d(toggleDestinationOne(longDest));
+
+    longDest = getRandomLongDestination();
+    setLongDestinationTwo(longDest);
+    d(toggleDestinationTwo(longDest));
+  }, []);
+
   const isToggled = (destination) => {
     if (gameState.turnPlayer === 1) {
-      return stateOne.destinations.find((d) => d.id === destination.id);
+      return playerOne.destinations.find((d) => d?.id === destination.id);
     }
     if (gameState.turnPlayer === 2) {
-      return stateTwo.destinations.find((d) => d?.id === destination.id);
+      return playerTwo.destinations.find((d) => d?.id === destination.id);
     }
-    throw new Error("CURRENT TURN PLAYER IS NOT CORRECT");
+    return false;
   };
 
   return (
@@ -47,39 +56,54 @@ const DestinationCardSelect = () => {
         Player {gameState.turnPlayer}
       </h1>
       <h2 className="text-center mt-4 font-bold text-3xl text-blue-200 select-none">
-        Please Select <span className="text-4xl">2</span> Destination Cards!
+        Please Select <span className="text-4xl">1</span> to <span className="text-4xl">3 </span>
+        Cards!
       </h2>
+      {gameState.turnPlayer === 1 && (
+        <h3 className="text-center mt-2">
+          (Your Long Destination is:
+          {` ${longDestinationOne.fromCity} ➡️➡️➡️ ${longDestinationOne.toCity}`})
+        </h3>
+      )}
+      {gameState.turnPlayer === 2 && (
+        <h3 className="text-center mt-2">
+          (Your Long Destination is:
+          {` ${longDestinationTwo.fromCity} ➡️➡️➡️ ${longDestinationTwo.toCity}`})
+        </h3>
+      )}
 
       {destinations.map((dest) => {
         return (
           <DestinationCard
             destination={dest}
-            toggled={isToggled(dest)}
             from={dest.fromCity}
             to={dest.toCity}
+            toggled={isToggled(dest)}
             click={() => toggleDestination(dest)}
           />
         );
       })}
-
-      <div className="w-1/4 mt-4 self-center text-center">
-        {gameState.turnPlayer === 1 ? (
-          <Button
-            onClick={() => {
-              d(setTurnPlayer(2));
-              setDestinations(getThreeDestinations());
-            }}
-          >
-            Confirm Choices
-          </Button>
-        ) : (
-          <Link to="/game">
-            <div className="text-center">
-              <Button>Confirm Choices</Button>
-            </div>
-          </Link>
-        )}
-      </div>
+      {playerOne.destinations.length > 0 && (
+        <div className="w-1/4 mt-4 self-center text-center">
+          {gameState.turnPlayer === 1 && (
+            <Button
+              onClick={() => {
+                d(setTurnPlayer(2));
+                setDestinations(getThreeShortDestinations());
+              }}
+            >
+              Continue with selected Destinations
+            </Button>
+          )}
+          {playerTwo.destinations.length > 0 && gameState.turnPlayer === 2 && (
+            <Link to="/game">
+              <div className="text-center">
+                <Button>Continue with selected Destinations</Button>
+              </div>
+            </Link>
+          )}
+        </div>
+      )}
     </div>
   );
 };

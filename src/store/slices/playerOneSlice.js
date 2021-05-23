@@ -30,6 +30,8 @@ export const playerOneSlice = createSlice({
     hand: [],
     selectedCards: [],
     destinations: [],
+    longDestinations: [],
+    drawnDestinations: [],
     score: [],
     collectedRoads: [],
     lastDrawnCard: null,
@@ -98,7 +100,6 @@ export const playerOneSlice = createSlice({
         }
       },
     },
-
     addCardOne: {
       reducer: (state, action) => {
         const colorCard = action.payload;
@@ -113,6 +114,7 @@ export const playerOneSlice = createSlice({
         // }
       },
     },
+
     drawCardOne: {
       reducer: (state, _) => {
         const color = getRandomColor();
@@ -124,6 +126,7 @@ export const playerOneSlice = createSlice({
         }
       },
     },
+
     toggleCardOne: {
       reducer: (state, { payload }) => {
         const { index, color } = payload;
@@ -134,44 +137,48 @@ export const playerOneSlice = createSlice({
       },
     },
 
-    // Add Destination to array or delete it if it's already there
     toggleDestinationOne: {
       reducer: (state, action) => {
+        const { type } = action.payload;
         const destination = action.payload;
-        const searchedDestIdx = state.destinations.findIndex((dest) => dest.id === destination.id);
 
-        state.destinations.forEach((d) => console.log(d));
-        console.log(searchedDestIdx);
-        if (searchedDestIdx === -1) {
+        const searchedDestinationIndex = state.destinations.findIndex(
+          (dest) => dest.id === destination.id
+        );
+
+        if (searchedDestinationIndex === -1) {
           state.destinations.push(destination);
         } else {
-          state.destinations.splice(searchedDestIdx, 1);
+          state.destinations.splice(searchedDestinationIndex, 1);
         }
       },
     },
-  },
-  addScoreOne: {
-    reducer: (state, action) => {
-      state.score += action.payload;
-    },
-  },
-  setCardsDrawnThisTurnOne: {
-    reducer: (state, _) => {
-      state.cardsDrawnThisTurn = 0;
-    },
-  },
-  removeColorFromHand: {
-    reducer: (state, action) => {
-      const { color, amount } = action.payload;
 
-      state.cards[color] -= amount;
+    addScoreOne: {
+      reducer: (state, action) => {
+        state.score += action.payload;
+      },
+    },
 
-      let counter = 0;
-      while (counter < amount) {
-        const index = state.hand.findIndex((cardColor) => cardColor === color);
-        state.hand.splice(index, 1);
-        counter++;
-      }
+    setCardsDrawnThisTurnOne: {
+      reducer: (state, _) => {
+        state.cardsDrawnThisTurn = 0;
+      },
+    },
+
+    removeColorFromHand: {
+      reducer: (state, action) => {
+        const { color, amount } = action.payload;
+
+        state.cards[color] -= amount;
+
+        let counter = 0;
+        while (counter < amount) {
+          const index = state.hand.findIndex((cardColor) => cardColor === color);
+          state.hand.splice(index, 1);
+          counter++;
+        }
+      },
     },
   },
 });

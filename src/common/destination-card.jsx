@@ -1,7 +1,6 @@
 import React from "react";
 
 const DestinationCard = ({ from, to, destination, click, toggled }) => {
-  console.log(from, to, destination);
   const { value } = destination;
   return (
     <div className={"w-full flex justify-center mt-10"} onClick={click}>

@@ -45,6 +45,7 @@ const Map = () => {
   };
 
   const collectRoad = (road) => {
+    console.log(road);
     if (gameState.turnPlayer === 1) dispatch(collectRoadOne(road));
     else dispatch(collectRoadTwo(road));
   };
@@ -71,7 +72,8 @@ const Map = () => {
               const { x, y } = coord(element.x, element.y);
               const elements = connection.elements;
               const color = getColor({ road: elements, id: connection.id }) ?? connection.color;
-              const roadToDispatch = elements;
+              const road = elements;
+
               if (index < connection.elements.length - 1) {
                 const xNext = coord(elements[index + 1].x, elements[index + 1].y).x;
                 const yNext = coord(elements[index + 1].x, elements[index + 1].y).y;
@@ -94,8 +96,12 @@ const Map = () => {
                     onClick={() =>
                       collectRoad({
                         id: connection.id,
-                        road: roadToDispatch,
                         color: connection.color,
+                        from: connection.from,
+                        to: connection.to,
+                        fromCity: connection.fromCity,
+                        toCity: connection.toCity,
+                        road,
                       })
                     }
                   />
@@ -118,8 +124,8 @@ const Map = () => {
                     onClick={() =>
                       collectRoad({
                         id: connection.id,
-                        road: roadToDispatch,
                         color: connection.color,
+                        road,
                       })
                     }
                   />

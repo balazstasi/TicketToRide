@@ -12,7 +12,6 @@ const Stat = ({ player, highlighted }) => {
 
   const highlightNodes = (destination) => {
     const firstCity = getDestinationByName(destination.fromCity);
-    console.log(firstCity);
     const secondCity = getDestinationByName(destination.toCity);
 
     const fst = coord(firstCity.x, firstCity.y);
@@ -61,12 +60,15 @@ const Stat = ({ player, highlighted }) => {
       <p className="text-sm">Destination Cards: </p>
       <div className="text-sm font-bold text-blue-100">
         {player === 1
-          ? playerOne.destinations.map((destination) => (
-              <div
-                className="cursor-pointer"
-                onMouseEnter={() => highlightNodes(destination)}
-              >{`${destination.value}: ${destination.fromCity} -> ${destination.toCity}`}</div>
-            ))
+          ? playerOne.destinations.map((destination) => {
+              console.log(destination);
+              return (
+                <div
+                  className="cursor-pointer"
+                  onMouseEnter={() => highlightNodes(destination)}
+                >{`${destination.value}: ${destination.fromCity} -> ${destination.toCity}`}</div>
+              );
+            })
           : playerTwo.destinations.map((destination) => (
               <div
                 className="cursor-pointer"

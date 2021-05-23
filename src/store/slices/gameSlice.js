@@ -64,20 +64,24 @@ export const gameSlice = createSlice({
       reducer: (state, _) => {
         if (state.deck.filter((color) => color === "locomotive").length >= 3) {
           state.deck = [1, 2, 3, 4, 5].map((_) => {
-            const color = getRandomColor();
-            state.fullDeck[color]--;
-            return state.fullDeck[color] > 0 ? color : null;
+            let color = getRandomColor();
+            state.cards[color]--;
+            while (state.cards[color] <= 0) color = getRandomColor();
+            return color;
           });
         } else {
-          const color = getRandomColor();
-          state.fullDeck[color]--;
-          state.deck.length < 5 && state.fullDeck[color] > 0 && state.deck.push(getRandomColor());
+          let color = getRandomColor();
+          while (state.colors[color] <= 0) color = getRandomColor();
+          state.cards[color]--;
+          state.deck.length < 5 && state.cards[color] > 0 && state.deck.push(getRandomColor());
+          return color;
         }
       },
     },
 
     removeCard: {
       reducer: (state, action) => {
+        state.thrownOutCards.push(action.payload);
         state.deck.splice(action.payload, 1);
         state.deck.length < 5 && state.deck.push(getRandomColor());
       },

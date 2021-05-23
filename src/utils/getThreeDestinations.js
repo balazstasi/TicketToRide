@@ -1,10 +1,19 @@
-import { getRandomDestination } from "./getRandomDestination";
+import { getRandomShortDestination } from "./getRandomDestination";
 
-export default function getThreeDestinations() {
+export default function getThreeShortDestinations() {
   const destResult = [];
-  for (let i = 0; i < 3; i++) destResult.push(getRandomDestination());
+
+  let newDestination = getRandomShortDestination();
+  destResult.push(newDestination);
+  for (let i = 0; i < 2; i++) {
+    // eslint-disable-next-line no-loop-func
+    while (destResult.find((dest) => newDestination.id === dest.id)) {
+      newDestination = getRandomShortDestination();
+    }
+    destResult.push(newDestination);
+  }
 
   return destResult;
 }
 
-export { getThreeDestinations };
+export { getThreeShortDestinations };
