@@ -78,29 +78,19 @@ const Map = () => {
                 return (
                   <Shape
                     opacity={
-                      color === playerOne.playerColor || color === playerTwo.playerColor
-                        ? 0.9
-                        : 0.01
+                      color === playerOne.playerColor || color === playerTwo.playerColor ? 0.45 : 0
                     }
                     sceneFunc={(context, shape) => {
                       context.beginPath();
                       context.moveTo(x, y);
                       context.lineTo(xNext, yNext);
                       context.closePath();
-                      // (!) Konva specific method, it is very important
                       context.fillStrokeShape(shape);
                     }}
                     stroke={color}
                     strokeWidth={
-                      color === playerOne.playerColor || color === playerTwo.playerColor ? 8 : 6
+                      color === playerOne.playerColor || color === playerTwo.playerColor ? 17 : 6
                     }
-                    // onClick={() =>
-                    //   collectRoad({
-                    //     id: connection.id,
-                    //     road: roadToDispatch,
-                    //     color: connection.color,
-                    //   })
-                    // }
                     onClick={() =>
                       collectRoad({
                         id: connection.id,
@@ -119,12 +109,11 @@ const Map = () => {
                       context.moveTo(x, y);
                       context.lineTo(coord(elements[index].x).x, coord(elements[index].y).y);
                       context.closePath();
-                      // (!) Konva specific method, it is very important
                       context.fillStrokeShape(shape);
                     }}
                     stroke={color}
                     strokeWidth={
-                      color === playerOne.playerColor || color === playerTwo.playerColor ? 12 : 6
+                      color === playerOne.playerColor || color === playerTwo.playerColor ? 17 : 6
                     }
                     onClick={() =>
                       collectRoad({
