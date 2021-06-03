@@ -24,7 +24,7 @@ export const gameSlice = createSlice({
   },
 
   reducers: {
-    setState: {
+    setStateGame: {
       reducer: (state, action) => {
         state = action.payload;
       },
@@ -37,8 +37,8 @@ export const gameSlice = createSlice({
     },
 
     setGameCode: {
-      reducer: (state, action) => {
-        state.gameCode = action.payload;
+      reducer: (state, { payload }) => {
+        state.gameCode = { id: payload.id, code: payload.code };
       },
     },
 
@@ -93,7 +93,7 @@ export const gameSlice = createSlice({
 });
 
 export const {
-  setState,
+  setStateGame,
   setGamePhase,
   setGameCode,
   setTurnPlayer,

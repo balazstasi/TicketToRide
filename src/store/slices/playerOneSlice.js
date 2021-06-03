@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getRandomColor } from "../../utils/getRandomColor";
 import { GRAY, LOCOMOTIVE, MOVE_LIST } from "../../constants/constants";
+import { cloneDeep } from "lodash";
 
 /*
   A function that accepts an initial state, an object full of reducer functions, and a "slice name", and automatically generates action creators and action types that correspond to the reducers and state.
@@ -42,6 +43,11 @@ export const playerOneSlice = createSlice({
     justBuilt: false,
   },
   reducers: {
+    setStateOne: {
+      reducer: (state, { payload }) => {
+        state = cloneDeep(payload);
+      },
+    },
     collectRoadOne: {
       reducer: (state, action) => {
         function removeColorHand(color, amount) {

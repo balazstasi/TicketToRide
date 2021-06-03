@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getRandomColor } from "../../utils/getRandomColor";
 import { MOVE_LIST, LOCOMOTIVE, GRAY } from "../../constants/constants";
+import { cloneDeep } from "lodash";
 
 export const playerTwoSlice = createSlice({
   name: "playerTwo",
@@ -31,6 +32,11 @@ export const playerTwoSlice = createSlice({
     beforeLastMove: null,
   },
   reducers: {
+    setStatetwo: {
+      reducer: (state, { payload }) => {
+        state = cloneDeep(payload);
+      },
+    },
     collectRoadTwo: {
       reducer: (state, action) => {
         const removeColorHand = (color, amount) => {
@@ -172,10 +178,10 @@ export const playerTwoSlice = createSlice({
 });
 
 export const {
+  setStateTwo,
   addCardTwo,
   toggleDestinationTwo,
   addScoreTwo,
-  setStateTwo,
   toggleCardTwo,
   drawCardTwo,
   setJustBuiltTwo,

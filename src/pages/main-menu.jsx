@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setGameCode } from "../store/slices/gameSlice";
+import { WebSocketContext } from "../containers/socket-container";
 
 const MainMenu = () => {
+  const dispatch = useDispatch();
+  const game = useSelector((state) => state.game);
+  const ws = useContext(WebSocketContext);
+
   return (
     <>
       <link
@@ -36,6 +43,7 @@ const MainMenu = () => {
                 </span>
               </div>
               <input
+                onChange={(e) => dispatch(setGameCode({ id: "", code: e.target.value }))}
                 type="password"
                 className="flex-shrink flex-grow leading-normal w-px flex-1 border-0 h-10 px-3 relative self-center font-roboto text-xl outline-none text-blue-500"
                 placeholder="Game Code"
@@ -49,21 +57,28 @@ const MainMenu = () => {
                 <p className="text-blue-500">Rules</p>
               </Link>
             </div>
-            <Link
+            {/* <Link
               className="p-2 mt-8 w-full bg-blue-400 hover:bg-blue-500 rounded-lg shadow text-xl font-medium uppercase text-white"
               to="/waiting-room"
             >
               <center>
                 <p className="self-center">ENTER LOBBY</p>
               </center>
-            </Link>
+            </Link> */}
             <p className="text-blue-500 mt-4 text-center">Or, fill in just your name and press:</p>
             <Link
               className="p-2 mt-4 w-full bg-blue-400 hover:bg-blue-500 rounded-lg shadow text-xl font-medium uppercase text-white"
               to="/waiting-room"
             >
               <center>
-                <p className="self-center">CREATE LOBBY</p>
+                <p
+                  className="self-center"
+                  onClick={() => {
+                    ws.createRoom(game.gameCode.code);
+                  }}
+                >
+                  CREATE LOBBY
+                </p>
               </center>
             </Link>
           </form>
