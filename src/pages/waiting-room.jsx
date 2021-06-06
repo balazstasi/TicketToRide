@@ -1,14 +1,27 @@
 import React, { useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { setGamePhase } from "../store/slices/gameSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Player from "../components/lobby/player";
 import { WebSocketContext } from "../containers/socket-container";
+import io from "socket.io-client";
+import { WS_BASE } from "../containers/config";
+
+import { playerOneSlice } from "../store/slices/playerOneSlice";
+import { getState, leaveRoom } from "../store/thunk/actions";
 
 const WaitingRoom = () => {
+  const history = useHistory();
   const ws = useContext(WebSocketContext);
   const d = useDispatch();
   const game = useSelector((state) => state.game);
+  const playerOne = useSelector((state) => state.playerOne);
+  const playerTwo = useSelector((state) => state.playerTwo);
+  const socket = io.connect(WS_BASE);
+
+  useEffect(() => {
+    if (game.gameCode.id === "") history.push("/");
+  }, []);
 
   return (
     <div>
@@ -16,7 +29,7 @@ const WaitingRoom = () => {
         <div className="bg-white w-full md:max-w-4xl rounded-lg shadow p-4">
           <div className="h-12 flex justify-between items-center border-b border-gray-200 m-4">
             <div>
-              <div className="text-xl font-bold text-gray-700">Room Code: {game.gameCode.code}</div>
+              <div className="text-xl font-bold text-gray-700">Room Code: {game.gameCode.id}</div>
               <div className="text-sm font-base text-gray-500">Waiting for more players...</div>
               <div className="text-sm font-base text-gray-500 mb-8">
                 Press the Lock when there are enough players (2)
@@ -50,8 +63,8 @@ const WaitingRoom = () => {
             </div>
           </div>
           <div className="px-6">
-            <Player />
-            <Player />
+            <Player name={playerOne.name} />
+            <Player name={playerTwo.name} />
             <div className="flex bg-gray-200 justify-center items-center h-16 p-4 my-6  rounded-lg  shadow-inner">
               <div className="flex items-center border border-gray-400 p-2 border-dashed rounded cursor-pointer">
                 <div>
@@ -76,7 +89,10 @@ const WaitingRoom = () => {
           </div>
           <div
             className="p-6 flex flex-col"
-            onClick={() => d(setGamePhase("FIRST_DRAW_DESTINATIONS"))}
+            onClick={() => {
+              d(setGamePhase("FIRST_DRAW_DESTINATIONS"));
+              getState(game.gameCode.id);
+            }}
           >
             <Link
               className="p-4 bg-blue-400 hover:bg-blue-500 rounded-lg shadow text-xl font-medium uppercase text-white w-full"
@@ -91,7 +107,7 @@ const WaitingRoom = () => {
               to="/"
             >
               <center>
-                <p className="self-center" onClick={() => ws.closeRoom()}>
+                <p className="self-center" onClick={() => leaveRoom(game.gameCode.id)}>
                   Back To Title Screen
                 </p>
               </center>

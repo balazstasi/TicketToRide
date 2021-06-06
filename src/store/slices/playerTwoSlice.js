@@ -32,11 +32,12 @@ export const playerTwoSlice = createSlice({
     beforeLastMove: null,
   },
   reducers: {
-    setStatetwo: {
+    setStateTwo: {
       reducer: (state, { payload }) => {
         state = cloneDeep(payload);
       },
     },
+
     collectRoadTwo: {
       reducer: (state, action) => {
         const removeColorHand = (color, amount) => {
@@ -133,14 +134,9 @@ export const playerTwoSlice = createSlice({
         const { index, color } = payload;
         const cardIndex = state.selectedCards.findIndex((card) => card.index === index);
 
-        console.log("CARD AT INDEX", index);
-
         if (cardIndex < 0) {
-          console.log("NOT FOUND");
           state.selectedCards.push({ index, color });
         } else {
-          console.log("FOUND");
-
           state.selectedCards.splice(cardIndex, 1);
         }
       },
@@ -149,17 +145,12 @@ export const playerTwoSlice = createSlice({
     toggleDestinationTwo: {
       // Add Destination to array or delete it if it's already there
       reducer: (state, action) => {
-        console.log("ACTION", action);
         const destination = action.payload;
         const searchedDestIdx = state.destinations.findIndex((dest) => dest.id === destination.id);
 
-        state.destinations.forEach((d) => console.log(d));
-        console.log(searchedDestIdx);
         if (searchedDestIdx === -1) {
-          console.log("ADDING");
           state.destinations.push(destination);
         } else {
-          console.log("REMOVING");
           state.destinations.splice(searchedDestIdx, 1);
         }
       },
@@ -174,12 +165,18 @@ export const playerTwoSlice = createSlice({
         state.cardsDrawnThisTurn = 0;
       },
     },
+    setNameTwo: {
+      reducer: (state, { payload }) => {
+        state.name = payload;
+      },
+    },
   },
 });
 
 export const {
   setStateTwo,
   addCardTwo,
+  setNameTwo,
   toggleDestinationTwo,
   addScoreTwo,
   toggleCardTwo,

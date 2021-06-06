@@ -1,9 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getRandomColor } from "../../utils/getRandomColor";
+import { createRoom } from "../thunk/actions";
 
 export const gameSlice = createSlice({
   name: "game",
   initialState: {
+    playerOneName: "",
+    playerTwoName: "",
     turnPlayer: null,
     gameState: "",
     gamePhase: "",
@@ -24,6 +27,16 @@ export const gameSlice = createSlice({
   },
 
   reducers: {
+    setPlayerName: {
+      reducer: (state, { payload }) => {
+        if (payload.number === 1) {
+          state.playerOneName = payload.name;
+        } else {
+          state.playerTwoName = payload.name;
+        }
+      },
+    },
+
     setStateGame: {
       reducer: (state, action) => {
         state = action.payload;
@@ -90,11 +103,17 @@ export const gameSlice = createSlice({
       state.throwOutCard.push(action.payload);
     },
   },
+  extraReducers: {
+    [createRoom.pending]: (state, action) => {},
+    [createRoom.rejected]: (state, action) => {},
+    [createRoom.fulfilled]: (state, action) => {},
+  },
 });
 
 export const {
   setStateGame,
   setGamePhase,
+  setPlayerName,
   setGameCode,
   setTurnPlayer,
   resetDeck,

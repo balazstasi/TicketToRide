@@ -3,10 +3,11 @@ import React, { createContext } from "react";
 import io from "socket.io-client";
 import { WS_BASE } from "./config";
 import { useDispatch, useSelector } from "react-redux";
-import { setGameCode } from "../store/slices/gameSlice";
-import { setStateOne } from "../store/slices/playerOneSlice";
-import { setStateTwo } from "../store/slices/playerTwoSlice";
+import { setGameCode, setPlayerName, setTurnPlayer } from "../store/slices/gameSlice";
+import { setNameOne, setStateOne } from "../store/slices/playerOneSlice";
+import { setStateTwo, setNameTwo } from "../store/slices/playerTwoSlice";
 import { setStateGame } from "../store/slices/gameSlice";
+import useDeepCompareEffect from "use-deep-compare-effect";
 
 const WebSocketContext = createContext(null);
 const WebSocketContextConsumer = WebSocketContext.Consumer;
@@ -22,19 +23,58 @@ export default ({ children }) => {
   const playerOne = useSelector((state) => state.playerOne);
   const playerTwo = useSelector((state) => state.playerTwo);
 
-  const createRoom = (code) => {
-    socket.emit("create-room", 2, ({ status, roomId }) => {
-      dispatch(setGameCode({ id: roomId, code }));
+  function emit(name, data, handler) {
+    // const ack = async function (resp) {
+    //   handler(resp);
+    // };
+    socket.emit(name, data, handler);
+  }
+
+  const createRoom = () => {
+    // socket.emit("create-room", 2, ({ status, roomId }) => {
+    //   if (status === "ok") {
+    //     dispatch(setGameCode({ id: roomId }));
+    //     console.log("create-room", roomId);
+    //   } else {
+    //     console.error("ERROR_CREATING_ROOM");
+    //   }
+    // });
+
+    emit("create-room", 2, ({ status, roomId }) => {
+      if (status === "ok") {
+        dispatch(setGameCode({ id: roomId }));
+        console.log(game.gameCode.id);
+      } else {
+        console.error("error creating room");
+      }
     });
   };
 
-  const closeRoom = () => {
-    socket.emit("close-room", JSON.stringify(game.gameCode.id), (ack) => console.log("CLOSE", ack));
+  const joinRoom = (roomId) => {
+    socket.emit("join-room", roomId, ({ status, message }) => {
+      if (status === "ok") {
+        dispatch(setGameCode({ id: roomId }));
+      } else {
+        console.error("ERROR_JOINING_ROOM", message);
+      }
+    });
   };
 
-  const syncState = () => {
-    socket.emit("sync-state", game.gameCode, { 1: playerOne, 2: playerTwo, game }, false, (ack) => {
-      console.log("SYNC", ack);
+  const closeRoom = (roomId) => {
+    socket.emit("close-room", roomId, (ack) => console.log("close-room", ack));
+  };
+
+  const leaveRoom = (roomId) => {
+    socket.emit("leave-room", roomId, (ack) => {
+      console.log("leave-room", ack);
+    });
+  };
+
+  const syncState = (roomId) => {
+    console.log(roomId);
+    socket.emit("sync-state", roomId + "", { 1: playerOne, 2: playerTwo, game }, false, (ack) => {
+      if (ack.status === "ok") console.log("sync-state:", { 1: playerOne, 2: playerTwo, game });
+      console.log(ack);
     });
   };
 
@@ -42,23 +82,33 @@ export default ({ children }) => {
     socket = io.connect(WS_BASE);
 
     socket.on("state-changed", ({ _, state }) => {
-      const payload = JSON.parse(state);
-      console.log(payload);
+      const payload = state;
+      console.log("state-changed", payload);
       dispatch(setStateOne(payload[1]));
       dispatch(setStateTwo(payload[2]));
       dispatch(setStateGame(payload.game));
     });
 
-    socket.on("room-is-full", ({ roomId, state, player }) => {
-      const payload = JSON.parse(state);
-      console.log(payload);
+    socket.on("player-joined", (ack) => {
+      console.log("player-joined", ack);
+    });
+
+    socket.on("room-is-full", (data) => {
+      console.log("room-is-full", data);
+    });
+
+    socket.on("player-left", (date) => {
+      console.log("payer-left");
+      syncState(game.gameCode.id);
     });
 
     ws = {
       socket: socket,
       createRoom,
+      joinRoom,
       closeRoom,
       syncState,
+      leaveRoom,
     };
   }
 

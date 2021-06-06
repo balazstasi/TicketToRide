@@ -1,6 +1,11 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-const Player = () => {
+const Player = ({ name }) => {
+  const game = useSelector((state) => state.game);
+  const playerOne = useSelector((state) => state.playerOne);
+  const playerTwo = useSelector((state) => state.playerTwo);
+
   return (
     <div className="flex justify-between items-center h-16 p-4 my-6  rounded-lg border border-gray-100 shadow-md">
       <div className="flex items-center">
@@ -10,7 +15,7 @@ const Player = () => {
           alt="Logo"
         />
         <div className="ml-2">
-          <div className="text-sm font-semibold text-gray-600">Társasjáték :P</div>
+          <div className="text-sm font-semibold text-gray-600">{name}</div>
         </div>
       </div>
       <div>

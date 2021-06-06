@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import DestinationCard from "../common/destination-card";
 import { Button } from "../common/button";
 import { Link, useHistory } from "react-router-dom";
@@ -10,6 +10,9 @@ import { toggleDestinationTwo } from "../store/slices/playerTwoSlice";
 import { setTurnPlayer } from "../store/slices/gameSlice";
 import { getRandomLongDestination } from "../utils/getRandomDestination";
 import { GAME_PHASE } from "../constants/constants";
+import useDeepCompareEffect from "use-deep-compare-effect";
+import { WebSocketContext } from "../containers/socket-container";
+import { syncState } from "../store/thunk/actions";
 
 const DestinationCardSelect = () => {
   const history = useHistory();
@@ -21,9 +24,15 @@ const DestinationCardSelect = () => {
   const playerOne = useSelector((state) => state.playerOne);
   const playerTwo = useSelector((state) => state.playerTwo);
 
+  const ws = useContext(WebSocketContext);
+
   useEffect(() => {
     if (gameState.gamePhase === "FIRST_DRAW_DESTINATIONS") d(setTurnPlayer(1));
   }, [d]);
+
+  useDeepCompareEffect(() => {
+    syncState(gameState.gameCode.id, JSON.stringify(gameState));
+  }, [gameState, playerOne, playerTwo]);
 
   const toggleDestination = (destination) => {
     gameState.turnPlayer === 1 && d(toggleDestinationOne(destination));
@@ -82,7 +91,9 @@ const DestinationCardSelect = () => {
             from={dest.fromCity}
             to={dest.toCity}
             toggled={isToggled(dest)}
-            click={() => toggleDestination(dest)}
+            click={() => {
+              toggleDestination(dest);
+            }}
           />
         );
       })}

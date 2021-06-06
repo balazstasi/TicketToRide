@@ -45,7 +45,12 @@ export const playerOneSlice = createSlice({
   reducers: {
     setStateOne: {
       reducer: (state, { payload }) => {
-        state = cloneDeep(payload);
+        state = payload;
+      },
+    },
+    setNameOne: {
+      reducer: (state, { payload }) => {
+        state.name = payload;
       },
     },
     collectRoadOne: {
@@ -204,6 +209,7 @@ export const playerOneSlice = createSlice({
 
 export const {
   addCardOne,
+  setNameOne,
   toggleDestinationOne,
   addScoreOne,
   setStateOne,
