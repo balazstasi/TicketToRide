@@ -1,7 +1,43 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setGameCode, setStateGame, setTurnPlayer } from "../store/slices/gameSlice";
+import { WebSocketContext } from "../containers/socket-container";
+import { WS_BASE } from "../containers/config";
+import io from "socket.io-client";
+import { createRoom, joinRoom, syncState } from "../store/thunk/actions";
+import { socket } from "../index";
+import { useHistory } from "react-router-dom";
+import { setJoinedOne, setNameOne, setStateOne } from "../store/slices/playerOneSlice";
+import { setJoinedTwo, setNameTwo, setStateTwo } from "../store/slices/playerTwoSlice";
+import { setActualPlayer } from "../store/slices/uiSlice";
+import { cloneDeep } from "lodash";
+import { syncStateGame, syncStateOne, syncStateTwo } from "../store/thunk/actions";
 
 const MainMenu = () => {
+  const dispatch = useDispatch();
+  const game = useSelector((state) => state.game);
+  const local = useSelector((state) => state.ui);
+  const playerOne = useSelector((state) => state.playerOne);
+  const playerTwo = useSelector((state) => state.playerTwo);
+  const ws = useContext(WebSocketContext);
+  const [input, setInput] = useState("");
+  const [name, setName] = useState("");
+  const history = useHistory();
+
+  function sync(roomId) {
+    console.log(game, playerOne, playerTwo);
+    socket.emit(
+      "sync-state",
+      roomId,
+      { game: cloneDeep(game), playerOne: cloneDeep(playerOne), playerTwo: cloneDeep(playerTwo) },
+      true,
+      function (answer) {
+        console.log("sync-state", answer);
+      }
+    );
+  }
+
   return (
     <>
       <link
@@ -27,6 +63,7 @@ const MainMenu = () => {
                 type="text"
                 className="flex-shrink flex-grow leading-normal w-px flex-1 h-10 rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none text-blue-500"
                 placeholder="Name"
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div className="flex flex-wrap w-full relative h-15 bg-white items-center rounded mb-4 border-2 border-blue-400">
@@ -36,6 +73,7 @@ const MainMenu = () => {
                 </span>
               </div>
               <input
+                onChange={(e) => setInput(e.target.value)}
                 type="password"
                 className="flex-shrink flex-grow leading-normal w-px flex-1 border-0 h-10 px-3 relative self-center font-roboto text-xl outline-none text-blue-500"
                 placeholder="Game Code"
@@ -52,6 +90,15 @@ const MainMenu = () => {
             <Link
               className="p-2 mt-8 w-full bg-blue-400 hover:bg-blue-500 rounded-lg shadow text-xl font-medium uppercase text-white"
               to="/waiting-room"
+              onClick={() => {
+                dispatch(joinRoom(input));
+                dispatch(setGameCode({ id: input }));
+                dispatch(setJoinedTwo(true));
+                dispatch(setNameTwo(name));
+                dispatch(setActualPlayer(2));
+                dispatch(setTurnPlayer(2));
+                dispatch(syncStateGame(input, { game }));
+              }}
             >
               <center>
                 <p className="self-center">ENTER LOBBY</p>
@@ -61,6 +108,15 @@ const MainMenu = () => {
             <Link
               className="p-2 mt-4 w-full bg-blue-400 hover:bg-blue-500 rounded-lg shadow text-xl font-medium uppercase text-white"
               to="/waiting-room"
+              onClick={() => {
+                const id = game.gameCode.id;
+                dispatch(createRoom(2));
+                dispatch(setNameOne(name));
+                dispatch(setTurnPlayer(1));
+                dispatch(setJoinedOne(true));
+                dispatch(setActualPlayer(1));
+                dispatch(syncStateGame(id, "anyukadat kocsog"));
+              }}
             >
               <center>
                 <p className="self-center">CREATE LOBBY</p>

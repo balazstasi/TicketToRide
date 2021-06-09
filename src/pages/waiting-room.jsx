@@ -1,17 +1,39 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useContext } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { setGamePhase, setStateGame } from "../store/slices/gameSlice";
+import { useDispatch, useSelector } from "react-redux";
+import Player from "../components/lobby/player";
+import { WebSocketContext } from "../containers/socket-container";
+import io from "socket.io-client";
+import { WS_BASE } from "../containers/config";
+
+import { playerOneSlice, setStateOne } from "../store/slices/playerOneSlice";
+import { getState, leaveRoom } from "../store/thunk/actions";
+import { setStateTwo } from "../store/slices/playerTwoSlice";
 
 const WaitingRoom = () => {
+  const history = useHistory();
+  const ws = useContext(WebSocketContext);
+  const d = useDispatch();
+  const game = useSelector((state) => state.game);
+  const playerOne = useSelector((state) => state.playerOne);
+  const playerTwo = useSelector((state) => state.playerTwo);
+  const socket = io.connect(WS_BASE);
+
+  useEffect(() => {
+    if (game.gameCode.id === "") history.push("/");
+  }, []);
+
   return (
     <div>
       <div className=" flex-1 bg-blue-400 flex justify-center items-center bg-gradient-to-tl from-blue-800 to-blue-500 text-white font-mono flex-col min-h-screen">
         <div className="bg-white w-full md:max-w-4xl rounded-lg shadow p-4">
           <div className="h-12 flex justify-between items-center border-b border-gray-200 m-4">
             <div>
-              <div className="text-xl font-bold text-gray-700">Room: [Game Code]</div>
+              <div className="text-xl font-bold text-gray-700">Room Code: {game.gameCode.id}</div>
               <div className="text-sm font-base text-gray-500">Waiting for more players...</div>
               <div className="text-sm font-base text-gray-500 mb-8">
-                Press the Lock when there are enough players (2 - 5)
+                Press the Lock when there are enough players (2)
               </div>
             </div>
             <div>
@@ -42,94 +64,8 @@ const WaitingRoom = () => {
             </div>
           </div>
           <div className="px-6">
-            <div className="flex justify-between items-center h-16 p-4 my-6  rounded-lg border border-gray-100 shadow-md">
-              <div className="flex items-center">
-                <img
-                  className="rounded-full h-12 w-12"
-                  src="https://eadn-wc03-1341917.nxedge.io/cdn/wp-content/uploads/2020/10/png-clipart-xubuntu-xfce-menu-element-hand-logo-150x150.png"
-                  alt="Logo"
-                />
-                <div className="ml-2">
-                  <div className="text-sm font-semibold text-gray-600">Már</div>
-                </div>
-              </div>
-              <div>
-                <button className="bg-red-400 hover:bg-red-500 p-2 rounded-full shadow-md flex justify-center items-center">
-                  <svg
-                    className="text-white toggle__lock w-6 h-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={3}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div className="flex justify-between items-center h-16 p-4 my-6  rounded-lg border border-gray-100 shadow-md">
-              <div className="flex items-center">
-                <img
-                  className="rounded-full h-12 w-12"
-                  src="https://www.shareicon.net/data/2015/09/16/101867_archlinux_512x512.png"
-                  alt="Logo"
-                />
-                <div className="ml-2">
-                  <div className="text-sm font-semibold text-gray-600">Megint</div>
-                  {/* <div className="text-sm font-light text-gray-500">
-                    Alcím
-                  </div> */}
-                </div>
-              </div>
-              <div>
-                <button className="bg-red-400 hover:bg-red-500  p-2 rounded-full shadow-md flex justify-center items-center">
-                  <svg
-                    className="text-white toggle__lock w-6 h-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={3}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div className="flex justify-between items-center h-16 p-4 my-6  rounded-lg border border-gray-100 shadow-md">
-              <div className="flex items-center">
-                <img
-                  className="rounded-full h-12 w-12"
-                  src="https://ia801905.us.archive.org/30/items/librewolf-81.0/logo.png"
-                  alt="Logo"
-                />
-                <div className="ml-2">
-                  <div className="text-sm font-semibold text-gray-600">Társasjáték :P</div>
-                </div>
-              </div>
-              <div>
-                <button className="bg-red-400 hover:bg-red-500  p-2 rounded-full shadow-md flex justify-center items-center">
-                  <svg
-                    className="text-white toggle__lock w-6 h-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+            {playerOne.joined && <Player name={playerOne.name} />}
+            {playerTwo.joined && <Player name={playerTwo.name} />}
             <div className="flex bg-gray-200 justify-center items-center h-16 p-4 my-6  rounded-lg  shadow-inner">
               <div className="flex items-center border border-gray-400 p-2 border-dashed rounded cursor-pointer">
                 <div>
@@ -152,7 +88,13 @@ const WaitingRoom = () => {
               </div>
             </div>
           </div>
-          <div className="p-6 flex flex-col">
+          <div
+            className="p-6 flex flex-col"
+            onClick={() => {
+              d(setGamePhase("FIRST_DRAW_DESTINATIONS"));
+              getState(game.gameCode.id);
+            }}
+          >
             <Link
               className="p-4 bg-blue-400 hover:bg-blue-500 rounded-lg shadow text-xl font-medium uppercase text-white w-full"
               to="/destination-card-select"
@@ -166,7 +108,9 @@ const WaitingRoom = () => {
               to="/"
             >
               <center>
-                <p className="self-center">Back To TItle Screen</p>
+                <p className="self-center" onClick={() => leaveRoom(game.gameCode.id)}>
+                  Back To Title Screen
+                </p>
               </center>
             </Link>
           </div>

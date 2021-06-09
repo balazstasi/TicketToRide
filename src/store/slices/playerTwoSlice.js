@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getRandomColor } from "../../utils/getRandomColor";
 import { MOVE_LIST, LOCOMOTIVE, GRAY } from "../../constants/constants";
+import { cloneDeep } from "lodash";
 
 export const playerTwoSlice = createSlice({
   name: "playerTwo",
   initialState: {
-    name: "Niki",
+    name: "",
     playerColor: "lightpink",
     trains: 45,
     cards: {
@@ -22,15 +23,27 @@ export const playerTwoSlice = createSlice({
     hand: [],
     selectedCards: [],
     cardsDrawn: 0,
+    cardsDrawnThisTurn: 100,
     destinations: [],
     collectedRoads: [],
     score: [],
+    justBuilt: false,
     lastMove: null,
     beforeLastMove: null,
-    cardsDrawnThisTurn: 0,
+    joined: false,
   },
   reducers: {
-    collectRoadOne: {
+    setStateTwo: {
+      reducer: (state, { payload }) => {
+        Object.keys(payload).forEach((key) => (state[key] = cloneDeep(payload[key]) || null));
+      },
+    },
+    setJoinedTwo: {
+      reducer: (state, { payload }) => {
+        state.joined = payload;
+      },
+    },
+    collectRoadTwo: {
       reducer: (state, action) => {
         const removeColorHand = (color, amount) => {
           state.cards[color] -= amount;
@@ -55,12 +68,16 @@ export const playerTwoSlice = createSlice({
               (card) => card.color === color || card.color === LOCOMOTIVE
             ) && state.selectedCards.length >= roadLength;
         } else {
-          selectedWithoutLoc = state.selectedCards.filter((card) => card.color !== LOCOMOTIVE) || [
-            LOCOMOTIVE,
-          ];
-          canBeBuilt = selectedWithoutLoc.every(
-            (card) => card.color === selectedWithoutLoc[0].color
-          );
+          selectedWithoutLoc =
+            state.selectedCards.filter((card) => card.color !== LOCOMOTIVE) || [];
+
+          if (selectedWithoutLoc.length === 0) {
+            canBeBuilt = false;
+          } else {
+            canBeBuilt =
+              selectedWithoutLoc.every((card) => card.color === selectedWithoutLoc[0].color) &&
+              state.selectedCards.length >= roadLength;
+          }
         }
 
         if (canBeBuilt) {
@@ -85,20 +102,29 @@ export const playerTwoSlice = createSlice({
             removeColorHand(LOCOMOTIVE, lengthAfterColoredCards);
           }
           state.selectedCards = [];
+          state.lastMove = MOVE_LIST.MAKE_ROUTE;
+
+          state.justBuilt = true;
         }
+      },
+    },
+    setJustBuiltTwo: {
+      reducer: (state, { payload }) => {
+        state.justBuilt = payload;
       },
     },
     addCardTwo: {
       reducer: (state, action) => {
         const colorCard = action.payload;
         state.cardsDrawn++;
-        state.cardsDrawnThisturn++;
+        state.cardsDrawnThisTurn++;
         state.cards[colorCard]++;
         state.hand.push(colorCard);
         state.beforeLastMove = state.lastMove;
         state.lastMove = MOVE_LIST.TAKE_CARD_FROM_DRAWN;
       },
     },
+
     drawCardTwo: {
       reducer: (state, _) => {
         const color = getRandomColor();
@@ -113,14 +139,9 @@ export const playerTwoSlice = createSlice({
         const { index, color } = payload;
         const cardIndex = state.selectedCards.findIndex((card) => card.index === index);
 
-        console.log("CARD AT INDEX", index);
-
         if (cardIndex < 0) {
-          console.log("NOT FOUND");
           state.selectedCards.push({ index, color });
         } else {
-          console.log("FOUND");
-
           state.selectedCards.splice(cardIndex, 1);
         }
       },
@@ -129,43 +150,46 @@ export const playerTwoSlice = createSlice({
     toggleDestinationTwo: {
       // Add Destination to array or delete it if it's already there
       reducer: (state, action) => {
-        console.log("ACTION", action);
         const destination = action.payload;
         const searchedDestIdx = state.destinations.findIndex((dest) => dest.id === destination.id);
 
-        state.destinations.forEach((d) => console.log(d));
-        console.log(searchedDestIdx);
         if (searchedDestIdx === -1) {
-          console.log("ADDING");
           state.destinations.push(destination);
         } else {
-          console.log("REMOVING");
           state.destinations.splice(searchedDestIdx, 1);
         }
       },
     },
-  },
-  addScoreTwo: {
-    reducer: (state, action) => {
-      state.score += action.payload;
+    addScoreTwo: {
+      reducer: (state, action) => {
+        state.score += action.payload;
+      },
     },
-  },
-  setCardsDrawnThisTurnTwo: {
-    reducer: (state, _) => {
-      state.cardsDrawnThisTurn = 0;
+    setCardsDrawnThisTurnTwo: {
+      reducer: (state, _) => {
+        state.cardsDrawnThisTurn = 0;
+      },
+    },
+    setNameTwo: {
+      reducer: (state, { payload }) => {
+        state.name = payload;
+      },
     },
   },
 });
 
 export const {
+  setStateTwo,
   addCardTwo,
+  setNameTwo,
   toggleDestinationTwo,
   addScoreTwo,
-  setStateTwo,
   toggleCardTwo,
   drawCardTwo,
+  setJustBuiltTwo,
   setCardsDrawnThisTurnTwo,
   collectRoadTwo,
+  setJoinedTwo,
 } = playerTwoSlice.actions;
 
 export default playerTwoSlice.reducer;

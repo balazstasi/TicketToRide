@@ -18,7 +18,7 @@ const Sidebar = ({ click }) => {
           click();
         }}
       >
-        {opened ? "HIDE SCORES" : "SHOW SCORES"}
+        {opened ? "SCORES<-" : "SCORES->"}
       </span>
       <div
         className={`opacity-90 h-1/4 flex flex-col flex-auto flex-shrink-0 z-40 antialiased bg-blue-100 text-gray-800 ${
@@ -26,7 +26,7 @@ const Sidebar = ({ click }) => {
         }`}
       >
         <div className="flex flex-col top-0  left-0 w-64 bg-blue-900 h-full shadow-lg">
-          <div className="flex items-center pl-6 h-20 border-b border-gray-800">
+          {/* <div className="flex items-center pl-6 h-20 border-b border-gray-800">
             <div className="ml-1">
               <p className="ml-1 text-3xl font-medium tracking-wide truncate text-blue-100 font-sans">
                 Players
@@ -38,7 +38,7 @@ const Sidebar = ({ click }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <Stats />
         </div>
       </div>

@@ -1,11 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getRandomColor } from "../../utils/getRandomColor";
-import { playerOneSlice } from "./playerOneSlice";
-import { playerTwoSlice } from "./playerTwoSlice";
+import { createRoom, syncActionGame, syncStateGame } from "../thunk/actions";
+import { cloneDeep } from "lodash";
+import { socket } from "../../index";
 
 export const gameSlice = createSlice({
   name: "game",
   initialState: {
+    playerOneName: "",
+    playerTwoName: "",
     turnPlayer: null,
     gameState: "",
     gamePhase: "",
@@ -26,9 +29,19 @@ export const gameSlice = createSlice({
   },
 
   reducers: {
-    setState: {
-      reducer: (state, action) => {
-        state = action.payload;
+    setPlayerName: {
+      reducer: (state, { payload }) => {
+        if (payload.number === 1) {
+          state.playerOneName = payload.name;
+        } else {
+          state.playerTwoName = payload.name;
+        }
+      },
+    },  
+
+    setStateGame: {
+      reducer: (state, { payload }) => {
+        Object.keys(payload).forEach((key) => (state[key] = cloneDeep(payload[key]) || null));
       },
     },
 
@@ -39,8 +52,8 @@ export const gameSlice = createSlice({
     },
 
     setGameCode: {
-      reducer: (state, action) => {
-        state.gameCode = action.payload;
+      reducer: (state, { payload }) => {
+        state.gameCode = { id: payload.id, code: payload.code };
       },
     },
 
@@ -64,20 +77,24 @@ export const gameSlice = createSlice({
       reducer: (state, _) => {
         if (state.deck.filter((color) => color === "locomotive").length >= 3) {
           state.deck = [1, 2, 3, 4, 5].map((_) => {
-            const color = getRandomColor();
-            state.fullDeck[color]--;
-            return state.fullDeck[color] > 0 ? color : null;
+            let color = getRandomColor();
+            state.cards[color]--;
+            while (state.cards[color] <= 0) color = getRandomColor();
+            return color;
           });
         } else {
-          const color = getRandomColor();
-          state.fullDeck[color]--;
-          state.deck.length < 5 && state.fullDeck[color] > 0 && state.deck.push(getRandomColor());
+          let color = getRandomColor();
+          while (state.colors[color] <= 0) color = getRandomColor();
+          state.cards[color]--;
+          state.deck.length < 5 && state.cards[color] > 0 && state.deck.push(getRandomColor());
+          return color;
         }
       },
     },
 
     removeCard: {
       reducer: (state, action) => {
+        state.thrownOutCards.push(action.payload);
         state.deck.splice(action.payload, 1);
         state.deck.length < 5 && state.deck.push(getRandomColor());
       },
@@ -88,11 +105,15 @@ export const gameSlice = createSlice({
       state.throwOutCard.push(action.payload);
     },
   },
+  extraReducers: {
+    [createRoom.pending]: (state, action) => {},
+  },
 });
 
 export const {
-  setState,
+  setStateGame,
   setGamePhase,
+  setPlayerName,
   setGameCode,
   setTurnPlayer,
   resetDeck,

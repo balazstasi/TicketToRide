@@ -1,14 +1,16 @@
-import React from "react";
-import { coord } from "../utils/calculateCoordinate";
+import React, { useEffect } from "react";
+import { ticketToRideData } from "../assets/ticket-to-ride-data";
 import { Image, Layer, Stage, Shape } from "react-konva";
 import { useSelector, useDispatch } from "react-redux";
-import { ticketToRideData } from "../assets/ticket-to-ride-data";
-import { collectRoadOne, collect } from "../store/slices/playerOneSlice";
-import { collectRoadTwo } from "../store/slices/playerTwoSlice";
-import highlightedCityDot from "../assets/images/highlightedCityDot.png";
-import gameMap from "../assets/ticket-to-ride-europe-map.jpg";
-import cityDot from "../assets/images/cityDot.png";
+import { collectRoadOne, setJustBuiltOne } from "../store/slices/playerOneSlice";
+import { collectRoadTwo, setJustBuiltTwo } from "../store/slices/playerTwoSlice";
+import { setTurnPlayer } from "../store/slices/gameSlice";
+import { useHistory } from "react-router-dom";
+import { coord } from "../utils/calculateCoordinate";
 import useImage from "use-image";
+import cityDot from "../assets/images/cityDot.png";
+import gameMap from "../assets/ticket-to-ride-europe-map.jpg";
+import highlightedCityDot from "../assets/images/highlightedCityDot.png";
 
 const MapImage = () => {
   const [image] = useImage(gameMap);
@@ -27,6 +29,7 @@ const CityDot = ({ x, y }) => {
 
 const Map = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const ui = useSelector((state) => state.ui);
   const gameState = useSelector((state) => state.game);
   const playerOne = useSelector((state) => state.playerOne);
@@ -44,9 +47,29 @@ const Map = () => {
     return null;
   };
 
+  useEffect(() => {
+    if (playerOne.trains <= 0 || playerTwo.trains <= 0) {
+      if (playerOne.hand.length <= 2 || playerTwo.hand.length <= 2) {
+        history.push("/end-game");
+      }
+    }
+  }, [playerOne.trains, playerTwo.trains, playerOne.hand, playerTwo.hand, history]);
+
   const collectRoad = (road) => {
-    if (gameState.turnPlayer === 1) dispatch(collectRoadOne(road));
-    else dispatch(collectRoadTwo(road));
+    console.log(road);
+    if (gameState.turnPlayer === 1) {
+      dispatch(collectRoadOne(road));
+      if (playerOne.justBuilt) {
+        dispatch(setJustBuiltOne(false));
+        dispatch(setTurnPlayer(2));
+      }
+    } else {
+      dispatch(collectRoadTwo(road));
+      if (playerTwo.justBuilt) {
+        dispatch(setJustBuiltTwo(false));
+        dispatch(setTurnPlayer(1));
+      }
+    }
   };
 
   return (
@@ -71,7 +94,8 @@ const Map = () => {
               const { x, y } = coord(element.x, element.y);
               const elements = connection.elements;
               const color = getColor({ road: elements, id: connection.id }) ?? connection.color;
-              const roadToDispatch = elements;
+              const road = elements;
+
               if (index < connection.elements.length - 1) {
                 const xNext = coord(elements[index + 1].x, elements[index + 1].y).x;
                 const yNext = coord(elements[index + 1].x, elements[index + 1].y).y;
@@ -87,15 +111,17 @@ const Map = () => {
                       context.closePath();
                       context.fillStrokeShape(shape);
                     }}
-                    stroke={color}
-                    strokeWidth={
-                      color === playerOne.playerColor || color === playerTwo.playerColor ? 17 : 6
-                    }
+                    stroke={connection.color}
+                    strokeWidth={20}
                     onClick={() =>
                       collectRoad({
                         id: connection.id,
-                        road: roadToDispatch,
                         color: connection.color,
+                        from: connection.from,
+                        to: connection.to,
+                        fromCity: connection.fromCity,
+                        toCity: connection.toCity,
+                        road,
                       })
                     }
                   />
@@ -103,7 +129,9 @@ const Map = () => {
               } else
                 return (
                   <Shape
-                    opacity={0.25}
+                    opacity={
+                      color === playerOne.playerColor || color === playerTwo.playerColor ? 0.45 : 0
+                    }
                     sceneFunc={(context, shape) => {
                       context.beginPath();
                       context.moveTo(x, y);
@@ -111,15 +139,15 @@ const Map = () => {
                       context.closePath();
                       context.fillStrokeShape(shape);
                     }}
-                    stroke={color}
+                    stroke={connection.color}
                     strokeWidth={
                       color === playerOne.playerColor || color === playerTwo.playerColor ? 17 : 6
                     }
                     onClick={() =>
                       collectRoad({
                         id: connection.id,
-                        road: roadToDispatch,
                         color: connection.color,
+                        road,
                       })
                     }
                   />

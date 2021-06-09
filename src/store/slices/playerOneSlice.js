@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getRandomColor } from "../../utils/getRandomColor";
 import { GRAY, LOCOMOTIVE, MOVE_LIST } from "../../constants/constants";
+import { cloneDeep } from "lodash";
 
 /*
   A function that accepts an initial state, an object full of reducer functions, and a "slice name", and automatically generates action creators and action types that correspond to the reducers and state.
@@ -12,7 +13,7 @@ import { GRAY, LOCOMOTIVE, MOVE_LIST } from "../../constants/constants";
 export const playerOneSlice = createSlice({
   name: "playerOne",
   initialState: {
-    name: "Balazs",
+    name: "",
     playerColor: "teal",
     trains: 45,
     cards: {
@@ -30,14 +31,34 @@ export const playerOneSlice = createSlice({
     hand: [],
     selectedCards: [],
     destinations: [],
-    score: [],
+    longDestinations: [],
+    drawnDestinations: [],
+    completedDestinations: [],
+    score: 0,
     collectedRoads: [],
     lastDrawnCard: null,
     lastMove: null,
     beforeLastMove: null,
     cardsDrawnThisTurn: 0,
+    justBuilt: false,
+    joined: false,
   },
   reducers: {
+    setStateOne: {
+      reducer: (state, { payload }) => {
+        Object.keys(payload).forEach((key) => (state[key] = cloneDeep(payload[key]) || null));
+      },
+    },
+    setJoinedOne: {
+      reducer: (state, { payload }) => {
+        state.joined = payload;
+      },
+    },
+    setNameOne: {
+      reducer: (state, { payload }) => {
+        state.name = payload;
+      },
+    },
     collectRoadOne: {
       reducer: (state, action) => {
         function removeColorHand(color, amount) {
@@ -55,7 +76,7 @@ export const playerOneSlice = createSlice({
         let { color, road } = action.payload;
         let roadLength = road.length;
 
-        let canBeBuilt;
+        let canBeBuilt = false;
         let selectedWithoutLoc = [];
         if (color !== GRAY) {
           canBeBuilt =
@@ -63,15 +84,19 @@ export const playerOneSlice = createSlice({
               (card) => card.color === color || card.color === LOCOMOTIVE
             ) && state.selectedCards.length >= roadLength;
         } else {
-          selectedWithoutLoc = state.selectedCards.filter((card) => card.color !== LOCOMOTIVE) || [
-            LOCOMOTIVE,
-          ];
-          canBeBuilt = selectedWithoutLoc.every(
-            (card) => card.color === selectedWithoutLoc[0].color
-          );
+          selectedWithoutLoc = state.selectedCards.filter((card) => card.color !== LOCOMOTIVE);
+
+          if (selectedWithoutLoc.length === 0) {
+            canBeBuilt = false;
+          } else {
+            canBeBuilt =
+              selectedWithoutLoc.every((card) => card.color === selectedWithoutLoc[0].color) &&
+              state.selectedCards.length >= roadLength;
+          }
         }
 
-        if (canBeBuilt) {
+        if (canBeBuilt && state.cardsDrawnThisTurn === 0) {
+          state.score = state.score + roadLength;
           state.trains -= roadLength;
           state.collectedRoads.push(action.payload);
 
@@ -95,14 +120,21 @@ export const playerOneSlice = createSlice({
           }
 
           state.selectedCards = [];
+
+          state.lastMove = MOVE_LIST.MAKE_ROUTE;
+
+          state.justBuilt = true;
         }
       },
     },
-
+    setJustBuiltOne: {
+      reducer: (state, { payload }) => {
+        state.justBuilt = payload;
+      },
+    },
     addCardOne: {
       reducer: (state, action) => {
         const colorCard = action.payload;
-        // if (state.lastDrawnCard !== LOCOMOTIVE) {
         state.lastDrawnCard = colorCard;
         state.cardsDrawn++;
         state.cardsDrawnThisTurn++;
@@ -110,9 +142,9 @@ export const playerOneSlice = createSlice({
         state.hand.push(colorCard);
         state.beforeLastMove = state.lastMove;
         state.lastMove = MOVE_LIST.TAKE_CARD_FROM_DRAWN;
-        // }
       },
     },
+
     drawCardOne: {
       reducer: (state, _) => {
         const color = getRandomColor();
@@ -124,6 +156,7 @@ export const playerOneSlice = createSlice({
         }
       },
     },
+
     toggleCardOne: {
       reducer: (state, { payload }) => {
         const { index, color } = payload;
@@ -134,58 +167,64 @@ export const playerOneSlice = createSlice({
       },
     },
 
-    // Add Destination to array or delete it if it's already there
     toggleDestinationOne: {
       reducer: (state, action) => {
+        const { type } = action.payload;
         const destination = action.payload;
-        const searchedDestIdx = state.destinations.findIndex((dest) => dest.id === destination.id);
 
-        state.destinations.forEach((d) => console.log(d));
-        console.log(searchedDestIdx);
-        if (searchedDestIdx === -1) {
+        const searchedDestinationIndex = state.destinations.findIndex(
+          (dest) => dest.id === destination.id
+        );
+
+        if (searchedDestinationIndex === -1) {
           state.destinations.push(destination);
         } else {
-          state.destinations.splice(searchedDestIdx, 1);
+          state.destinations.splice(searchedDestinationIndex, 1);
         }
       },
     },
-  },
-  addScoreOne: {
-    reducer: (state, action) => {
-      state.score += action.payload;
-    },
-  },
-  setCardsDrawnThisTurnOne: {
-    reducer: (state, _) => {
-      state.cardsDrawnThisTurn = 0;
-    },
-  },
-  removeColorFromHand: {
-    reducer: (state, action) => {
-      const { color, amount } = action.payload;
 
-      state.cards[color] -= amount;
+    addScoreOne: {
+      reducer: (state, action) => {
+        state.score += action.payload;
+      },
+    },
 
-      let counter = 0;
-      while (counter < amount) {
-        const index = state.hand.findIndex((cardColor) => cardColor === color);
-        state.hand.splice(index, 1);
-        counter++;
-      }
+    setCardsDrawnThisTurnOne: {
+      reducer: (state, _) => {
+        state.cardsDrawnThisTurn = 0;
+      },
+    },
+
+    removeColorFromHand: {
+      reducer: (state, action) => {
+        const { color, amount } = action.payload;
+
+        state.cards[color] -= amount;
+
+        let counter = 0;
+        while (counter < amount) {
+          const index = state.hand.findIndex((cardColor) => cardColor === color);
+          state.hand.splice(index, 1);
+          counter++;
+        }
+      },
     },
   },
 });
 
 export const {
   addCardOne,
+  setNameOne,
   toggleDestinationOne,
   addScoreOne,
   setStateOne,
-  collect,
+  setJustBuiltOne,
   drawCardOne,
   toggleCardOne,
   setCardsDrawnThisTurnOne,
   collectRoadOne,
+  setJoinedOne,
 } = playerOneSlice.actions;
 
 export default playerOneSlice.reducer;
