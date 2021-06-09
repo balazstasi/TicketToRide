@@ -3,6 +3,10 @@ import playerOneReducer from "./slices/playerOneSlice";
 import playerTwoReducer from "./slices/playerTwoSlice";
 import uiReducer from "./slices/uiSlice";
 import gameReducer from "./slices/gameSlice";
+import reduxWebsocket from "@giantmachines/redux-websocket";
+import thunk from "redux-thunk";
+
+const reduxWebsocketMiddleware = reduxWebsocket();
 
 export default configureStore({
   reducer: {
@@ -12,5 +16,6 @@ export default configureStore({
     ui: uiReducer,
   },
 
+  middleware: [thunk, reduxWebsocketMiddleware],
   devTools: process.env.NODE_ENV !== "production",
 });

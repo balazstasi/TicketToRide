@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getRandomColor } from "../../utils/getRandomColor";
-import { createRoom } from "../thunk/actions";
+import { createRoom, syncActionGame, syncStateGame } from "../thunk/actions";
+import { cloneDeep } from "lodash";
+import { socket } from "../../index";
 
 export const gameSlice = createSlice({
   name: "game",
@@ -35,11 +37,11 @@ export const gameSlice = createSlice({
           state.playerTwoName = payload.name;
         }
       },
-    },
+    },  
 
     setStateGame: {
-      reducer: (state, action) => {
-        state = action.payload;
+      reducer: (state, { payload }) => {
+        Object.keys(payload).forEach((key) => (state[key] = cloneDeep(payload[key]) || null));
       },
     },
 
@@ -105,8 +107,6 @@ export const gameSlice = createSlice({
   },
   extraReducers: {
     [createRoom.pending]: (state, action) => {},
-    [createRoom.rejected]: (state, action) => {},
-    [createRoom.fulfilled]: (state, action) => {},
   },
 });
 

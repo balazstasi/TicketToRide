@@ -6,7 +6,7 @@ import { cloneDeep } from "lodash";
 export const playerTwoSlice = createSlice({
   name: "playerTwo",
   initialState: {
-    name: "Niki",
+    name: "",
     playerColor: "lightpink",
     trains: 45,
     cards: {
@@ -30,14 +30,19 @@ export const playerTwoSlice = createSlice({
     justBuilt: false,
     lastMove: null,
     beforeLastMove: null,
+    joined: false,
   },
   reducers: {
     setStateTwo: {
       reducer: (state, { payload }) => {
-        state = cloneDeep(payload);
+        Object.keys(payload).forEach((key) => (state[key] = cloneDeep(payload[key]) || null));
       },
     },
-
+    setJoinedTwo: {
+      reducer: (state, { payload }) => {
+        state.joined = payload;
+      },
+    },
     collectRoadTwo: {
       reducer: (state, action) => {
         const removeColorHand = (color, amount) => {
@@ -184,6 +189,7 @@ export const {
   setJustBuiltTwo,
   setCardsDrawnThisTurnTwo,
   collectRoadTwo,
+  setJoinedTwo,
 } = playerTwoSlice.actions;
 
 export default playerTwoSlice.reducer;

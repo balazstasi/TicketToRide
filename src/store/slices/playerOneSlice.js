@@ -13,7 +13,7 @@ import { cloneDeep } from "lodash";
 export const playerOneSlice = createSlice({
   name: "playerOne",
   initialState: {
-    name: "Balazs",
+    name: "",
     playerColor: "teal",
     trains: 45,
     cards: {
@@ -41,11 +41,17 @@ export const playerOneSlice = createSlice({
     beforeLastMove: null,
     cardsDrawnThisTurn: 0,
     justBuilt: false,
+    joined: false,
   },
   reducers: {
     setStateOne: {
       reducer: (state, { payload }) => {
-        state = payload;
+        Object.keys(payload).forEach((key) => (state[key] = cloneDeep(payload[key]) || null));
+      },
+    },
+    setJoinedOne: {
+      reducer: (state, { payload }) => {
+        state.joined = payload;
       },
     },
     setNameOne: {
@@ -218,6 +224,7 @@ export const {
   toggleCardOne,
   setCardsDrawnThisTurnOne,
   collectRoadOne,
+  setJoinedOne,
 } = playerOneSlice.actions;
 
 export default playerOneSlice.reducer;

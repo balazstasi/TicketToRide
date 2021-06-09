@@ -1,14 +1,15 @@
 import React, { useEffect, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { setGamePhase } from "../store/slices/gameSlice";
+import { setGamePhase, setStateGame } from "../store/slices/gameSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Player from "../components/lobby/player";
 import { WebSocketContext } from "../containers/socket-container";
 import io from "socket.io-client";
 import { WS_BASE } from "../containers/config";
 
-import { playerOneSlice } from "../store/slices/playerOneSlice";
+import { playerOneSlice, setStateOne } from "../store/slices/playerOneSlice";
 import { getState, leaveRoom } from "../store/thunk/actions";
+import { setStateTwo } from "../store/slices/playerTwoSlice";
 
 const WaitingRoom = () => {
   const history = useHistory();
@@ -63,8 +64,8 @@ const WaitingRoom = () => {
             </div>
           </div>
           <div className="px-6">
-            <Player name={playerOne.name} />
-            <Player name={playerTwo.name} />
+            {playerOne.joined && <Player name={playerOne.name} />}
+            {playerTwo.joined && <Player name={playerTwo.name} />}
             <div className="flex bg-gray-200 justify-center items-center h-16 p-4 my-6  rounded-lg  shadow-inner">
               <div className="flex items-center border border-gray-400 p-2 border-dashed rounded cursor-pointer">
                 <div>

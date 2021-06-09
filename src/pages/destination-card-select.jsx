@@ -5,14 +5,15 @@ import { Link, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { getThreeShortDestinations } from "../utils/getThreeDestinations";
-import { toggleDestinationOne } from "../store/slices/playerOneSlice";
-import { toggleDestinationTwo } from "../store/slices/playerTwoSlice";
-import { setTurnPlayer } from "../store/slices/gameSlice";
+import { setStateOne, toggleDestinationOne } from "../store/slices/playerOneSlice";
+import { setStateTwo, toggleDestinationTwo } from "../store/slices/playerTwoSlice";
+import { setStateGame, setTurnPlayer } from "../store/slices/gameSlice";
 import { getRandomLongDestination } from "../utils/getRandomDestination";
 import { GAME_PHASE } from "../constants/constants";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import { WebSocketContext } from "../containers/socket-container";
 import { syncState } from "../store/thunk/actions";
+import { socket } from "../index";
 
 const DestinationCardSelect = () => {
   const history = useHistory();
@@ -23,17 +24,11 @@ const DestinationCardSelect = () => {
   const gameState = useSelector((state) => state.game);
   const playerOne = useSelector((state) => state.playerOne);
   const playerTwo = useSelector((state) => state.playerTwo);
-
-  const ws = useContext(WebSocketContext);
+  const local = useSelector((state) => state.ui);
 
   useEffect(() => {
     if (gameState.gamePhase === "FIRST_DRAW_DESTINATIONS") d(setTurnPlayer(1));
-  }, [d]);
-
-  useDeepCompareEffect(() => {
-    syncState(gameState.gameCode.id, JSON.stringify(gameState));
-  }, [gameState, playerOne, playerTwo]);
-
+  }, []);
   const toggleDestination = (destination) => {
     gameState.turnPlayer === 1 && d(toggleDestinationOne(destination));
     gameState.turnPlayer === 2 && d(toggleDestinationTwo(destination));
@@ -50,6 +45,8 @@ const DestinationCardSelect = () => {
       setLongDestinationTwo(longDest);
       d(toggleDestinationTwo(longDest));
     }
+
+    // syncState(gameState.gameCode.id);
   }, []);
 
   const isToggled = (destination) => {
@@ -92,7 +89,9 @@ const DestinationCardSelect = () => {
             to={dest.toCity}
             toggled={isToggled(dest)}
             click={() => {
-              toggleDestination(dest);
+              if (local.actualPlayer === gameState.turnPlayer) {
+                toggleDestination(dest);
+              }
             }}
           />
         );

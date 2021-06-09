@@ -7,9 +7,16 @@ export const uiSlice = createSlice({
     firstY: 0,
     secondX: 0,
     secondY: 0,
+
+    actualPlayer: 1,
   },
 
   reducers: {
+    setActualPlayer: {
+      reducer: (state, action) => {
+        state.actualPlayer = action.payload;
+      },
+    },
     highlightCity: {
       reducer: (state, action) => {
         const { xFirst, yFirst, xSecond, ySecond } = action.payload;
@@ -23,6 +30,6 @@ export const uiSlice = createSlice({
   },
 });
 
-export const { highlightCity } = uiSlice.actions;
+export const { highlightCity, setActualPlayer } = uiSlice.actions;
 
 export default uiSlice.reducer;

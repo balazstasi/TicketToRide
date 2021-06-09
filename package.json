@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.1.1",
+    "@giantmachines/redux-websocket": "^1.5.1",
     "@reduxjs/toolkit": "^1.5.1",
     "@tailwindcss/postcss7-compat": "npm:@tailwindcss/postcss7-compat",
     "@testing-library/jest-dom": "^5.11.4",
