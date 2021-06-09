@@ -37,7 +37,7 @@ export const gameSlice = createSlice({
           state.playerTwoName = payload.name;
         }
       },
-    },  
+    },
 
     setStateGame: {
       reducer: (state, { payload }) => {
@@ -53,7 +53,7 @@ export const gameSlice = createSlice({
 
     setGameCode: {
       reducer: (state, { payload }) => {
-        state.gameCode = { id: payload.id, code: payload.code };
+        state.gameCode = payload;
       },
     },
 

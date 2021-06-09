@@ -7,21 +7,26 @@ import "./styles/tailwind.css";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import WebSocketProvider from "./containers/socket-container";
 import io from "socket.io-client";
-import { connect } from "@giantmachines/redux-websocket";
 import { WS_BASE } from "./containers/config";
 
-// export const socket = io.connect(WS_BASE);
-const socket = store.dispatch(connect("http://webprogramozas.inf.elte.hu:3031/"));
+export const socket = io(WS_BASE);
 
-socket.on("connect", () => {
+socket.on("connect", (ack) => {
   console.log("socket connected");
 });
 
+export const syncAction = (action, roomId, broadcast, ack) => {
+  socket.emit("sync-action", roomId, action, broadcast, (ack) => {
+    console.log(roomId);
+    console.log("sync-action", ack.message, action);
+  });
+};
+
 ReactDOM.render(
   <Provider store={store}>
-    <WebSocketProvider>
-      <App />
-    </WebSocketProvider>
+    {/* <WebSocketProvider> */}
+    <App />
+    {/* </WebSocketProvider> */}
   </Provider>,
   document.getElementById("root")
 );

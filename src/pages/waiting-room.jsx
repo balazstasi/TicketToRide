@@ -7,9 +7,10 @@ import { WebSocketContext } from "../containers/socket-container";
 import io from "socket.io-client";
 import { WS_BASE } from "../containers/config";
 
-import { playerOneSlice, setStateOne } from "../store/slices/playerOneSlice";
+import { playerOneSlice, setNameOne, setStateOne } from "../store/slices/playerOneSlice";
 import { getState, leaveRoom } from "../store/thunk/actions";
 import { setStateTwo } from "../store/slices/playerTwoSlice";
+import { syncAction } from "../index";
 
 const WaitingRoom = () => {
   const history = useHistory();
@@ -21,8 +22,13 @@ const WaitingRoom = () => {
   const socket = io.connect(WS_BASE);
 
   useEffect(() => {
-    if (game.gameCode.id === "") history.push("/");
+    socket.on("action-sent", (ack) => {
+      console.log("action-sent", ack.action);
+      d(ack.action);
+    });
   }, []);
+
+  useEffect(() => {}, []);
 
   return (
     <div>
@@ -30,7 +36,7 @@ const WaitingRoom = () => {
         <div className="bg-white w-full md:max-w-4xl rounded-lg shadow p-4">
           <div className="h-12 flex justify-between items-center border-b border-gray-200 m-4">
             <div>
-              <div className="text-xl font-bold text-gray-700">Room Code: {game.gameCode.id}</div>
+              <div className="text-xl font-bold text-gray-700">Room Code: {game.gameCode}</div>
               <div className="text-sm font-base text-gray-500">Waiting for more players...</div>
               <div className="text-sm font-base text-gray-500 mb-8">
                 Press the Lock when there are enough players (2)
@@ -92,7 +98,6 @@ const WaitingRoom = () => {
             className="p-6 flex flex-col"
             onClick={() => {
               d(setGamePhase("FIRST_DRAW_DESTINATIONS"));
-              getState(game.gameCode.id);
             }}
           >
             <Link
@@ -108,7 +113,7 @@ const WaitingRoom = () => {
               to="/"
             >
               <center>
-                <p className="self-center" onClick={() => leaveRoom(game.gameCode.id)}>
+                <p className="self-center" onClick={() => leaveRoom(game.gameCode)}>
                   Back To Title Screen
                 </p>
               </center>

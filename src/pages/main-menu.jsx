@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setGameCode, setStateGame, setTurnPlayer } from "../store/slices/gameSlice";
+import { setGameCode, setPlayerName, setStateGame, setTurnPlayer } from "../store/slices/gameSlice";
 import { WebSocketContext } from "../containers/socket-container";
 import { WS_BASE } from "../containers/config";
 import io from "socket.io-client";
@@ -13,6 +13,7 @@ import { setJoinedTwo, setNameTwo, setStateTwo } from "../store/slices/playerTwo
 import { setActualPlayer } from "../store/slices/uiSlice";
 import { cloneDeep } from "lodash";
 import { syncStateGame, syncStateOne, syncStateTwo } from "../store/thunk/actions";
+import { syncAction } from "../index";
 
 const MainMenu = () => {
   const dispatch = useDispatch();
@@ -25,18 +26,54 @@ const MainMenu = () => {
   const [name, setName] = useState("");
   const history = useHistory();
 
-  function sync(roomId) {
-    console.log(game, playerOne, playerTwo);
-    socket.emit(
-      "sync-state",
-      roomId,
-      { game: cloneDeep(game), playerOne: cloneDeep(playerOne), playerTwo: cloneDeep(playerTwo) },
-      true,
-      function (answer) {
-        console.log("sync-state", answer);
+  useEffect(() => {
+    socket.on("action-sent", (ack) => {
+      console.log("action-sent", ack.action);
+      dispatch(ack.action);
+    });
+  }, []);
+
+  const createRoom = (roomSize) => {
+    socket.emit("create-room", roomSize, (ack) => {
+      console.log(ack.roomId);
+      if (ack.status === "ok") {
+        console.log("create-room", ack.status);
+        dispatch(setGameCode(ack.roomId));
+        dispatch(setNameOne(name));
+        history.push("/waiting-room");
+      } else {
+        console.log("create-room", ack.message);
       }
-    );
-  }
+    });
+  };
+
+  const joinRoom = (roomId) => {
+    socket.emit("join-room", roomId, (ack) => {
+      if (ack.status === "ok") {
+        console.log(name);
+        dispatch(setNameTwo(name));
+        syncAction(setNameTwo(name), roomId, false);
+        console.log("join-room", ack.status);
+      } else {
+        console.log("join-room", ack.message);
+      }
+    });
+  };
+
+  socket.on("player-joined", (ack) => {
+    if (playerOne.name.length > 0) {
+      console.log("sync playerOne.name szarrrrrrrrrr", game.roomId);
+      if (playerOne.name !== "") syncAction(setNameOne(playerOne.name), ack.roomId, false);
+    }
+  });
+
+  socket.on("room-is-full", (ack) => {
+    console.log("room-is-full", ack.roomId, ack.player);
+    dispatch(setGameCode(ack.roomId));
+    // if (playerOne.name.length > 0) syncAction(setNameOne(playerOne.name), game.roomId, false);
+    // if (playerTwo.name.length > 0) syncAction(setNameTwo(playerTwo.name), ack.roomId, false);
+    history.push("/waiting-room");
+  });
 
   return (
     <>
@@ -91,14 +128,17 @@ const MainMenu = () => {
               className="p-2 mt-8 w-full bg-blue-400 hover:bg-blue-500 rounded-lg shadow text-xl font-medium uppercase text-white"
               to="/waiting-room"
               onClick={() => {
-                dispatch(joinRoom(input));
-                dispatch(setGameCode({ id: input }));
-                dispatch(setJoinedTwo(true));
-                dispatch(setNameTwo(name));
-                dispatch(setActualPlayer(2));
-                dispatch(setTurnPlayer(2));
-                dispatch(syncStateGame(input, { game }));
+                joinRoom(input);
               }}
+              // onClick={() => {
+              //   dispatch(joinRoom(input));
+              //   dispatch(setGameCode({ id: input }));
+              //   dispatch(setJoinedTwo(true));
+              //   dispatch(setNameTwo(name));
+              //   dispatch(setActualPlayer(2));
+              //   dispatch(setTurnPlayer(2));
+              //   dispatch(syncStateGame(input, { game }));
+              // }}
             >
               <center>
                 <p className="self-center">ENTER LOBBY</p>
@@ -107,16 +147,19 @@ const MainMenu = () => {
             <p className="text-blue-500 mt-4 text-center">Or, fill in just your name and press:</p>
             <Link
               className="p-2 mt-4 w-full bg-blue-400 hover:bg-blue-500 rounded-lg shadow text-xl font-medium uppercase text-white"
-              to="/waiting-room"
+              // to="/waiting-room"
               onClick={() => {
-                const id = game.gameCode.id;
-                dispatch(createRoom(2));
-                dispatch(setNameOne(name));
-                dispatch(setTurnPlayer(1));
-                dispatch(setJoinedOne(true));
-                dispatch(setActualPlayer(1));
-                dispatch(syncStateGame(id, "anyukadat kocsog"));
+                createRoom(2);
               }}
+              // onClick={() => {
+              //   const id = game.gameCode.id;
+              //   dispatch(createRoom(2));
+              //   dispatch(setNameOne(name));
+              //   dispatch(setTurnPlayer(1));
+              //   dispatch(setJoinedOne(true));
+              //   dispatch(setActualPlayer(1));
+              //   dispatch(syncStateGame(id, "anyukadat kocsog"));
+              // }}
             >
               <center>
                 <p className="self-center">CREATE LOBBY</p>

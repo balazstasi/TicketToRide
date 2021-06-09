@@ -6,7 +6,7 @@ import gameReducer from "./slices/gameSlice";
 import reduxWebsocket from "@giantmachines/redux-websocket";
 import thunk from "redux-thunk";
 
-const reduxWebsocketMiddleware = reduxWebsocket();
+// const reduxWebsocketMiddleware = reduxWebsocket();
 
 export default configureStore({
   reducer: {
@@ -16,6 +16,6 @@ export default configureStore({
     ui: uiReducer,
   },
 
-  middleware: [thunk, reduxWebsocketMiddleware],
+  middleware: [thunk],
   devTools: process.env.NODE_ENV !== "production",
 });
