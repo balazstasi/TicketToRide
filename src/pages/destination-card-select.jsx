@@ -14,6 +14,7 @@ import useDeepCompareEffect from "use-deep-compare-effect";
 import { WebSocketContext } from "../containers/socket-container";
 import { syncState } from "../store/thunk/actions";
 import { socket } from "../index";
+import { syncAction } from "../index";
 
 const DestinationCardSelect = () => {
   const history = useHistory();
@@ -26,28 +27,39 @@ const DestinationCardSelect = () => {
   const playerTwo = useSelector((state) => state.playerTwo);
   const local = useSelector((state) => state.ui);
 
-  useEffect(() => {
-    if (gameState.gamePhase === "FIRST_DRAW_DESTINATIONS") d(setTurnPlayer(1));
-  }, []);
-  const toggleDestination = (destination) => {
-    gameState.turnPlayer === 1 && d(toggleDestinationOne(destination));
-    gameState.turnPlayer === 2 && d(toggleDestinationTwo(destination));
-  };
+  // useEffect(() => {
+  //   socket.on("action-sent", (ack) => {
+  //     console.log("action-sent", ack.action);
+  //     d(ack.action);
+  //   });
+  // }, []);
 
   useEffect(() => {
     setDestinations(getThreeShortDestinations());
-    if (gameState.gamePhase === "FIRST_DRAW_DESTINATIONS") {
+    if (local.actualPlayer === 1) {
       let longDest = getRandomLongDestination();
       setLongDestinationOne(longDest);
       d(toggleDestinationOne(longDest));
-
-      longDest = getRandomLongDestination();
+      syncAction(toggleDestinationOne(longDest), gameState.gameCode, true);
+    }
+    if (local.actualPlayer === 2) {
+      let longDest = getRandomLongDestination();
       setLongDestinationTwo(longDest);
       d(toggleDestinationTwo(longDest));
+      syncAction(toggleDestinationTwo(longDest), gameState.gameCode, true);
     }
-
-    // syncState(gameState.gameCode.id);
   }, []);
+
+  const toggleDestination = (destination) => {
+    if (gameState.turnPlayer === 1) {
+      d(toggleDestinationOne(destination));
+      syncAction(toggleDestinationOne(destination), gameState.gameCode, false);
+    }
+    if (gameState.turnPlayer === 2) {
+      d(toggleDestinationTwo(destination));
+      syncAction(toggleDestinationTwo(destination), gameState.gameCode, false);
+    }
+  };
 
   const isToggled = (destination) => {
     if (gameState.turnPlayer === 1) {
@@ -68,13 +80,13 @@ const DestinationCardSelect = () => {
         Please Select <span className="text-4xl">1</span> to <span className="text-4xl">3 </span>
         Cards!
       </h2>
-      {gameState.turnPlayer === 1 && (
+      {local.actualPlayer === 1 && (
         <h3 className="text-center mt-2">
           (Your Long Destination is:
           {` ${longDestinationOne.fromCity} ➡️➡️➡️ ${longDestinationOne.toCity}`})
         </h3>
       )}
-      {gameState.turnPlayer === 2 && (
+      {local.actualPlayer === 2 && (
         <h3 className="text-center mt-2">
           (Your Long Destination is:
           {` ${longDestinationTwo.fromCity} ➡️➡️➡️ ${longDestinationTwo.toCity}`})
@@ -98,22 +110,26 @@ const DestinationCardSelect = () => {
       })}
       {playerOne.destinations.length > 0 && (
         <div className="w-1/4 mt-4 self-center text-center">
-          {gameState.turnPlayer === 1 && (
+          {local.actualPlayer === 1 && (
             <Button
               onClick={() => {
-                if (gameState.gamePhase === GAME_PHASE.CHOOSE_DESTINATIONS_1) {
-                  d(setTurnPlayer(2));
-                  history.push("/game");
-                } else {
-                  d(setTurnPlayer(2));
-                  setDestinations(getThreeShortDestinations());
-                }
+                // if (gameState.gamePhase === GAME_PHASE.CHOOSE_DESTINATIONS_1) {
+                //   d(setTurnPlayer(2));
+                //   syncAction(setTurnPlayer(2), gameState.gameCode, false);
+                //   history.push("/game");
+                // } else {
+                //   d(setTurnPlayer(2));
+                //   syncAction(setTurnPlayer(2), gameState.gameCode, false);
+                //   setDestinations(getThreeShortDestinations());
+                // }
+                // syncAction(setTurnPlayer(2), gameState.gameCode, false);
+                history.push("/game");
               }}
             >
               Continue with selected Destinations
             </Button>
           )}
-          {playerTwo.destinations.length > 0 && gameState.turnPlayer === 2 && (
+          {local.actualPlayer === 2 && (
             // <Link to="/game">
             //   <div className="text-center">
             //     <Button>Continue with selected Destinations</Button>
@@ -121,14 +137,15 @@ const DestinationCardSelect = () => {
             // </Link>
             <Button
               onClick={() => {
-                if (gameState.gamePhase === GAME_PHASE.CHOOSE_DESTINATIONS_2) {
-                  history.push("/game");
-                } else {
-                  // d(setTurnPlayer(1));
-                  d(setTurnPlayer(1));
-                  setDestinations(getThreeShortDestinations());
-                  history.push("/game");
-                }
+                // if (gameState.gamePhase === GAME_PHASE.CHOOSE_DESTINATIONS_2) {
+                //   history.push("/game");
+                // } else {
+                //   // d(setTurnPlayer(1));
+                //   d(setTurnPlayer(1));
+                //   setDestinations(getThreeShortDestinations());
+                //   history.push("/game");
+                // }
+                history.push("/game");
               }}
             >
               Continue with selected Destinations

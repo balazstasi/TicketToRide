@@ -26,12 +26,12 @@ const MainMenu = () => {
   const [name, setName] = useState("");
   const history = useHistory();
 
-  useEffect(() => {
-    socket.on("action-sent", (ack) => {
-      console.log("action-sent", ack.action);
-      dispatch(ack.action);
-    });
-  }, []);
+  // useEffect(() => {
+  //   socket.on("action-sent", (ack) => {
+  //     console.log("action-sent", ack.action);
+  //     dispatch(ack.action);
+  //   });
+  // }, []);
 
   const createRoom = (roomSize) => {
     socket.emit("create-room", roomSize, (ack) => {
@@ -40,6 +40,7 @@ const MainMenu = () => {
         console.log("create-room", ack.status);
         dispatch(setGameCode(ack.roomId));
         dispatch(setNameOne(name));
+        dispatch(setActualPlayer(1));
         history.push("/waiting-room");
       } else {
         console.log("create-room", ack.message);
@@ -53,6 +54,7 @@ const MainMenu = () => {
         console.log(name);
         dispatch(setNameTwo(name));
         syncAction(setNameTwo(name), roomId, false);
+        dispatch(setActualPlayer(2));
         console.log("join-room", ack.status);
       } else {
         console.log("join-room", ack.message);
@@ -62,8 +64,7 @@ const MainMenu = () => {
 
   socket.on("player-joined", (ack) => {
     if (playerOne.name.length > 0) {
-      console.log("sync playerOne.name szarrrrrrrrrr", game.roomId);
-      if (playerOne.name !== "") syncAction(setNameOne(playerOne.name), ack.roomId, false);
+      syncAction(setNameOne(playerOne.name), ack.roomId, false);
     }
   });
 
@@ -72,7 +73,7 @@ const MainMenu = () => {
     dispatch(setGameCode(ack.roomId));
     // if (playerOne.name.length > 0) syncAction(setNameOne(playerOne.name), game.roomId, false);
     // if (playerTwo.name.length > 0) syncAction(setNameTwo(playerTwo.name), ack.roomId, false);
-    history.push("/waiting-room");
+    // history.push("/waiting-room");
   });
 
   return (

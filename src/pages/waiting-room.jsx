@@ -21,12 +21,12 @@ const WaitingRoom = () => {
   const playerTwo = useSelector((state) => state.playerTwo);
   const socket = io.connect(WS_BASE);
 
-  useEffect(() => {
-    socket.on("action-sent", (ack) => {
-      console.log("action-sent", ack.action);
-      d(ack.action);
-    });
-  }, []);
+  // useEffect(() => {
+  //   socket.on("action-sent", (ack) => {
+  //     console.log("action-sent", ack.action);
+  //     d(ack.action);
+  //   });
+  // }, []);
 
   useEffect(() => {}, []);
 
@@ -70,8 +70,8 @@ const WaitingRoom = () => {
             </div>
           </div>
           <div className="px-6">
-            {playerOne.joined && <Player name={playerOne.name} />}
-            {playerTwo.joined && <Player name={playerTwo.name} />}
+            {playerOne.name.length > 0 && <Player name={playerOne.name} />}
+            {playerTwo.name.length > 0 && <Player name={playerTwo.name} />}
             <div className="flex bg-gray-200 justify-center items-center h-16 p-4 my-6  rounded-lg  shadow-inner">
               <div className="flex items-center border border-gray-400 p-2 border-dashed rounded cursor-pointer">
                 <div>

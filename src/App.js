@@ -17,6 +17,13 @@ function App() {
   const playerOne = useSelector((state) => state.playerOne);
   const playerTwo = useSelector((state) => state.playerTwo);
 
+  useEffect(() => {
+    socket.on("action-sent", (ack) => {
+      console.log("action-sent", ack.action);
+      dispatch(ack.action);
+    });
+  }, []);
+
   // socket.on("state-changed", function (answer) {
   //   console.log("state-changed", answer);
   // });

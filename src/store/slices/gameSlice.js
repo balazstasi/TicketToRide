@@ -26,6 +26,8 @@ export const gameSlice = createSlice({
     },
     deck: [1, 2, 3, 4, 5].map((_) => getRandomColor()),
     thrownOutCards: [],
+    longDestinationOne: {},
+    longDestinationTwo: {},
   },
 
   reducers: {
@@ -36,6 +38,13 @@ export const gameSlice = createSlice({
         } else {
           state.playerTwoName = payload.name;
         }
+      },
+    },
+
+    setLongDestination: {
+      reducer: (state, { payload }) => {
+        if (payload.player === 1) state.longDestinationOne = payload.destination;
+        else state.longDestinationTwo = payload.destination;
       },
     },
 
@@ -120,6 +129,7 @@ export const {
   drawCard,
   removeCard,
   throwOutCard,
+  setLongDestination,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;
