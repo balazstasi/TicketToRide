@@ -39,33 +39,33 @@ const DestinationCardSelect = () => {
     if (local.actualPlayer === 1) {
       let longDest = getRandomLongDestination();
       setLongDestinationOne(longDest);
-      d(toggleDestinationOne(longDest));
-      syncAction(toggleDestinationOne(longDest), gameState.gameCode, true);
+      // d(toggleDestinationOne(longDest));
+      syncAction(toggleDestinationOne(longDest), gameState.gameCode, false);
     }
     if (local.actualPlayer === 2) {
       let longDest = getRandomLongDestination();
       setLongDestinationTwo(longDest);
-      d(toggleDestinationTwo(longDest));
-      syncAction(toggleDestinationTwo(longDest), gameState.gameCode, true);
+      // d(toggleDestinationTwo(longDest));
+      syncAction(toggleDestinationTwo(longDest), gameState.gameCode, false);
     }
   }, []);
 
   const toggleDestination = (destination) => {
-    if (gameState.turnPlayer === 1) {
+    if (local.actualPlayer === 1) {
       d(toggleDestinationOne(destination));
-      syncAction(toggleDestinationOne(destination), gameState.gameCode, false);
+      syncAction(toggleDestinationOne(destination), gameState.gameCode, true);
     }
-    if (gameState.turnPlayer === 2) {
+    if (local.actualPlayer === 2) {
       d(toggleDestinationTwo(destination));
-      syncAction(toggleDestinationTwo(destination), gameState.gameCode, false);
+      syncAction(toggleDestinationTwo(destination), gameState.gameCode, true);
     }
   };
 
   const isToggled = (destination) => {
-    if (gameState.turnPlayer === 1) {
+    if (local.actualPlayer === 1) {
       return playerOne.destinations.find((d) => d?.id === destination.id);
     }
-    if (gameState.turnPlayer === 2) {
+    if (local.actualPlayer === 2) {
       return playerTwo.destinations.find((d) => d?.id === destination.id);
     }
     return false;
@@ -74,7 +74,7 @@ const DestinationCardSelect = () => {
   return (
     <div className="flex flex-col">
       <h1 className="text-center mt-2 font-bold text-3xl text-blue-200 select-none">
-        Player {gameState.turnPlayer}
+        Player {local.actualPlayer}
       </h1>
       <h2 className="text-center mt-4 font-bold text-3xl text-blue-200 select-none">
         Please Select <span className="text-4xl">1</span> to <span className="text-4xl">3 </span>
@@ -101,9 +101,7 @@ const DestinationCardSelect = () => {
             to={dest.toCity}
             toggled={isToggled(dest)}
             click={() => {
-              if (local.actualPlayer === gameState.turnPlayer) {
-                toggleDestination(dest);
-              }
+              toggleDestination(dest);
             }}
           />
         );
