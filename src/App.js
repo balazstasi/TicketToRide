@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import Routes from "./routes/Routes";
-import { socket } from "./index";
+import { socket, syncAction } from "./index";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import { useSelector, useDispatch } from "react-redux";
 import { cloneDeep } from "lodash";
 import { setStateOne } from "./store/slices/playerOneSlice";
 import { setStateTwo } from "./store/slices/playerTwoSlice";
-import { setStateGame } from "./store/slices/gameSlice";
+import { setDeck, setStateGame } from "./store/slices/gameSlice";
 import { useHistory } from "react-router-dom";
 import store from "./store/index";
 

@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import Card from "../card";
 import CardStack from "../card-stack";
 import { getRandomColor } from "../../utils/getRandomColor";
-import { removeCard, setGamePhase, setTurnPlayer } from "../../store/slices/gameSlice";
+import { removeCard, setDeck, setGamePhase, setTurnPlayer } from "../../store/slices/gameSlice";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { addCardOne, setCardsDrawnThisTurnOne } from "../../store/slices/playerOneSlice";
 import { addCardTwo, setCardsDrawnThisTurnTwo } from "../../store/slices/playerTwoSlice";
 import { GAME_PHASE } from "../../constants/constants";
 import { useHistory } from "react-router-dom";
+import { syncAction } from "../../index";
 
 const DrawSidebar = () => {
   const history = useHistory();
@@ -16,13 +17,14 @@ const DrawSidebar = () => {
   const gameState = useSelector((state) => state.game);
   const playerOne = useSelector((state) => state.playerOne);
   const playerTwo = useSelector((state) => state.playerTwo);
+  const local = useSelector((state) => state.ui);
 
   const [drawnOne, setDrawnOne] = useState(0);
   const [drawnTwo, setDrawnTwo] = useState(0);
 
   useEffect(() => {
-    setCardsDrawnThisTurnOne(0);
-    setCardsDrawnThisTurnTwo(0);
+    syncAction(setCardsDrawnThisTurnOne(0), gameState.gameCode, false);
+    syncAction(setCardsDrawnThisTurnTwo(0), gameState.gameCode, false);
   }, []);
 
   const drawCardForCurrentPlayer = (cardColor, i) => {
@@ -38,6 +40,7 @@ const DrawSidebar = () => {
     } else if (gameState.turnPlayer === 2) {
       d(addCardTwo(cardColor));
       d(removeCard(i));
+
       setDrawnTwo(drawnTwo + 1);
       if (drawnTwo === 1) {
         d(setTurnPlayer(1));
@@ -57,6 +60,7 @@ const DrawSidebar = () => {
     } else if (gameState.turnPlayer === 2) {
       console.log(playerTwo.cardsDrawnThisTurn);
       d(addCardTwo(cardColor));
+
       if (playerTwo.cardsDrawnThisTurn === 2) {
         d(setCardsDrawnThisTurnTwo(0));
         d(setTurnPlayer(1));
@@ -81,7 +85,7 @@ const DrawSidebar = () => {
                 <Card
                   color={cardColor}
                   click={() => drawCardForCurrentPlayer(cardColor, i)}
-                  highlighted={false}
+                  highlighted={true}
                 />
               );
             })}
@@ -90,7 +94,7 @@ const DrawSidebar = () => {
                 <CardStack
                   type="trains"
                   drawCard={() => drawCardFromDeck(getRandomColor())}
-                  highlighted={false}
+                  highlighted={true}
                 />
               </div>
               <div className="flex-grow mr-2 px-1 text-center">

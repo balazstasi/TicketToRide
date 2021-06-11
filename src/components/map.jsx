@@ -11,6 +11,7 @@ import useImage from "use-image";
 import cityDot from "../assets/images/cityDot.png";
 import gameMap from "../assets/ticket-to-ride-europe-map.jpg";
 import highlightedCityDot from "../assets/images/highlightedCityDot.png";
+import { syncAction } from "..";
 
 const MapImage = () => {
   const [image] = useImage(gameMap);
@@ -59,15 +60,21 @@ const Map = () => {
     console.log(road);
     if (gameState.turnPlayer === 1) {
       dispatch(collectRoadOne(road));
+      syncAction(collectRoadOne(road), gameState.gameCode, true);
       if (playerOne.justBuilt) {
         dispatch(setJustBuiltOne(false));
         dispatch(setTurnPlayer(2));
+        syncAction(setJustBuiltOne(false), gameState.gameCode, true);
+        syncAction(setTurnPlayer(2), gameState.gameCode, true);
       }
     } else {
       dispatch(collectRoadTwo(road));
+      syncAction(collectRoadTwo(road), gameState.gameCode, true);
       if (playerTwo.justBuilt) {
         dispatch(setJustBuiltTwo(false));
         dispatch(setTurnPlayer(1));
+        syncAction(setJustBuiltTwo(false), gameState.gameCode, true);
+        syncAction(setTurnPlayer(1), gameState.gameCode, true);
       }
     }
   };

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getRandomColor } from "../../utils/getRandomColor";
 import { createRoom, syncActionGame, syncStateGame } from "../thunk/actions";
 import { cloneDeep } from "lodash";
-import { socket } from "../../index";
+import { socket, syncAction } from "../../index";
 
 export const gameSlice = createSlice({
   name: "game",
@@ -24,7 +24,8 @@ export const gameSlice = createSlice({
       yellow: 12,
       locomotive: 14,
     },
-    deck: [1, 2, 3, 4, 5].map((_) => getRandomColor()),
+    // deck: [1, 2, 3, 4, 5].map((_) => getRandomColor()),
+    deck: [],
     thrownOutCards: [],
     longDestinationOne: {},
     longDestinationTwo: {},
@@ -81,6 +82,11 @@ export const gameSlice = createSlice({
         });
       },
     },
+    setDeck: {
+      reducer: (state, action) => {
+        state.deck = action.payload;
+      },
+    },
 
     drawCard: {
       reducer: (state, _) => {
@@ -106,6 +112,8 @@ export const gameSlice = createSlice({
         state.thrownOutCards.push(action.payload);
         state.deck.splice(action.payload, 1);
         state.deck.length < 5 && state.deck.push(getRandomColor());
+
+        syncAction(setDeck(state.deck), state.gameCode, false);
       },
     },
   },
@@ -129,6 +137,7 @@ export const {
   drawCard,
   removeCard,
   throwOutCard,
+  setDeck,
   setLongDestination,
 } = gameSlice.actions;
 
