@@ -26,7 +26,7 @@ export const playerTwoSlice = createSlice({
     cardsDrawnThisTurn: 100,
     destinations: [],
     collectedRoads: [],
-    score: [],
+    score: 0,
     justBuilt: false,
     lastMove: null,
     beforeLastMove: null,
@@ -103,6 +103,7 @@ export const playerTwoSlice = createSlice({
           }
           state.selectedCards = [];
           state.lastMove = MOVE_LIST.MAKE_ROUTE;
+          state.score = state.score + roadLength;
 
           state.justBuilt = true;
         }
@@ -175,12 +176,19 @@ export const playerTwoSlice = createSlice({
         state.name = payload;
       },
     },
+    setLastMoveTwo: {
+      reducer: (state, action) => {
+        state.beforeLastMove = state.lastMove;
+        state.lastMove = action.payload;
+      },
+    },
   },
 });
 
 export const {
   setStateTwo,
   addCardTwo,
+  setLastMoveTwo,
   setNameTwo,
   toggleDestinationTwo,
   addScoreTwo,

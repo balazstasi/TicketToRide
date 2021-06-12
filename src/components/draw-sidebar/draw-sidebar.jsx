@@ -5,8 +5,16 @@ import { getRandomColor } from "../../utils/getRandomColor";
 import { removeCard, setDeck, setGamePhase, setTurnPlayer } from "../../store/slices/gameSlice";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { addCardOne, setCardsDrawnThisTurnOne } from "../../store/slices/playerOneSlice";
-import { addCardTwo, setCardsDrawnThisTurnTwo } from "../../store/slices/playerTwoSlice";
+import {
+  addCardOne,
+  setCardsDrawnThisTurnOne,
+  setLastMoveOne,
+} from "../../store/slices/playerOneSlice";
+import {
+  addCardTwo,
+  setCardsDrawnThisTurnTwo,
+  setLastMoveTwo,
+} from "../../store/slices/playerTwoSlice";
 import { GAME_PHASE } from "../../constants/constants";
 import { useHistory } from "react-router-dom";
 import { syncAction } from "../../index";
@@ -28,24 +36,37 @@ const DrawSidebar = () => {
   }, []);
 
   const drawCardForCurrentPlayer = (cardColor, i) => {
-    if (gameState.turnPlayer === 1) {
+    if (gameState.turnPlayer === 1 && local.actualPlayer === 1) {
       d(addCardOne(cardColor));
+      syncAction(addCardOne(cardColor), gameState.gameCode, true);
       d(removeCard(i));
       setDrawnOne(drawnOne + 1);
+      // syncAction(setDrawnOne(drawnOne + 1), gameState.gameCode, true);
       if (drawnOne === 1) {
         d(setTurnPlayer(2));
-        d(setCardsDrawnThisTurnOne(0));
+        syncAction(setTurnPlayer(2), gameState.gameCode, false);
+
+        syncAction(setCardsDrawnThisTurnTwo(0), gameState.gameCode, false);
+        // syncAction(setLastMoveOne(playerOne.lastMove), gameState.gameCode, false);
         setDrawnOne(0);
+        syncAction(setDrawnOne(0), gameState.gameCode, false);
       }
-    } else if (gameState.turnPlayer === 2) {
+    } else if (gameState.turnPlayer === 2 && local.actualPlayer === 2) {
       d(addCardTwo(cardColor));
+      syncAction(addCardTwo(cardColor), gameState.gameCode, true);
+
       d(removeCard(i));
+      // syncAction(setLastMoveOne(playerOne.lastMove), gameState.gameCode, false);
 
       setDrawnTwo(drawnTwo + 1);
+      // syncAction(setDrawnTwo(drawnTwo + 1), gameState.gameCode, true);
+
       if (drawnTwo === 1) {
         d(setTurnPlayer(1));
-        d(setCardsDrawnThisTurnTwo(0));
+        syncAction(setTurnPlayer(1), gameState.gameCode, false);
+        syncAction(setCardsDrawnThisTurnOne(0), gameState.gameCode, false);
         setDrawnTwo(0);
+        syncAction(setDrawnTwo(0), gameState.gameCode, true);
       }
     }
   };
@@ -53,17 +74,22 @@ const DrawSidebar = () => {
   const drawCardFromDeck = (cardColor) => {
     if (gameState.turnPlayer === 1) {
       d(addCardOne(cardColor));
+      syncAction(addCardOne(cardColor), gameState.gameCode, true);
+
       if (playerOne.cardsDrawnThisTurn === 1) {
-        d(setCardsDrawnThisTurnOne(0));
+        syncAction(setCardsDrawnThisTurnOne(0), gameState.gameCode, false);
+        // setLastMoveOne(playerOne.lastMove, gameState.gameCode, false);
         d(setTurnPlayer(2));
+        syncAction(setTurnPlayer(2), gameState.gameCode, false);
       }
     } else if (gameState.turnPlayer === 2) {
-      console.log(playerTwo.cardsDrawnThisTurn);
-      d(addCardTwo(cardColor));
+      syncAction(addCardTwo(cardColor), gameState.gameCode, false);
 
       if (playerTwo.cardsDrawnThisTurn === 2) {
-        d(setCardsDrawnThisTurnTwo(0));
+        syncAction(setCardsDrawnThisTurnTwo(0), gameState.gameCode, false);
+        // setLastMoveTwo(playerTwo.lastMove, gameState.gameCode, false);
         d(setTurnPlayer(1));
+        syncAction(setTurnPlayer(1), gameState.gameCode, false);
       }
     }
   };

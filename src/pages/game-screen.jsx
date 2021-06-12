@@ -7,12 +7,13 @@ import DrawBottom from "../components/draw-sidebar/draw-bottom";
 
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { setDeck, setTurnPlayer } from "../store/slices/gameSlice";
+import { setDeck, setGameCode, setGameDone, setTurnPlayer } from "../store/slices/gameSlice";
 import { drawCardOne } from "../store/slices/playerOneSlice";
 import { drawCardTwo } from "../store/slices/playerTwoSlice";
 import { useHistory } from "react-router-dom";
-import { syncAction } from "..";
+import { syncAction } from "../index";
 import { getRandomColor } from "../utils/getRandomColor";
+import { socket } from "..";
 
 const GameScreen = () => {
   const history = useHistory();
@@ -23,12 +24,11 @@ const GameScreen = () => {
 
   useEffect(() => {
     [1, 2, 3, 4].forEach((_) => {
-      d(drawCardOne());
-      syncAction(drawCardOne(), gameState.gameCode, true);
-    });
-    [1, 2, 3, 4].forEach((_) => {
-      d(drawCardTwo());
-      syncAction(drawCardTwo(), gameState.gameCode, true);
+      if (local.actualPlayer === 1) {
+        syncAction(drawCardOne(), gameState.gameCode, false);
+      } else {
+        syncAction(drawCardTwo(), gameState.gameCode, false);
+      }
     });
 
     if (local.actualPlayer === 1 && gameState.deck.length === 0) {
@@ -37,10 +37,22 @@ const GameScreen = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (gameState.gameCode === "") history.push("/end-game");
+  }, [gameState.gameCode, history]);
+
+  const goToEndScreen = () => {
+    syncAction(setGameCode(""), gameState.gameCode, false);
+  };
+
   return (
     <div className="h-screen">
       <div className="absolute">
-        <Sidebar click={() => setScoreOpen(!scoreOpen)} />
+        <Sidebar
+          click={() => {
+            setScoreOpen(!scoreOpen);
+          }}
+        />
       </div>
       <div className="flex flex-row">
         <div className="flex flex-col w-full">
@@ -50,8 +62,8 @@ const GameScreen = () => {
               <Button
                 highlighted={gameState.turnPlayer === 1}
                 onClick={() => {
-                  d(setTurnPlayer(1));
-                  syncAction(setTurnPlayer(1), gameState.gameCode, true);
+                  // d(setTurnPlayer(1));
+                  syncAction(setTurnPlayer(1), gameState.gameCode, false);
                 }}
               >
                 Player 1
@@ -61,15 +73,24 @@ const GameScreen = () => {
               <Button
                 highlighted={gameState.turnPlayer === 2}
                 onClick={() => {
-                  d(setTurnPlayer(2));
-                  syncAction(setTurnPlayer(2), gameState.gameCode, true);
+                  // d(setTurnPlayer(2));
+                  syncAction(setTurnPlayer(2), gameState.gameCode, false);
                 }}
               >
                 Player 2
               </Button>
             </div>
             <div>
-              <Button onClick={() => history.push("/end-game")}>End Game</Button>
+              <Button
+                onClick={() => goToEndScreen()}
+                // onClick={() => {
+                // d(setGameDone());
+                // syncAction(setGameDone(), gameState.gameCode, false);
+                // history.push("/end-game");
+                // }}
+              >
+                End Game
+              </Button>
             </div>
           </div>
           <Map />

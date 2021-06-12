@@ -7,9 +7,14 @@ import { WebSocketContext } from "../containers/socket-container";
 import io from "socket.io-client";
 import { WS_BASE } from "../containers/config";
 
-import { playerOneSlice, setNameOne, setStateOne } from "../store/slices/playerOneSlice";
+import {
+  drawCardOne,
+  playerOneSlice,
+  setNameOne,
+  setStateOne,
+} from "../store/slices/playerOneSlice";
 import { getState, leaveRoom } from "../store/thunk/actions";
-import { setStateTwo } from "../store/slices/playerTwoSlice";
+import { drawCardTwo, setStateTwo } from "../store/slices/playerTwoSlice";
 import { syncAction } from "../index";
 
 const WaitingRoom = () => {
@@ -21,14 +26,9 @@ const WaitingRoom = () => {
   const playerTwo = useSelector((state) => state.playerTwo);
   const socket = io.connect(WS_BASE);
 
-  // useEffect(() => {
-  //   socket.on("action-sent", (ack) => {
-  //     console.log("action-sent", ack.action);
-  //     d(ack.action);
-  //   });
-  // }, []);
-
-  useEffect(() => {}, []);
+  if (playerOne.name.length > 0 && playerTwo.name.length > 0) {
+    history.push("/destination-card-select");
+  }
 
   return (
     <div>

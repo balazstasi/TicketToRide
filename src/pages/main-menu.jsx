@@ -34,16 +34,15 @@ const MainMenu = () => {
   // }, []);
 
   const createRoom = (roomSize) => {
-    socket.emit("create-room", roomSize, (ack) => {
-      console.log(ack.roomId);
-      if (ack.status === "ok") {
-        console.log("create-room", ack.status);
-        dispatch(setGameCode(ack.roomId));
+    socket.emit("create-room", roomSize, ({ status, roomId, message }) => {
+      if (status === "ok") {
+        console.log("create-room", status);
+        dispatch(setGameCode(roomId));
         dispatch(setNameOne(name));
         dispatch(setActualPlayer(1));
         history.push("/waiting-room");
       } else {
-        console.log("create-room", ack.message);
+        console.log("create-room", message);
       }
     });
   };
@@ -55,6 +54,7 @@ const MainMenu = () => {
         dispatch(setNameTwo(name));
         syncAction(setNameTwo(name), roomId, false);
         dispatch(setActualPlayer(2));
+        history.push("/waiting-room");
         console.log("join-room", ack.status);
       } else {
         console.log("join-room", ack.message);
@@ -88,8 +88,13 @@ const MainMenu = () => {
             <h1 className="font-bold text-5xl my-10 text-blue-500 self-center">🎟️➡️🚆➡️🇪🇺</h1>
 
             <div className="text-blue-500 mb-4 text-center font-semiblue text-md">
-              Enter a name and the game code given to you to join a Room
+              Enter a name and the game code given to you to join a Room, also select the player
+              number:
+              <select className="w-1/7 bg-white text-blue-900">
+                <option>2</option>
+              </select>
             </div>
+
             <div className="text-sm font-base text-gray-500"></div>
             <div className="flex flex-wrap w-full relative h-15 bg-white items-center rounded mb-6 pr-10 border-2 border-blue-400">
               <div className="flex -mr-px justify-center w-15">
@@ -127,7 +132,7 @@ const MainMenu = () => {
             </div>
             <Link
               className="p-2 mt-8 w-full bg-blue-400 hover:bg-blue-500 rounded-lg shadow text-xl font-medium uppercase text-white"
-              to="/waiting-room"
+              // to="/waiting-room"
               onClick={() => {
                 joinRoom(input);
               }}
@@ -152,15 +157,6 @@ const MainMenu = () => {
               onClick={() => {
                 createRoom(2);
               }}
-              // onClick={() => {
-              //   const id = game.gameCode.id;
-              //   dispatch(createRoom(2));
-              //   dispatch(setNameOne(name));
-              //   dispatch(setTurnPlayer(1));
-              //   dispatch(setJoinedOne(true));
-              //   dispatch(setActualPlayer(1));
-              //   dispatch(syncStateGame(id, "anyukadat kocsog"));
-              // }}
             >
               <center>
                 <p className="self-center">CREATE LOBBY</p>

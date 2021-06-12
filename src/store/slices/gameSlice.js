@@ -24,6 +24,7 @@ export const gameSlice = createSlice({
       yellow: 12,
       locomotive: 14,
     },
+    isGameDone: false,
     // deck: [1, 2, 3, 4, 5].map((_) => getRandomColor()),
     deck: [],
     thrownOutCards: [],
@@ -122,6 +123,16 @@ export const gameSlice = createSlice({
       state.throwOutCard.push(action.payload);
     },
   },
+  endGame: {
+    reducer: (state, action) => {
+      state.gameEnded = true;
+    },
+  },
+  setGameDone: {
+    reducer: (state, action) => {
+      state.gameDone = true;
+    },
+  },
   extraReducers: {
     [createRoom.pending]: (state, action) => {},
   },
@@ -139,6 +150,8 @@ export const {
   throwOutCard,
   setDeck,
   setLongDestination,
+  endGame,
+  setGameDone,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

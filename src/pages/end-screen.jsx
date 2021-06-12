@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Stat from "../components/player-stats/stat";
 import { useSelector } from "react-redux";
 import { Button } from "../common/button";
 import { useHistory } from "react-router-dom";
+import { syncAction } from "..";
+import { endGame } from "../store/slices/gameSlice";
 
 const EndScreen = () => {
   const gameState = useSelector((state) => state.game);
   const history = useHistory();
   const playerOne = useSelector((state) => state.playerOne);
   const playerTwo = useSelector((state) => state.playerTwo);
+
   return (
     <div className="text-center flex flex-col align-middle">
       <h1 className="text-4xl text-center my-6">Game Ended!</h1>
@@ -22,7 +25,13 @@ const EndScreen = () => {
         <Stat player={2} highlighted={true} />
       </div>
       <div className="w-1/4 mt-6 self-center text-md text-center">
-        <Button onClick={() => history.push("/")}>Start Again</Button>
+        <Button
+          onClick={() => {
+            history.push("/");
+          }}
+        >
+          Start Again
+        </Button>
       </div>
     </div>
   );

@@ -3,8 +3,11 @@ import playerOneReducer from "./slices/playerOneSlice";
 import playerTwoReducer from "./slices/playerTwoSlice";
 import uiReducer from "./slices/uiSlice";
 import gameReducer from "./slices/gameSlice";
-import reduxWebsocket from "@giantmachines/redux-websocket";
+import { connectRouter } from "connected-react-router";
 import thunk from "redux-thunk";
+import { createBrowserHistory } from "history";
+
+export const history = createBrowserHistory();
 
 // const reduxWebsocketMiddleware = reduxWebsocket();
 
@@ -14,6 +17,7 @@ export default configureStore({
     playerOne: playerOneReducer,
     playerTwo: playerTwoReducer,
     ui: uiReducer,
+    router: connectRouter(history),
   },
 
   middleware: [thunk],

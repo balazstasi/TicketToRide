@@ -4,8 +4,8 @@ import { socket, syncAction } from "./index";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import { useSelector, useDispatch } from "react-redux";
 import { cloneDeep } from "lodash";
-import { setStateOne } from "./store/slices/playerOneSlice";
-import { setStateTwo } from "./store/slices/playerTwoSlice";
+import { setLastMoveOne, setStateOne } from "./store/slices/playerOneSlice";
+import { setLastMoveTwo, setStateTwo } from "./store/slices/playerTwoSlice";
 import { setDeck, setStateGame } from "./store/slices/gameSlice";
 import { useHistory } from "react-router-dom";
 import store from "./store/index";
@@ -16,13 +16,22 @@ function App() {
   const game = useSelector((state) => state.game);
   const playerOne = useSelector((state) => state.playerOne);
   const playerTwo = useSelector((state) => state.playerTwo);
+  const local = useSelector((state) => state.ui);
 
   useEffect(() => {
     socket.on("action-sent", (ack) => {
       console.log("action-sent", ack.action);
-      dispatch(ack.action);
+      if (ack.action) dispatch(ack.action);
+      local.actualPlayer === 1 &&
+        syncAction(setLastMoveOne(playerOne.lastMove), game.gameCode, true);
+      local.actualPlayer === 2 &&
+        syncAction(setLastMoveTwo(playerTwo.lastMove), game.gameCode, true);
     });
   }, []);
+
+  useEffect(() => {
+    if (game.gameEnded) history.push("/end-game");
+  }, [game.gameEnded]);
 
   // socket.on("state-changed", function (answer) {
   //   console.log("state-changed", answer);

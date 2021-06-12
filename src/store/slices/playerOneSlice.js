@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getRandomColor } from "../../utils/getRandomColor";
 import { GRAY, LOCOMOTIVE, MOVE_LIST } from "../../constants/constants";
 import { cloneDeep } from "lodash";
+import { syncAction } from "../..";
+import { setTurnPlayer } from "./gameSlice";
 
 /*
   A function that accepts an initial state, an object full of reducer functions, and a "slice name", and automatically generates action creators and action types that correspond to the reducers and state.
@@ -148,12 +150,12 @@ export const playerOneSlice = createSlice({
     drawCardOne: {
       reducer: (state, _) => {
         const color = getRandomColor();
-        if (state.lastDrawnCard !== LOCOMOTIVE) {
-          state.hand.push(color);
-          state.cards[color]++;
-          state.cardsDrawn++;
-          state.lastDrawnCard = color;
-        }
+        // if (state.lastDrawnCard !== LOCOMOTIVE) {
+        state.hand.push(color);
+        state.cards[color]++;
+        state.cardsDrawn++;
+        state.lastDrawnCard = color;
+        // }
       },
     },
 
@@ -210,11 +212,19 @@ export const playerOneSlice = createSlice({
         }
       },
     },
+
+    setLastMoveOne: {
+      reducer: (state, action) => {
+        state.beforeLastMove = state.lastMove;
+        state.lastMove = action.payload;
+      },
+    },
   },
 });
 
 export const {
   addCardOne,
+  setLastMoveOne,
   setNameOne,
   toggleDestinationOne,
   addScoreOne,

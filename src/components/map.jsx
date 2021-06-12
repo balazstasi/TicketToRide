@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import { ticketToRideData } from "../assets/ticket-to-ride-data";
 import { Image, Layer, Stage, Shape } from "react-konva";
 import { useSelector, useDispatch } from "react-redux";
-import { collectRoadOne, setJustBuiltOne } from "../store/slices/playerOneSlice";
-import { collectRoadTwo, setJustBuiltTwo } from "../store/slices/playerTwoSlice";
-import { setTurnPlayer } from "../store/slices/gameSlice";
+import { collectRoadOne, setJustBuiltOne, setLastMoveOne } from "../store/slices/playerOneSlice";
+import { collectRoadTwo, setJustBuiltTwo, setLastMoveTwo } from "../store/slices/playerTwoSlice";
+import { endGame, setTurnPlayer } from "../store/slices/gameSlice";
 import { useHistory } from "react-router-dom";
 import { coord } from "../utils/calculateCoordinate";
 import useImage from "use-image";
@@ -51,30 +51,35 @@ const Map = () => {
   useEffect(() => {
     if (playerOne.trains <= 0 || playerTwo.trains <= 0) {
       if (playerOne.hand.length <= 2 || playerTwo.hand.length <= 2) {
-        history.push("/end-game");
+        syncAction(endGame(), gameState.gameCode, false);
       }
     }
   }, [playerOne.trains, playerTwo.trains, playerOne.hand, playerTwo.hand, history]);
 
   const collectRoad = (road) => {
-    console.log(road);
     if (gameState.turnPlayer === 1) {
       dispatch(collectRoadOne(road));
-      syncAction(collectRoadOne(road), gameState.gameCode, true);
+      if (!playerTwo.collectedRoads.find((currRoad) => currRoad.id === road.id))
+        syncAction(collectRoadOne(road), gameState.gameCode, true);
+      dispatch(setTurnPlayer(2));
+      syncAction(setTurnPlayer(2), gameState.gameCode, true);
       if (playerOne.justBuilt) {
         dispatch(setJustBuiltOne(false));
-        dispatch(setTurnPlayer(2));
         syncAction(setJustBuiltOne(false), gameState.gameCode, true);
-        syncAction(setTurnPlayer(2), gameState.gameCode, true);
+
+        syncAction(setLastMoveOne(playerTwo.lastMove), gameState.gameCode, false);
       }
     } else {
-      dispatch(collectRoadTwo(road));
-      syncAction(collectRoadTwo(road), gameState.gameCode, true);
+      if (!playerOne.collectedRoads.find((currRoad) => currRoad.id === road.id))
+        syncAction(collectRoadTwo(road), gameState.gameCode, false);
+
+      dispatch(setTurnPlayer(1));
+      syncAction(setTurnPlayer(1), gameState.gameCode, true);
       if (playerTwo.justBuilt) {
         dispatch(setJustBuiltTwo(false));
-        dispatch(setTurnPlayer(1));
         syncAction(setJustBuiltTwo(false), gameState.gameCode, true);
-        syncAction(setTurnPlayer(1), gameState.gameCode, true);
+
+        syncAction(setLastMoveOne(playerOne.lastMove), gameState.gameCode, false);
       }
     }
   };
